@@ -1,4 +1,4 @@
-rkit--Raster kit
+geokit
 ===================
 
 A suit of utilites for processing geo-dataset.

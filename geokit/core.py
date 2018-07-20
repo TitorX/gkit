@@ -7,13 +7,16 @@ from osgeo import gdal, osr, ogr
 
 # numpy数据类型到gdal数据类型的映射关系
 TYPE = {
+    np.dtype(np.int8): gdal.GDT_Byte,
+    np.dtype(np.uint8): gdal.GDT_Byte,
+    np.dtype(np.int16): gdal.GDT_Int16,
+    np.dtype(np.uint16): gdal.GDT_UInt16,
+    np.dtype(np.int32): gdal.GDT_Int32,
+    np.dtype(np.uint32): gdal.GDT_UInt32,
     np.dtype(np.float32): gdal.GDT_Float32,
     np.dtype(np.float64): gdal.GDT_Float64,
-    np.dtype(np.int16): gdal.GDT_Int16,
-    np.dtype(np.int32): gdal.GDT_Int32,
-    np.dtype(np.uint16): gdal.GDT_UInt16,
-    np.dtype(np.uint32): gdal.GDT_UInt32,
-    np.dtype(np.uint8): gdal.GDT_Byte,
+    np.dtype(np.complex64): gdal.GDT_CFloat32,
+    np.dtype(np.complex128): gdal.GDT_CFloat64,
 }
 
 
@@ -166,22 +169,22 @@ class Raster(MaskedArray):
 
         options = ["{0}={1}".format(k, v) for k, v in options.items()]
 
-        if not out_raster_path:
-            driver = gdal.GetDriverByName('MEM')
-            out_raster_path = ''
-        else:
+        if out_raster_path:
             driver = gdal.GetDriverByName('GTiff')
             if not out_raster_path.endswith('.tif'):
                 out_raster_path += '.tif'
+        else:
+            driver = gdal.GetDriverByName('MEM')
+            out_raster_path = ''
 
         out_raster = driver.Create(
             out_raster_path,
             raster.shape[1], raster.shape[0], 1, dtype, options=options)
 
-        out_raster.SetProjection(raster._raster_meta['projection'])
-        out_raster.SetGeoTransform(raster._raster_meta['transform'])
+        out_raster.SetProjection(raster.projection)
+        out_raster.SetGeoTransform(raster.transform)
         out_band = out_raster.GetRasterBand(1)
-        out_band.SetNoDataValue(np.float(raster.fill_value))
+        out_band.SetNoDataValue(raster.fill_value)
         out_band.WriteArray(raster.filled())
 
         if driver.ShortName == "MEM":
@@ -240,37 +243,67 @@ class Raster(MaskedArray):
         return np.ma.masked_array(self, mask)
 
     def reproject(self, x_count, y_count,
-                  transform, projection=None, method=gdal.GRA_Bilinear):
+                  transform=None, projection=None, method=gdal.GRA_Bilinear):
         """
+        重投影/重采样
+
+        x_count:
+            RasterXSize 目标数据一行的像素点数
+        y_count:
+            RasterYSize 目标数据一列的像素点数
+        transform:
+            默认使用原栅格数据的transform
+        projection:
+            默认使用原栅格数据的projection
+        method:
+            重投影/采样时所使用的算法
+            gdal.GRA_Bilinear (default)
+            gdal.GRA_Average
+            gdal.GRA_Cubic
+            gdal.GRA_CubicSpline
+            gdal.GRA_Lanczos
+            gdal.GRA_NearestNeighbour
+
+        return:
+            Raster对象
         """
         mem_raster_driver = gdal.GetDriverByName("MEM")
         tmp_raster = mem_raster_driver.Create(
             "", x_count, y_count, 1, gdal.GDT_Float32
         )
 
+        if transform is None:
+            transform = self.transform
+
         if projection is None:
-            projection = self._raster_meta['projection']
+            projection = self.projection
 
         tmp_raster.SetProjection(projection)
         tmp_raster.SetGeoTransform(transform)
         tmp_band = tmp_raster.GetRasterBand(1)
-        tmp_band.SetNoDataValue(np.float(self.fill_value))
-        tmp_band.Fill(np.float(self.fill_value))
+        tmp_band.SetNoDataValue(self.fill_value)
+        tmp_band.Fill(self.fill_value)
 
         gdal.ReprojectImage(
             self.save("", in_memory=True), tmp_raster,
-            self._raster_meta['projection'], projection, method)
+            self.projection, projection, method)
 
-        return Raster.open(tmp_raster)
+        return Raster(
+            tmp_band.ReadAsArray(), transform,
+            projection, nodatavalue=self.fill_value)
 
     def plot(self, cmap_name='seismic'):
+        """
+        使用matplotlib绘制预览图
+
+        cmap_name:
+            图像所使用的color map名
+            可参考:
+            https://matplotlib.org/examples/color/colormaps_reference.html
+        """
         ax = plt.gca()
 
-        filled = self.filled(np.nan)
-        vmin = np.nanpercentile(filled, 2)
-        vmax = np.nanpercentile(filled, 98)
-
-        plt.imshow(self, cmap=plt.get_cmap(cmap_name), vmax=vmax, vmin=vmin)
+        plt.imshow(self, cmap=plt.get_cmap(cmap_name))
 
         def ticker(origin, pixel_size):
             def _ticker(t, pos):

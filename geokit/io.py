@@ -6,7 +6,7 @@ def load():
     pass
 
 
-def read_geotiff(in_raster, band_num):
+def read_geotiff(in_raster, band_num=1):
     """
     载入GeoTIFF文件
 
