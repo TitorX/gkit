@@ -184,7 +184,7 @@ class Raster(MaskedArray):
         out_raster.SetProjection(raster.projection)
         out_raster.SetGeoTransform(raster.transform)
         out_band = out_raster.GetRasterBand(1)
-        out_band.SetNoDataValue(raster.fill_value)
+        out_band.SetNoDataValue(np.float64(raster.fill_value))
         out_band.WriteArray(raster.filled())
 
         if driver.ShortName == "MEM":
@@ -281,7 +281,7 @@ class Raster(MaskedArray):
         tmp_raster.SetProjection(projection)
         tmp_raster.SetGeoTransform(transform)
         tmp_band = tmp_raster.GetRasterBand(1)
-        tmp_band.SetNoDataValue(self.fill_value)
+        tmp_band.SetNoDataValue(np.float64(self.fill_value))
         tmp_band.Fill(self.fill_value)
 
         gdal.ReprojectImage(
