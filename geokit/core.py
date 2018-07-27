@@ -1,7 +1,6 @@
+# coding=utf-8
 import numpy as np
 from numpy.ma import MaskedArray
-import matplotlib.pylab as plt
-from matplotlib.ticker import FuncFormatter
 from osgeo import gdal, osr, ogr
 
 
@@ -292,7 +291,7 @@ class Raster(MaskedArray):
             tmp_band.ReadAsArray(), transform,
             projection, nodatavalue=self.fill_value)
 
-    def plot(self, cmap_name='seismic'):
+    def plot(self, ax=None, cmap_name='seismic'):
         """
         使用matplotlib绘制预览图
 
@@ -301,7 +300,11 @@ class Raster(MaskedArray):
             可参考:
             https://matplotlib.org/examples/color/colormaps_reference.html
         """
-        ax = plt.gca()
+        import matplotlib.pylab as plt
+        from matplotlib.ticker import FuncFormatter
+
+        if ax is None:
+            ax = plt.gca()
 
         plt.imshow(self, cmap=plt.get_cmap(cmap_name))
 

@@ -1,3 +1,4 @@
+# coding=utf-8
 from osgeo import gdal
 from .core import Raster
 
@@ -6,7 +7,7 @@ def load():
     pass
 
 
-def read_geotiff(in_raster, band_num=1):
+def read_geotiff(in_raster, layer_num=1):
     """
     载入GeoTIFF文件
 
@@ -22,7 +23,7 @@ def read_geotiff(in_raster, band_num=1):
         else in_raster + ".tif"
     raster = gdal.Open(in_raster)
 
-    band = raster.GetRasterBand(band_num)
+    band = raster.GetRasterBand(layer_num)
     projection = raster.GetProjection()
     transform = raster.GetGeoTransform()
     array = band.ReadAsArray()

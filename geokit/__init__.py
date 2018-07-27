@@ -1,3 +1,4 @@
+# coding=utf-8
 from .core import Raster
 from .math import *
 from .io import read_geotiff
