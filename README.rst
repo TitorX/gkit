@@ -31,7 +31,8 @@ plot raster
 
 The plot:
 
-.. image:: docs/images/lst_plot.png
+.. image:: docs/imgs/lst_plot.png
+    :align: center
 
 raster calculator
 
