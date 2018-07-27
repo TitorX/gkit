@@ -39,7 +39,7 @@ raster calculator
 .. code-block:: python
 
     # Use raster like common numpy masked array.
-    new = (raster - 273.15)**3 /4 
+    new = (raster - 273.15)**3 / 4 
 
 
 save to file
@@ -48,3 +48,23 @@ save to file
 
     raster.save("out_file.tif")
 
+
+create a raster from numpy array
+
+.. code-block:: python
+
+    import numpy as np
+    x, y = np.mgrid[-1:1:100j, -2:2:200j]
+    array = np.sqrt(x**2 + y**2)
+
+    print(array.shape)
+    # (100, 200)
+
+    transform = [-100, 0.1, 0, 0, 0, -0.1]
+
+    raster = geo.Raster(z, transform)
+    raster.plot()
+
+The output:
+
+.. image:: docs/imgs/array_plot.png
