@@ -6,6 +6,10 @@ Geokit is a suit of utilites for processing geo-dataset.
 Until now, it's only support to manipulate GeoTIFF dataset and a part of 
 interaction between raster and vector dataset.
 
+Geokit supports Python3 and all OS which could install numpy, matplotlib, 
+gdal.
+
+In Python2, may have unpredictable bugs.
 
 Example
 --------
@@ -14,6 +18,7 @@ Here is examples of some basic features that Geokit provides.
 
 .. code-block:: python
 
+    import numpy as np
     import geokit as geo
 
     # Read the first layer(band) from .tif.
@@ -22,8 +27,20 @@ Here is examples of some basic features that Geokit provides.
     # You could also specific point out which layer(band) you want to load.
     r = geo.read_geotiff("lst.tif", 2)
 
+    # geo.read_geotiff return a Raster class
+    type(r)
+    # Output:
+    # geokit.core.Raster
+
     # Open an interactive window display raster using matplotlib(call plt.show).
     r.show()
+
+The picture:
+
+.. image:: docs/imgs/lst_plot.png
+    :align: center
+
+.. code-block:: python
 
     # Only draw raster without calling plt.show to continue
     # modify figure.
@@ -34,12 +51,30 @@ Here is examples of some basic features that Geokit provides.
     plt.title("LST(C)")
     plt.savefig("lst_plot.png")
 
-The picture:
-
-.. image:: docs/imgs/lst_plot.png
-    :align: center
-
-.. code-block:: python
+    # Raster class inherits from np.ma.MaskedArray.
+    # It has all features which MaskedArray has.
+    r
+    # Output:
+    # masked_array(data =
+    #  [[-- -- -- ..., -- -- --]
+    #  [-- -- -- ..., -- -- --]
+    #  [-- -- -- ..., -- -- --]
+    #  ...,
+    #  [242.5966339111328 242.6825408935547 242.79612731933594 ...,
+    #   243.512451171875 243.46498107910156 243.45751953125]
+    #  [241.1952667236328 241.18592834472656 241.19235229492188 ...,
+    #   241.02757263183594 241.04196166992188 241.0919189453125]
+    #  [241.97023010253906 242.03948974609375 242.05393981933594 ...,
+    #   241.8543243408203 241.85800170898438 241.80813598632812]],
+    #              mask =
+    #  [[ True  True  True ...,  True  True  True]
+    #  [ True  True  True ...,  True  True  True]
+    #  [ True  True  True ...,  True  True  True]
+    #  ...,
+    #  [False False False ..., False False False]
+    #  [False False False ..., False False False]
+    #  [False False False ..., False False False]],
+    #        fill_value = 1e+20)
 
     # Doing operation like common numpy masked array.
     tmp = (r - 273.15)**3 / 4
@@ -52,6 +87,8 @@ The picture:
     print(r.max())
     print(r.min())
 
+    tmp = r.astype(np.float64)
+
     # Save to file
     r.save("out_file.tif")
 
@@ -61,7 +98,8 @@ The picture:
     array = np.sqrt(x**2 + y**2)
 
     print(array.shape)
-    # output: (100, 200)
+    # Output:
+    # (100, 200)
 
     transform = [-100, 0.1, 0, 0, 0, -0.1]
 
