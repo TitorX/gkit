@@ -291,20 +291,28 @@ class Raster(MaskedArray):
             tmp_band.ReadAsArray(), transform,
             projection, nodatavalue=self.fill_value)
 
-    def plot(self, ax=None, cmap_name='seismic'):
+    def plot(self, ax=None, cmap_name='seismic', if_show=False):
         """
         使用matplotlib绘制预览图
+
+        ax:
+            给定绘图的目标Axes，若为None则在当前默认Axes上进行绘制
 
         cmap_name:
             图像所使用的color map名
             可参考:
             https://matplotlib.org/examples/color/colormaps_reference.html
+
+        if_show:
+            绘制后是否调用plt.show()进行显示
+            默认为False,绘制后不进行任何动作
         """
         import matplotlib.pylab as plt
         from matplotlib.ticker import FuncFormatter
 
         if ax is None:
             ax = plt.gca()
+        plt.sca(ax)
 
         plt.imshow(self, cmap=plt.get_cmap(cmap_name))
 
@@ -327,5 +335,12 @@ class Raster(MaskedArray):
         ))
 
         plt.colorbar()
-        plt.show()
-        plt.close()
+
+        if if_show:
+            plt.show()
+
+    def show(self, **kwargs):
+        """
+        self.plot方法的快捷方式，直接调用plt.show显示绘制的图像进行简单的预览查看
+        """
+        self.plot(**kwargs, if_show=True)
