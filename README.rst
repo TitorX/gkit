@@ -1,6 +1,14 @@
 Geokit
 --------
 
+.. image:: https://img.shields.io/github/license/TitorX/geokit.svg
+    :alt: GitHub license
+    :target: https://github.com/TitorX/geokit/blob/master/LICENSE
+
+.. image:: https://img.shields.io/badge/python-2&3-brightgreen.svg
+    :target: https://www.python.org
+
+
 Geokit is a suit of utilites for processing geo-dataset.
 
 Until now, it's only support to manipulate GeoTIFF dataset and a part of 
@@ -11,8 +19,8 @@ gdal.
 
 In Python2, may have unpredictable bugs.
 
-Example
---------
+Simple Example
+---------------
 
 Here is examples of some basic features that Geokit provides.
 

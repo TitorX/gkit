@@ -1,0 +1,328 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>API Reference &mdash; Geokit 0.1.0 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+
+  
+  
+    
+
+  
+
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Welcome to Geokit’s documentation!" href="index.html" /> 
+
+  
+  <script src="_static/js/modernizr.min.js"></script>
+
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search">
+          
+
+          
+            <a href="index.html" class="icon icon-home"> Geokit
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1.0
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Geokit</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>API Reference</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/api.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-geokit">
+<span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-geokit" title="Permalink to this headline">¶</a></h1>
+<dl class="class">
+<dt id="geokit.Raster">
+<em class="property">class </em><code class="descclassname">geokit.</code><code class="descname">Raster</code><a class="reference internal" href="_modules/geokit/core.html#Raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="geokit.Raster.clip">
+<code class="descname">clip</code><span class="sig-paren">(</span><em>shp_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.clip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.clip" title="Permalink to this definition">¶</a></dt>
+<dd><p>根据给定的shapefile剪切栅格</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="geokit.Raster.get_point">
+<code class="descname">get_point</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.get_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.get_point" title="Permalink to this definition">¶</a></dt>
+<dd><p>获取距离给定(x, y)坐标最近的点值
+x为纵轴 y为横轴</p>
+</dd></dl>
+
+<dl class="classmethod">
+<dt id="geokit.Raster.open">
+<em class="property">classmethod </em><code class="descname">open</code><span class="sig-paren">(</span><em>in_raster</em>, <em>band_num=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.open"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.open" title="Permalink to this definition">¶</a></dt>
+<dd><p>从指定路径或已打开的gdal对象中载入栅格数据。</p>
+<dl class="docutils">
+<dt>in_raster:</dt>
+<dd>已经打开的gdal栅格对象或要加载的栅格数据文件路径</dd>
+<dt>band_num:</dt>
+<dd>要加载的波段编号，默认为1，加载第一个波段的数据</dd>
+<dt>return:</dt>
+<dd>Raster对象</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="geokit.Raster.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>ax=None</em>, <em>cmap_name='seismic'</em>, <em>if_show=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.plot" title="Permalink to this definition">¶</a></dt>
+<dd><p>使用matplotlib绘制预览图</p>
+<dl class="docutils">
+<dt>ax:</dt>
+<dd>给定绘图的目标Axes，若为None则在当前默认Axes上进行绘制</dd>
+<dt>cmap_name:</dt>
+<dd>图像所使用的color map名
+可参考:
+<a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a></dd>
+<dt>if_show:</dt>
+<dd>绘制后是否调用plt.show()进行显示
+默认为False,绘制后不进行任何动作</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="geokit.Raster.reproject">
+<code class="descname">reproject</code><span class="sig-paren">(</span><em>x_count</em>, <em>y_count</em>, <em>transform=None</em>, <em>projection=None</em>, <em>method=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.reproject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.reproject" title="Permalink to this definition">¶</a></dt>
+<dd><p>重投影/重采样</p>
+<dl class="docutils">
+<dt>x_count:</dt>
+<dd>RasterXSize 目标数据一行的像素点数</dd>
+<dt>y_count:</dt>
+<dd>RasterYSize 目标数据一列的像素点数</dd>
+<dt>transform:</dt>
+<dd>默认使用原栅格数据的transform</dd>
+<dt>projection:</dt>
+<dd>默认使用原栅格数据的projection</dd>
+<dt>method:</dt>
+<dd>重投影/采样时所使用的算法
+gdal.GRA_Bilinear (default)
+gdal.GRA_Average
+gdal.GRA_Cubic
+gdal.GRA_CubicSpline
+gdal.GRA_Lanczos
+gdal.GRA_NearestNeighbour</dd>
+<dt>return:</dt>
+<dd>Raster对象</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="geokit.Raster.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>out_raster_path=None</em>, <em>dtype=None</em>, <em>compress=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>将Raster对象输出存储为GeoTIFF文件或gdal.Dataset对象</p>
+<dl class="docutils">
+<dt>out_raster_path:</dt>
+<dd>输出文件路径，若为None则返回gdal.Dataset对象</dd>
+<dt>dtype:</dt>
+<dd>输出时所使用的数据类型
+默认为目前所使用的数据类型进行存储，通过dtype转换为指定的数据类型进行存储</dd>
+<dt>compress:</dt>
+<dd>存储时进行压缩
+有一下几种选项
+compress=True(default) 使用LZW算法进行压缩
+compress=False 不进行压缩
+compress=’DEFAULT’ 使用gdal默认算法进行压缩
+compress=’PACKBITS’ 使用gdal的PACKBITS算法进行压缩
+… 或其他gdal支持的压缩算法</dd>
+<dt>return:</dt>
+<dd>None或gdal.Dataset</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="geokit.Raster.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>self.plot方法的快捷方式，直接调用plt.show显示绘制的图像进行简单的预览查看</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="geokit.Raster.zonal_apply">
+<code class="descname">zonal_apply</code><span class="sig-paren">(</span><em>func</em>, <em>shp_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.zonal_apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.zonal_apply" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="index.html" class="btn btn-neutral" title="Welcome to Geokit’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2018, Titor.
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  
+
+    <script type="text/javascript">
+        var DOCUMENTATION_OPTIONS = {
+            URL_ROOT:'./',
+            VERSION:'0.1.0',
+            LANGUAGE:'None',
+            COLLAPSE_INDEX:false,
+            FILE_SUFFIX:'.html',
+            HAS_SOURCE:  true,
+            SOURCELINK_SUFFIX: '.txt'
+        };
+    </script>
+      <script type="text/javascript" src="_static/jquery.js"></script>
+      <script type="text/javascript" src="_static/underscore.js"></script>
+      <script type="text/javascript" src="_static/doctools.js"></script>
+      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+
+  
+
+  <script type="text/javascript" src="_static/js/theme.js"></script>
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
