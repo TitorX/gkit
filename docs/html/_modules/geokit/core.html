@@ -208,39 +208,6 @@
         <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_raster_meta&#39;</span><span class="p">,</span> <span class="n">_raster_meta</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span>
 
-<div class="viewcode-block" id="Raster.open"><a class="viewcode-back" href="../../api.html#geokit.Raster.open">[docs]</a>    <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">open</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">in_raster</span><span class="p">,</span> <span class="n">band_num</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        从指定路径或已打开的gdal对象中载入栅格数据。</span>
-
-<span class="sd">        in_raster:</span>
-<span class="sd">            已经打开的gdal栅格对象或要加载的栅格数据文件路径</span>
-<span class="sd">        band_num:</span>
-<span class="sd">            要加载的波段编号，默认为1，加载第一个波段的数据</span>
-
-<span class="sd">        return:</span>
-<span class="sd">            Raster对象</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">in_raster</span><span class="p">)</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
-            <span class="n">in_raster</span> <span class="o">=</span> <span class="n">in_raster</span> <span class="k">if</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tif&quot;</span><span class="p">)</span> \
-                <span class="k">else</span> <span class="n">in_raster</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span>
-            <span class="n">raster</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">in_raster</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">raster</span> <span class="o">=</span> <span class="n">in_raster</span>
-
-        <span class="n">band</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">band_num</span><span class="p">)</span>
-        <span class="n">projection</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span>
-        <span class="n">transform</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
-        <span class="n">array</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
-
-        <span class="n">obj</span> <span class="o">=</span> <span class="bp">cls</span><span class="p">(</span>
-            <span class="n">array</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">projection</span><span class="p">,</span>
-            <span class="n">nodatavalue</span><span class="o">=</span><span class="n">band</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
-        <span class="p">)</span>
-
-        <span class="k">del</span> <span class="n">band</span><span class="p">,</span> <span class="n">raster</span>
-        <span class="k">return</span> <span class="n">obj</span></div>
-
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">projection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;projection&#39;</span><span class="p">]</span>

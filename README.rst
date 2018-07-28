@@ -19,6 +19,9 @@ gdal.
 
 In Python2, may have unpredictable bugs.
 
+Documents: https://titorx.github.io/geokit/html/
+
+
 Simple Example
 ---------------
 
