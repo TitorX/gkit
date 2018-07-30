@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; Geokit 0.1.0 documentation</title>
+  <title>API Reference &mdash; Geokit 0.1.1 documentation</title>
   
 
   
@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                0.1.0
+                0.1.1
               </div>
             
           
@@ -83,7 +83,12 @@
             
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-geokit.io">io</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-geokit.math">math</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-geokit.core">core</a></li>
+</ul>
+</li>
 </ul>
 
             
@@ -148,20 +153,74 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="module-geokit">
-<span id="api-reference"></span><h1>API Reference<a class="headerlink" href="#module-geokit" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="api-reference">
+<h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-geokit.io">
+<span id="io"></span><h2>io<a class="headerlink" href="#module-geokit.io" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="geokit.io.read_geotiff">
+<code class="descclassname">geokit.io.</code><code class="descname">read_geotiff</code><span class="sig-paren">(</span><em>in_raster</em>, <em>layer_num=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/io.html#read_geotiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.io.read_geotiff" title="Permalink to this definition">¶</a></dt>
+<dd><p>载入GeoTIFF文件</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>in_raster</strong> – 已经打开的gdal栅格对象或要加载的栅格数据文件路径</li>
+<li><strong>band_num</strong> – 要加载的波段编号，默认为1，加载第一个波段的数据</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Raster对象</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</div>
+<div class="section" id="module-geokit.math">
+<span id="math"></span><h2>math<a class="headerlink" href="#module-geokit.math" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="geokit.math.max">
+<code class="descclassname">geokit.math.</code><code class="descname">max</code><span class="sig-paren">(</span><em>x</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/math.html#max"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.math.max" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="geokit.math.mean">
+<code class="descclassname">geokit.math.</code><code class="descname">mean</code><span class="sig-paren">(</span><em>x</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/math.html#mean"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.math.mean" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="geokit.math.min">
+<code class="descclassname">geokit.math.</code><code class="descname">min</code><span class="sig-paren">(</span><em>x</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/math.html#min"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.math.min" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="geokit.math.std">
+<code class="descclassname">geokit.math.</code><code class="descname">std</code><span class="sig-paren">(</span><em>x</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/math.html#std"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.math.std" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="geokit.math.sum">
+<code class="descclassname">geokit.math.</code><code class="descname">sum</code><span class="sig-paren">(</span><em>x</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/math.html#sum"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.math.sum" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-geokit.core">
+<span id="core"></span><h2>core<a class="headerlink" href="#module-geokit.core" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="geokit.Raster">
-<em class="property">class </em><code class="descclassname">geokit.</code><code class="descname">Raster</code><a class="reference internal" href="_modules/geokit/core.html#Raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster" title="Permalink to this definition">¶</a></dt>
+<dt id="geokit.core.Raster">
+<em class="property">class </em><code class="descclassname">geokit.core.</code><code class="descname">Raster</code><a class="reference internal" href="_modules/geokit/core.html#Raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
-<dt id="geokit.Raster.clip">
-<code class="descname">clip</code><span class="sig-paren">(</span><em>shp_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.clip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.clip" title="Permalink to this definition">¶</a></dt>
+<dt id="geokit.core.Raster.clip">
+<code class="descname">clip</code><span class="sig-paren">(</span><em>shp_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.clip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.clip" title="Permalink to this definition">¶</a></dt>
 <dd><p>根据给定的shapefile剪切栅格</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="geokit.Raster.get_point">
-<code class="descname">get_point</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.get_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.get_point" title="Permalink to this definition">¶</a></dt>
+<dt id="geokit.core.Raster.get_point">
+<code class="descname">get_point</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.get_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.get_point" title="Permalink to this definition">¶</a></dt>
 <dd><p>获取距离给定(x, y)坐标最近的点值</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -178,8 +237,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="geokit.Raster.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>ax=None</em>, <em>cmap_name='seismic'</em>, <em>if_show=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.plot" title="Permalink to this definition">¶</a></dt>
+<dt id="geokit.core.Raster.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>ax=None</em>, <em>cmap_name='seismic'</em>, <em>if_show=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>使用matplotlib绘制预览图</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -198,8 +257,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="geokit.Raster.reproject">
-<code class="descname">reproject</code><span class="sig-paren">(</span><em>x_count</em>, <em>y_count</em>, <em>transform=None</em>, <em>projection=None</em>, <em>method=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.reproject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.reproject" title="Permalink to this definition">¶</a></dt>
+<dt id="geokit.core.Raster.reproject">
+<code class="descname">reproject</code><span class="sig-paren">(</span><em>x_count</em>, <em>y_count</em>, <em>transform=None</em>, <em>projection=None</em>, <em>method=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.reproject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.reproject" title="Permalink to this definition">¶</a></dt>
 <dd><p>重投影/重采样</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -231,8 +290,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="geokit.Raster.save">
-<code class="descname">save</code><span class="sig-paren">(</span><em>out_raster_path=None</em>, <em>dtype=None</em>, <em>compress=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.save" title="Permalink to this definition">¶</a></dt>
+<dt id="geokit.core.Raster.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>out_raster_path=None</em>, <em>dtype=None</em>, <em>compress=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>将Raster对象输出存储为GeoTIFF文件或gdal.Dataset对象</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -263,13 +322,14 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="geokit.Raster.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.show" title="Permalink to this definition">¶</a></dt>
+<dt id="geokit.core.Raster.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>self.plot方法的快捷方式，直接调用plt.show显示绘制的图像进行简单的预览查看</p>
 </dd></dl>
 
 </dd></dl>
 
+</div>
 </div>
 
 
@@ -312,7 +372,7 @@
     <script type="text/javascript">
         var DOCUMENTATION_OPTIONS = {
             URL_ROOT:'./',
-            VERSION:'0.1.0',
+            VERSION:'0.1.1',
             LANGUAGE:'None',
             COLLAPSE_INDEX:false,
             FILE_SUFFIX:'.html',

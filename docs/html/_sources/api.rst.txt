@@ -1,7 +1,18 @@
 API Reference
 ===============
 
-.. module:: geokit
+io
+----------
+.. automodule:: geokit.io
+    :members:
 
-.. autoclass:: Raster
+math
+----------
+.. automodule:: geokit.math
+    :members:
+    :undoc-members:
+
+core
+----------
+.. automodule:: geokit.core
     :members:
