@@ -162,74 +162,104 @@
 <dl class="method">
 <dt id="geokit.Raster.get_point">
 <code class="descname">get_point</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.get_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.get_point" title="Permalink to this definition">¶</a></dt>
-<dd><p>获取距离给定(x, y)坐标最近的点值
-x为纵轴 y为横轴</p>
+<dd><p>获取距离给定(x, y)坐标最近的点值</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>x</strong> (<em>int</em>) – 纵轴</li>
+<li><strong>y</strong> (<em>int</em>) – 横轴</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="geokit.Raster.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>ax=None</em>, <em>cmap_name='seismic'</em>, <em>if_show=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>使用matplotlib绘制预览图</p>
-<dl class="docutils">
-<dt>ax:</dt>
-<dd>给定绘图的目标Axes，若为None则在当前默认Axes上进行绘制</dd>
-<dt>cmap_name:</dt>
-<dd>图像所使用的color map名
-可参考:
-<a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a></dd>
-<dt>if_show:</dt>
-<dd>绘制后是否调用plt.show()进行显示
-默认为False,绘制后不进行任何动作</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>ax</strong> – 给定绘图的目标Axes，若为None则在当前默认Axes上进行绘制</li>
+<li><strong>cmap_name</strong> (<em>str</em>) – 图像所使用的color map名，可参考:
+<a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a></li>
+<li><strong>if_show</strong> (<em>bool</em>) – 绘制后是否调用plt.show()进行显示，默认为False,绘制后不进行任何动作</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="geokit.Raster.reproject">
 <code class="descname">reproject</code><span class="sig-paren">(</span><em>x_count</em>, <em>y_count</em>, <em>transform=None</em>, <em>projection=None</em>, <em>method=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.reproject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.reproject" title="Permalink to this definition">¶</a></dt>
 <dd><p>重投影/重采样</p>
-<dl class="docutils">
-<dt>x_count:</dt>
-<dd>RasterXSize 目标数据一行的像素点数</dd>
-<dt>y_count:</dt>
-<dd>RasterYSize 目标数据一列的像素点数</dd>
-<dt>transform:</dt>
-<dd>默认使用原栅格数据的transform</dd>
-<dt>projection:</dt>
-<dd>默认使用原栅格数据的projection</dd>
-<dt>method:</dt>
-<dd>重投影/采样时所使用的算法
-gdal.GRA_Bilinear (default)
-gdal.GRA_Average
-gdal.GRA_Cubic
-gdal.GRA_CubicSpline
-gdal.GRA_Lanczos
-gdal.GRA_NearestNeighbour</dd>
-<dt>return:</dt>
-<dd>Raster对象</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_count</strong> (<em>int</em>) – RasterXSize 目标数据一行的像素点数</li>
+<li><strong>y_count</strong> (<em>int</em>) – RasterYSize 目标数据一列的像素点数</li>
+<li><strong>transform</strong> (<em>list</em>) – 默认使用原栅格数据的transform</li>
+<li><strong>projection</strong> – 默认使用原栅格数据的projection</li>
+<li><strong>method</strong> (<em>int</em>) – <div class="line-block">
+<div class="line">重投影/采样时所使用的算法</div>
+<div class="line">gdal.GRA_Bilinear (default)</div>
+<div class="line">gdal.GRA_Average</div>
+<div class="line">gdal.GRA_Cubic</div>
+<div class="line">gdal.GRA_CubicSpline</div>
+<div class="line">gdal.GRA_Lanczos</div>
+<div class="line">gdal.GRA_NearestNeighbour</div>
+</div>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Raster对象</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
 <dt id="geokit.Raster.save">
 <code class="descname">save</code><span class="sig-paren">(</span><em>out_raster_path=None</em>, <em>dtype=None</em>, <em>compress=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.save" title="Permalink to this definition">¶</a></dt>
 <dd><p>将Raster对象输出存储为GeoTIFF文件或gdal.Dataset对象</p>
-<dl class="docutils">
-<dt>out_raster_path:</dt>
-<dd>输出文件路径，若为None则返回gdal.Dataset对象</dd>
-<dt>dtype:</dt>
-<dd>输出时所使用的数据类型
-默认为目前所使用的数据类型进行存储，通过dtype转换为指定的数据类型进行存储</dd>
-<dt>compress:</dt>
-<dd>存储时进行压缩
-有一下几种选项
-compress=True(default) 使用LZW算法进行压缩
-compress=False 不进行压缩
-compress=’DEFAULT’ 使用gdal默认算法进行压缩
-compress=’PACKBITS’ 使用gdal的PACKBITS算法进行压缩
-… 或其他gdal支持的压缩算法</dd>
-<dt>return:</dt>
-<dd>None或gdal.Dataset</dd>
-</dl>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>out_raster_path</strong> (<em>str</em>) – 输出文件路径，若为None则返回gdal.Dataset对象</li>
+<li><strong>dtype</strong> (<em>dtype</em>) – 输出时所使用的数据类型
+默认为目前所使用的数据类型进行存储，
+通过dtype转换为指定的数据类型进行存储</li>
+<li><strong>compress</strong> (<em>int</em>) – <div class="line-block">
+<div class="line">存储时进行压缩, 有以下几种选项</div>
+<div class="line">compress=True(default) 使用LZW算法进行压缩</div>
+<div class="line">compress=False 不进行压缩</div>
+<div class="line">compress=’DEFAULT’ 使用gdal默认算法进行压缩</div>
+<div class="line">compress=’PACKBITS’ 使用gdal的PACKBITS算法进行压缩</div>
+<div class="line">… 或其他gdal支持的压缩算法</div>
+</div>
+</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None or gdal.Dataset</p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -237,11 +267,6 @@ compress=’PACKBITS’ 使用gdal的PACKBITS算法进行压缩
 <code class="descname">show</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>self.plot方法的快捷方式，直接调用plt.show显示绘制的图像进行简单的预览查看</p>
 </dd></dl>
-
-<dl class="method">
-<dt id="geokit.Raster.zonal_apply">
-<code class="descname">zonal_apply</code><span class="sig-paren">(</span><em>func</em>, <em>shp_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.zonal_apply"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.Raster.zonal_apply" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
 
 </dd></dl>
 

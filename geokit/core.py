@@ -76,10 +76,19 @@ class Raster(MaskedArray):
     def transform(self, value):
         self._raster_meta['transform'] = value
 
+    def _gdal_dtype(self):
+        if self.dtype in TYPE:
+            dtype = TYPE[self.dtype]
+            return dtype
+        else:
+            raise 'Cannot convert {} into gdal.'.format(self.dtype)
+
     def get_point(self, x, y):
-        """
-        获取距离给定(x, y)坐标最近的点值
-        x为纵轴 y为横轴
+        """获取距离给定(x, y)坐标最近的点值
+
+        Args:
+            x (int): 纵轴
+            y (int): 横轴
         """
         origin_x = self._raster_meta['transform'][3]
         origin_y = self._raster_meta['transform'][0]
@@ -98,34 +107,31 @@ class Raster(MaskedArray):
         return
 
     def save(self, out_raster_path=None, dtype=None, compress=True):
+        """将Raster对象输出存储为GeoTIFF文件或gdal.Dataset对象
+
+        Args:
+            out_raster_path (str):
+                输出文件路径，若为None则返回gdal.Dataset对象
+
+            dtype (dtype): 输出时所使用的数据类型
+                默认为目前所使用的数据类型进行存储，
+                通过dtype转换为指定的数据类型进行存储
+
+            compress (int):
+                |  存储时进行压缩, 有以下几种选项
+                |  compress=True(default) 使用LZW算法进行压缩
+                |  compress=False 不进行压缩
+                |  compress='DEFAULT' 使用gdal默认算法进行压缩
+                |  compress='PACKBITS' 使用gdal的PACKBITS算法进行压缩
+                |  ... 或其他gdal支持的压缩算法
+
+        Returns:
+            None or gdal.Dataset
         """
-        将Raster对象输出存储为GeoTIFF文件或gdal.Dataset对象
+        raster = self
 
-        out_raster_path:
-            输出文件路径，若为None则返回gdal.Dataset对象
-
-        dtype:
-            输出时所使用的数据类型
-            默认为目前所使用的数据类型进行存储，通过dtype转换为指定的数据类型进行存储
-
-        compress:
-            存储时进行压缩
-            有一下几种选项
-            compress=True(default) 使用LZW算法进行压缩
-            compress=False 不进行压缩
-            compress='DEFAULT' 使用gdal默认算法进行压缩
-            compress='PACKBITS' 使用gdal的PACKBITS算法进行压缩
-            ... 或其他gdal支持的压缩算法
-
-        return:
-            None或gdal.Dataset
-        """
         # 查找与numpy数据类型对应的gdal数据类型
-        if self.dtype in TYPE:
-            raster = self
-            dtype = TYPE[self.dtype]
-        else:
-            raise 'Cannot convert {} into gdal.'.format(self.dtype)
+        dtype = self._gdal_dtype()
 
         options = {}
         if compress is True:
@@ -159,8 +165,7 @@ class Raster(MaskedArray):
             del out_band, out_raster
 
     def zonal_apply(self, func, shp_path):
-        """
-        """
+        """"""
         mem_shp_driver = ogr.GetDriverByName("Memory")
 
         shp = ogr.Open(shp_path)
@@ -181,16 +186,12 @@ class Raster(MaskedArray):
         return fid, result
 
     def clip(self, shp_path):
-        """
-        根据给定的shapefile剪切栅格
-        """
+        """根据给定的shapefile剪切栅格"""
         shp = ogr.Open(shp_path)
         return self._clip(shp.GetLayer())
 
     def _clip(self, layer):
-        """
-        根据给定的layer剪切栅格
-        """
+        """根据给定的layer剪切栅格"""
         # TODO 转换layer投影到栅格投影
         mem_raster_driver = gdal.GetDriverByName("MEM")
 
@@ -210,32 +211,28 @@ class Raster(MaskedArray):
 
     def reproject(self, x_count, y_count,
                   transform=None, projection=None, method=gdal.GRA_Bilinear):
-        """
-        重投影/重采样
+        """重投影/重采样
 
-        x_count:
-            RasterXSize 目标数据一行的像素点数
-        y_count:
-            RasterYSize 目标数据一列的像素点数
-        transform:
-            默认使用原栅格数据的transform
-        projection:
-            默认使用原栅格数据的projection
-        method:
-            重投影/采样时所使用的算法
-            gdal.GRA_Bilinear (default)
-            gdal.GRA_Average
-            gdal.GRA_Cubic
-            gdal.GRA_CubicSpline
-            gdal.GRA_Lanczos
-            gdal.GRA_NearestNeighbour
+        Args:
+            x_count (int): RasterXSize 目标数据一行的像素点数
+            y_count (int): RasterYSize 目标数据一列的像素点数
+            transform (list): 默认使用原栅格数据的transform
+            projection: 默认使用原栅格数据的projection
+            method (int): 
+                |  重投影/采样时所使用的算法
+                |  gdal.GRA_Bilinear (default)
+                |  gdal.GRA_Average
+                |  gdal.GRA_Cubic
+                |  gdal.GRA_CubicSpline
+                |  gdal.GRA_Lanczos
+                |  gdal.GRA_NearestNeighbour
 
-        return:
+        Returns:
             Raster对象
         """
         mem_raster_driver = gdal.GetDriverByName("MEM")
         tmp_raster = mem_raster_driver.Create(
-            "", x_count, y_count, 1, gdal.GDT_Float32
+            "", x_count, y_count, 1, self._gdal_dtype()
         )
 
         if transform is None:
@@ -251,28 +248,27 @@ class Raster(MaskedArray):
         tmp_band.Fill(self.fill_value)
 
         gdal.ReprojectImage(
-            self.save("", in_memory=True), tmp_raster,
+            self.save(), tmp_raster,
             self.projection, projection, method)
 
+        array = tmp_band.ReadAsArray()
+
+        del tmp_band, tmp_raster
         return Raster(
-            tmp_band.ReadAsArray(), transform,
+            array, transform,
             projection, nodatavalue=self.fill_value)
 
     def plot(self, ax=None, cmap_name='seismic', if_show=False):
-        """
-        使用matplotlib绘制预览图
+        """使用matplotlib绘制预览图
 
-        ax:
-            给定绘图的目标Axes，若为None则在当前默认Axes上进行绘制
+        Args:
+            ax: 给定绘图的目标Axes，若为None则在当前默认Axes上进行绘制
 
-        cmap_name:
-            图像所使用的color map名
-            可参考:
-            https://matplotlib.org/examples/color/colormaps_reference.html
+            cmap_name (str): 图像所使用的color map名，可参考:
+                https://matplotlib.org/examples/color/colormaps_reference.html
 
-        if_show:
-            绘制后是否调用plt.show()进行显示
-            默认为False,绘制后不进行任何动作
+            if_show (bool):
+                绘制后是否调用plt.show()进行显示，默认为False,绘制后不进行任何动作
         """
         import matplotlib.pylab as plt
         from matplotlib.ticker import FuncFormatter
@@ -307,7 +303,6 @@ class Raster(MaskedArray):
             plt.show()
 
     def show(self, **kwargs):
-        """
-        self.plot方法的快捷方式，直接调用plt.show显示绘制的图像进行简单的预览查看
+        """self.plot方法的快捷方式，直接调用plt.show显示绘制的图像进行简单的预览查看
         """
         self.plot(**kwargs, if_show=True)

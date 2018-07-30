@@ -224,10 +224,19 @@
     <span class="k">def</span> <span class="nf">transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
 
+    <span class="k">def</span> <span class="nf">_gdal_dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="n">TYPE</span><span class="p">:</span>
+            <span class="n">dtype</span> <span class="o">=</span> <span class="n">TYPE</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">dtype</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="s1">&#39;Cannot convert </span><span class="si">{}</span><span class="s1"> into gdal.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
 <div class="viewcode-block" id="Raster.get_point"><a class="viewcode-back" href="../../api.html#geokit.Raster.get_point">[docs]</a>    <span class="k">def</span> <span class="nf">get_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        获取距离给定(x, y)坐标最近的点值</span>
-<span class="sd">        x为纵轴 y为横轴</span>
+        <span class="sd">&quot;&quot;&quot;获取距离给定(x, y)坐标最近的点值</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            x (int): 纵轴</span>
+<span class="sd">            y (int): 横轴</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">origin_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
         <span class="n">origin_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
@@ -246,34 +255,31 @@
         <span class="k">return</span>
 
 <div class="viewcode-block" id="Raster.save"><a class="viewcode-back" href="../../api.html#geokit.Raster.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_raster_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        将Raster对象输出存储为GeoTIFF文件或gdal.Dataset对象</span>
+        <span class="sd">&quot;&quot;&quot;将Raster对象输出存储为GeoTIFF文件或gdal.Dataset对象</span>
 
-<span class="sd">        out_raster_path:</span>
-<span class="sd">            输出文件路径，若为None则返回gdal.Dataset对象</span>
+<span class="sd">        Args:</span>
+<span class="sd">            out_raster_path (str):</span>
+<span class="sd">                输出文件路径，若为None则返回gdal.Dataset对象</span>
 
-<span class="sd">        dtype:</span>
-<span class="sd">            输出时所使用的数据类型</span>
-<span class="sd">            默认为目前所使用的数据类型进行存储，通过dtype转换为指定的数据类型进行存储</span>
+<span class="sd">            dtype (dtype): 输出时所使用的数据类型</span>
+<span class="sd">                默认为目前所使用的数据类型进行存储，</span>
+<span class="sd">                通过dtype转换为指定的数据类型进行存储</span>
 
-<span class="sd">        compress:</span>
-<span class="sd">            存储时进行压缩</span>
-<span class="sd">            有一下几种选项</span>
-<span class="sd">            compress=True(default) 使用LZW算法进行压缩</span>
-<span class="sd">            compress=False 不进行压缩</span>
-<span class="sd">            compress=&#39;DEFAULT&#39; 使用gdal默认算法进行压缩</span>
-<span class="sd">            compress=&#39;PACKBITS&#39; 使用gdal的PACKBITS算法进行压缩</span>
-<span class="sd">            ... 或其他gdal支持的压缩算法</span>
+<span class="sd">            compress (int):</span>
+<span class="sd">                |  存储时进行压缩, 有以下几种选项</span>
+<span class="sd">                |  compress=True(default) 使用LZW算法进行压缩</span>
+<span class="sd">                |  compress=False 不进行压缩</span>
+<span class="sd">                |  compress=&#39;DEFAULT&#39; 使用gdal默认算法进行压缩</span>
+<span class="sd">                |  compress=&#39;PACKBITS&#39; 使用gdal的PACKBITS算法进行压缩</span>
+<span class="sd">                |  ... 或其他gdal支持的压缩算法</span>
 
-<span class="sd">        return:</span>
-<span class="sd">            None或gdal.Dataset</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            None or gdal.Dataset</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">raster</span> <span class="o">=</span> <span class="bp">self</span>
+
         <span class="c1"># 查找与numpy数据类型对应的gdal数据类型</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="n">TYPE</span><span class="p">:</span>
-            <span class="n">raster</span> <span class="o">=</span> <span class="bp">self</span>
-            <span class="n">dtype</span> <span class="o">=</span> <span class="n">TYPE</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="s1">&#39;Cannot convert </span><span class="si">{}</span><span class="s1"> into gdal.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gdal_dtype</span><span class="p">()</span>
 
         <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="n">compress</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
@@ -306,9 +312,8 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">del</span> <span class="n">out_band</span><span class="p">,</span> <span class="n">out_raster</span></div>
 
-<div class="viewcode-block" id="Raster.zonal_apply"><a class="viewcode-back" href="../../api.html#geokit.Raster.zonal_apply">[docs]</a>    <span class="k">def</span> <span class="nf">zonal_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">shp_path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">zonal_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">shp_path</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
         <span class="n">mem_shp_driver</span> <span class="o">=</span> <span class="n">ogr</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;Memory&quot;</span><span class="p">)</span>
 
         <span class="n">shp</span> <span class="o">=</span> <span class="n">ogr</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">shp_path</span><span class="p">)</span>
@@ -326,19 +331,15 @@
             <span class="n">fid</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">GetFID</span><span class="p">())</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">func</span><span class="p">(</span><span class="n">tmp_raster</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">fid</span><span class="p">,</span> <span class="n">result</span></div>
+        <span class="k">return</span> <span class="n">fid</span><span class="p">,</span> <span class="n">result</span>
 
 <div class="viewcode-block" id="Raster.clip"><a class="viewcode-back" href="../../api.html#geokit.Raster.clip">[docs]</a>    <span class="k">def</span> <span class="nf">clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shp_path</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        根据给定的shapefile剪切栅格</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;根据给定的shapefile剪切栅格&quot;&quot;&quot;</span>
         <span class="n">shp</span> <span class="o">=</span> <span class="n">ogr</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">shp_path</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_clip</span><span class="p">(</span><span class="n">shp</span><span class="o">.</span><span class="n">GetLayer</span><span class="p">())</span></div>
 
     <span class="k">def</span> <span class="nf">_clip</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        根据给定的layer剪切栅格</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;根据给定的layer剪切栅格&quot;&quot;&quot;</span>
         <span class="c1"># TODO 转换layer投影到栅格投影</span>
         <span class="n">mem_raster_driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;MEM&quot;</span><span class="p">)</span>
 
@@ -358,32 +359,28 @@
 
 <div class="viewcode-block" id="Raster.reproject"><a class="viewcode-back" href="../../api.html#geokit.Raster.reproject">[docs]</a>    <span class="k">def</span> <span class="nf">reproject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_count</span><span class="p">,</span> <span class="n">y_count</span><span class="p">,</span>
                   <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GRA_Bilinear</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        重投影/重采样</span>
+        <span class="sd">&quot;&quot;&quot;重投影/重采样</span>
 
-<span class="sd">        x_count:</span>
-<span class="sd">            RasterXSize 目标数据一行的像素点数</span>
-<span class="sd">        y_count:</span>
-<span class="sd">            RasterYSize 目标数据一列的像素点数</span>
-<span class="sd">        transform:</span>
-<span class="sd">            默认使用原栅格数据的transform</span>
-<span class="sd">        projection:</span>
-<span class="sd">            默认使用原栅格数据的projection</span>
-<span class="sd">        method:</span>
-<span class="sd">            重投影/采样时所使用的算法</span>
-<span class="sd">            gdal.GRA_Bilinear (default)</span>
-<span class="sd">            gdal.GRA_Average</span>
-<span class="sd">            gdal.GRA_Cubic</span>
-<span class="sd">            gdal.GRA_CubicSpline</span>
-<span class="sd">            gdal.GRA_Lanczos</span>
-<span class="sd">            gdal.GRA_NearestNeighbour</span>
+<span class="sd">        Args:</span>
+<span class="sd">            x_count (int): RasterXSize 目标数据一行的像素点数</span>
+<span class="sd">            y_count (int): RasterYSize 目标数据一列的像素点数</span>
+<span class="sd">            transform (list): 默认使用原栅格数据的transform</span>
+<span class="sd">            projection: 默认使用原栅格数据的projection</span>
+<span class="sd">            method (int): </span>
+<span class="sd">                |  重投影/采样时所使用的算法</span>
+<span class="sd">                |  gdal.GRA_Bilinear (default)</span>
+<span class="sd">                |  gdal.GRA_Average</span>
+<span class="sd">                |  gdal.GRA_Cubic</span>
+<span class="sd">                |  gdal.GRA_CubicSpline</span>
+<span class="sd">                |  gdal.GRA_Lanczos</span>
+<span class="sd">                |  gdal.GRA_NearestNeighbour</span>
 
-<span class="sd">        return:</span>
+<span class="sd">        Returns:</span>
 <span class="sd">            Raster对象</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">mem_raster_driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;MEM&quot;</span><span class="p">)</span>
         <span class="n">tmp_raster</span> <span class="o">=</span> <span class="n">mem_raster_driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span>
-            <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">x_count</span><span class="p">,</span> <span class="n">y_count</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Float32</span>
+            <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">x_count</span><span class="p">,</span> <span class="n">y_count</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gdal_dtype</span><span class="p">()</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">transform</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -399,28 +396,27 @@
         <span class="n">tmp_band</span><span class="o">.</span><span class="n">Fill</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span><span class="p">)</span>
 
         <span class="n">gdal</span><span class="o">.</span><span class="n">ReprojectImage</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">in_memory</span><span class="o">=</span><span class="kc">True</span><span class="p">),</span> <span class="n">tmp_raster</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">save</span><span class="p">(),</span> <span class="n">tmp_raster</span><span class="p">,</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span> <span class="n">projection</span><span class="p">,</span> <span class="n">method</span><span class="p">)</span>
 
+        <span class="n">array</span> <span class="o">=</span> <span class="n">tmp_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+
+        <span class="k">del</span> <span class="n">tmp_band</span><span class="p">,</span> <span class="n">tmp_raster</span>
         <span class="k">return</span> <span class="n">Raster</span><span class="p">(</span>
-            <span class="n">tmp_band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">(),</span> <span class="n">transform</span><span class="p">,</span>
+            <span class="n">array</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span>
             <span class="n">projection</span><span class="p">,</span> <span class="n">nodatavalue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Raster.plot"><a class="viewcode-back" href="../../api.html#geokit.Raster.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap_name</span><span class="o">=</span><span class="s1">&#39;seismic&#39;</span><span class="p">,</span> <span class="n">if_show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        使用matplotlib绘制预览图</span>
+        <span class="sd">&quot;&quot;&quot;使用matplotlib绘制预览图</span>
 
-<span class="sd">        ax:</span>
-<span class="sd">            给定绘图的目标Axes，若为None则在当前默认Axes上进行绘制</span>
+<span class="sd">        Args:</span>
+<span class="sd">            ax: 给定绘图的目标Axes，若为None则在当前默认Axes上进行绘制</span>
 
-<span class="sd">        cmap_name:</span>
-<span class="sd">            图像所使用的color map名</span>
-<span class="sd">            可参考:</span>
-<span class="sd">            https://matplotlib.org/examples/color/colormaps_reference.html</span>
+<span class="sd">            cmap_name (str): 图像所使用的color map名，可参考:</span>
+<span class="sd">                https://matplotlib.org/examples/color/colormaps_reference.html</span>
 
-<span class="sd">        if_show:</span>
-<span class="sd">            绘制后是否调用plt.show()进行显示</span>
-<span class="sd">            默认为False,绘制后不进行任何动作</span>
+<span class="sd">            if_show (bool):</span>
+<span class="sd">                绘制后是否调用plt.show()进行显示，默认为False,绘制后不进行任何动作</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="kn">import</span> <span class="nn">matplotlib.pylab</span> <span class="k">as</span> <span class="nn">plt</span>
         <span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="k">import</span> <span class="n">FuncFormatter</span>
@@ -455,8 +451,7 @@
             <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Raster.show"><a class="viewcode-back" href="../../api.html#geokit.Raster.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        self.plot方法的快捷方式，直接调用plt.show显示绘制的图像进行简单的预览查看</span>
+        <span class="sd">&quot;&quot;&quot;self.plot方法的快捷方式，直接调用plt.show显示绘制的图像进行简单的预览查看</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">,</span> <span class="n">if_show</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div></div>
 </pre></div>
