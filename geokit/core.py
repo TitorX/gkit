@@ -1,10 +1,9 @@
-# coding=utf-8
 import numpy as np
 from numpy.ma import MaskedArray
 from osgeo import gdal, osr, ogr
 
 
-# Data type mapping between numpy and gdal
+# Data type mapping between numpy and gdal.
 TYPE = {
     np.dtype(np.int8): gdal.GDT_Byte,
     np.dtype(np.uint8): gdal.GDT_Byte,
@@ -82,12 +81,12 @@ class Raster(MaskedArray):
         else:
             raise 'Cannot convert {} into gdal.'.format(self.dtype)
 
-    def get_point(self, x, y):
-        """获取距离给定(x, y)坐标最近的点值
+    def get_point_value(self, x, y):
+        """Get point value by coordinate.
 
         Args:
-            x (int): The vertical axis
-            y (int): The horizontal axis
+            x (int): The X coordinate of the point.
+            y (int): The Y coordinate of the point.
         """
         origin_x = self._raster_meta['transform'][3]
         origin_y = self._raster_meta['transform'][0]
@@ -106,30 +105,27 @@ class Raster(MaskedArray):
         return
 
     def save(self, out_raster_path=None, dtype=None, compress=True):
-        """将Raster对象输出存储为GeoTIFF文件或gdal.Dataset对象
+        """save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.
 
         Args:
-            out_raster_path (str):
-                输出文件路径，若为None则返回gdal.Dataset对象
+            out_raster_path (str): The output path. If it is ``None``,
+                return :class:`gdal.Dataset`.
 
-            dtype (dtype): 输出时所使用的数据类型
-                默认为目前所使用的数据类型进行存储，
-                通过dtype转换为指定的数据类型进行存储
+            dtype (dtype): Save raster as specified data type.
 
             compress (int):
-                |  存储时进行压缩, 有以下几种选项
-                |  compress=True(default) 使用LZW算法进行压缩
-                |  compress=False 不进行压缩
-                |  compress='DEFAULT' 使用gdal默认算法进行压缩
-                |  compress='PACKBITS' 使用gdal的PACKBITS算法进行压缩
-                |  ... 或其他gdal支持的压缩算法
+                |  Could be following options:
+                |  ``compress=True`` (default) Use LZW to compress
+                |  ``compress=False`` Do not compress
+                |  ``compress='DEFAULT'``
+                |  ``compress='PACKBITS'``
+                |  ... other algorithms that gdal supported
 
         Returns:
-            None or gdal.Dataset
+            `None` or `gdal.Dataset`
         """
         raster = self
 
-        # 查找与numpy数据类型对应的gdal数据类型
         dtype = self._gdal_dtype()
 
         options = {}
@@ -185,13 +181,15 @@ class Raster(MaskedArray):
         return fid, result
 
     def clip(self, shp_path):
-        """根据给定的shapefile剪切栅格"""
+        """Clip raster by specified shapefile."""
         shp = ogr.Open(shp_path)
         return self._clip(shp.GetLayer())
 
     def _clip(self, layer):
-        """根据给定的layer剪切栅格"""
-        # TODO 转换layer投影到栅格投影
+        """Clip raster by specified layer."""
+
+        # TODO Convert layer's projection into raster's projection when
+        # they have different projection.
         mem_raster_driver = gdal.GetDriverByName("MEM")
 
         tmp_raster = mem_raster_driver.Create(
@@ -210,24 +208,24 @@ class Raster(MaskedArray):
 
     def reproject(self, x_count, y_count,
                   transform=None, projection=None, method=gdal.GRA_Bilinear):
-        """重投影/重采样
+        """Reproject/Resample
 
         Args:
-            x_count (int): RasterXSize 目标数据一行的像素点数
-            y_count (int): RasterYSize 目标数据一列的像素点数
-            transform (list): 默认使用原栅格数据的transform
-            projection: 默认使用原栅格数据的projection
+            x_count (int): Row count. (``RasterXSize``)
+            y_count (int): Column count. (``RasterYSize``)
+            transform (list): Use current transform in default.
+            projection: Use current projection in default.
             method (int): 
-                |  重投影/采样时所使用的算法
-                |  gdal.GRA_Bilinear (default)
-                |  gdal.GRA_Average
-                |  gdal.GRA_Cubic
-                |  gdal.GRA_CubicSpline
-                |  gdal.GRA_Lanczos
-                |  gdal.GRA_NearestNeighbour
+                |  Could be following options:
+                |  ``gdal.GRA_Bilinear`` (default)
+                |  ``gdal.GRA_Average``
+                |  ``gdal.GRA_Cubic``
+                |  ``gdal.GRA_CubicSpline``
+                |  ``gdal.GRA_Lanczos``
+                |  ``gdal.GRA_NearestNeighbour``
 
         Returns:
-            Raster
+            :class:`Raster`
         """
         mem_raster_driver = gdal.GetDriverByName("MEM")
         tmp_raster = mem_raster_driver.Create(
@@ -258,16 +256,16 @@ class Raster(MaskedArray):
             projection, nodatavalue=self.fill_value)
 
     def plot(self, ax=None, cmap_name='seismic', if_show=False):
-        """使用matplotlib绘制预览图
+        """Use ``matplotlib`` to plot preview picture
 
         Args:
-            ax: 给定绘图的目标Axes，若为None则在当前默认Axes上进行绘制
+            ax: The ``Axes`` instance. If it's ``None``, use the current
+                ``Axes`` instance.
 
-            cmap_name (str): 图像所使用的color map名，可参考:
+            cmap_name (str): color map name, reference:
                 https://matplotlib.org/examples/color/colormaps_reference.html
 
-            if_show (bool):
-                绘制后是否调用plt.show()进行显示，默认为False,绘制后不进行任何动作
+            if_show (bool): If call :meth:`plt.show` after ploting.
         """
         import matplotlib.pylab as plt
         from matplotlib.ticker import FuncFormatter
@@ -301,7 +299,7 @@ class Raster(MaskedArray):
         if if_show:
             plt.show()
 
-    def show(self, **kwargs):
-        """self.plot方法的快捷方式，直接调用plt.show显示绘制的图像进行简单的预览查看
+    def show(self, *args, **kwargs):
+        """A shortcut of :meth:`self.plot`. Just set ``if_show=True``.
         """
-        self.plot(**kwargs, if_show=True)
+        self.plot(*args, **kwargs, if_show=True)

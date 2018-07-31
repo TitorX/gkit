@@ -161,18 +161,18 @@
 <dl class="function">
 <dt id="geokit.io.read_gdal">
 <code class="descclassname">geokit.io.</code><code class="descname">read_gdal</code><span class="sig-paren">(</span><em>raster</em>, <em>layer_num=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/io.html#read_gdal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.io.read_gdal" title="Permalink to this definition">¶</a></dt>
-<dd><p>read raster from gdal.Dataset</p>
+<dd><p>Read raster from <code class="xref py py-class docutils literal notranslate"><span class="pre">gdal.Dataset</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>raster</strong> (<em>gdal.Dataset</em>) – returned by gdal.Open</li>
-<li><strong>layer_num</strong> (<em>int</em>) – layer number wanted to loaded</li>
+<li><strong>raster</strong> (<em>gdal.Dataset</em>) – Returned by <code class="xref py py-meth docutils literal notranslate"><span class="pre">gdal.Open()</span></code>.</li>
+<li><strong>layer_num</strong> (<em>int</em>) – Layer number wanted to loaded.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Raster</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code></p>
 </td>
 </tr>
 </tbody>
@@ -182,18 +182,18 @@
 <dl class="function">
 <dt id="geokit.io.read_geotiff">
 <code class="descclassname">geokit.io.</code><code class="descname">read_geotiff</code><span class="sig-paren">(</span><em>raster_path</em>, <em>layer_num=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/io.html#read_geotiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.io.read_geotiff" title="Permalink to this definition">¶</a></dt>
-<dd><p>read GeoTIFF file</p>
+<dd><p>Read GeoTIFF file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>raster_path</strong> (<em>str</em>) – 已经打开的gdal栅格对象或要加载的栅格数据文件路径</li>
-<li><strong>layer_num</strong> (<em>int</em>) – layer number wanted to loaded</li>
+<li><strong>raster_path</strong> (<em>str</em>) – GeoTIFF file path.</li>
+<li><strong>layer_num</strong> (<em>int</em>) – Layer number wanted to loaded.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Raster</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code></p>
 </td>
 </tr>
 </tbody>
@@ -204,157 +204,40 @@
 <div class="section" id="module-geokit.math">
 <span id="math"></span><h2>math<a class="headerlink" href="#module-geokit.math" title="Permalink to this headline">¶</a></h2>
 <p>Wrapping some math functions from numpy, make it
-work fine with <cite>Raster</cite>.</p>
+work fine with <code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code>.</p>
 <dl class="function">
 <dt id="geokit.math.max">
-<code class="descclassname">geokit.math.</code><code class="descname">max</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.max" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the maximum along a given axis.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>axis</strong> (<em>{None</em><em>, </em><em>int}</em><em>, </em><em>optional</em>) – Axis along which to operate.  By default, <code class="docutils literal notranslate"><span class="pre">axis</span></code> is None and the
-flattened input is used.</li>
-<li><strong>out</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Alternative output array in which to place the result.  Must
-be of the same shape and buffer length as the expected output.</li>
-<li><strong>fill_value</strong> (<em>{var}</em><em>, </em><em>optional</em>) – Value used to fill in the masked values.
-If None, use the output of maximum_fill_value().</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>amax</strong> – New array holding the result.
-If <code class="docutils literal notranslate"><span class="pre">out</span></code> was specified, <code class="docutils literal notranslate"><span class="pre">out</span></code> is returned.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array_like</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">maximum_fill_value()</span></code></dt>
-<dd>Returns the maximum filling value for a given datatype.</dd>
-</dl>
-</div>
+<code class="descclassname">geokit.math.</code><code class="descname">max</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy function. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="geokit.math.mean">
-<code class="descclassname">geokit.math.</code><code class="descname">mean</code><span class="sig-paren">(</span><em>self</em>, <em>axis=None</em>, <em>dtype=None</em>, <em>out=None</em>, <em>keepdims=&lt;class 'numpy._globals._NoValue'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.mean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the average of the array elements along given axis.</p>
-<p>Masked entries are ignored, and result elements which are not
-finite will be masked.</p>
-<p>Refer to <cite>numpy.mean</cite> for full documentation.</p>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">ndarray.mean()</span></code></dt>
-<dd>corresponding function for ndarrays</dd>
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.mean()</span></code></dt>
-<dd>Equivalent function</dd>
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.ma.average()</span></code></dt>
-<dd>Weighted average.</dd>
-</dl>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],</span> <span class="n">mask</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span>
-<span class="go">masked_array(data = [1 2 --],</span>
-<span class="go">             mask = [False False  True],</span>
-<span class="go">       fill_value = 999999)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">a</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
-<span class="go">1.5</span>
-</pre></div>
-</div>
+<code class="descclassname">geokit.math.</code><code class="descname">mean</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy function. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="geokit.math.min">
-<code class="descclassname">geokit.math.</code><code class="descname">min</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.min" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the minimum along a given axis.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>axis</strong> (<em>{None</em><em>, </em><em>int}</em><em>, </em><em>optional</em>) – Axis along which to operate.  By default, <code class="docutils literal notranslate"><span class="pre">axis</span></code> is None and the
-flattened input is used.</li>
-<li><strong>out</strong> (<em>array_like</em><em>, </em><em>optional</em>) – Alternative output array in which to place the result.  Must be of
-the same shape and buffer length as the expected output.</li>
-<li><strong>fill_value</strong> (<em>{var}</em><em>, </em><em>optional</em>) – Value used to fill in the masked values.
-If None, use the output of <cite>minimum_fill_value</cite>.</li>
-</ul>
-</td>
-</tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><strong>amin</strong> – New array holding the result.
-If <code class="docutils literal notranslate"><span class="pre">out</span></code> was specified, <code class="docutils literal notranslate"><span class="pre">out</span></code> is returned.</p>
-</td>
-</tr>
-<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">array_like</p>
-</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">minimum_fill_value()</span></code></dt>
-<dd>Returns the minimum filling value for a given datatype.</dd>
-</dl>
-</div>
+<code class="descclassname">geokit.math.</code><code class="descname">min</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy function. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="geokit.math.std">
-<code class="descclassname">geokit.math.</code><code class="descname">std</code><span class="sig-paren">(</span><em>self</em>, <em>axis=None</em>, <em>dtype=None</em>, <em>out=None</em>, <em>ddof=0</em>, <em>keepdims=&lt;class 'numpy._globals._NoValue'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.std" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the standard deviation of the array elements along given axis.</p>
-<p>Masked entries are ignored.</p>
-<p>Refer to <cite>numpy.std</cite> for full documentation.</p>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">ndarray.std()</span></code></dt>
-<dd>corresponding function for ndarrays</dd>
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.std()</span></code></dt>
-<dd>Equivalent function</dd>
-</dl>
-</div>
+<code class="descclassname">geokit.math.</code><code class="descname">std</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.std" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy function. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
 <dt id="geokit.math.sum">
-<code class="descclassname">geokit.math.</code><code class="descname">sum</code><span class="sig-paren">(</span><em>self</em>, <em>axis=None</em>, <em>dtype=None</em>, <em>out=None</em>, <em>keepdims=&lt;class 'numpy._globals._NoValue'&gt;</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.sum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the sum of the array elements over the given axis.</p>
-<p>Masked elements are set to 0 internally.</p>
-<p>Refer to <cite>numpy.sum</cite> for full documentation.</p>
-<div class="admonition seealso">
-<p class="first admonition-title">See also</p>
-<dl class="last docutils">
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">ndarray.sum()</span></code></dt>
-<dd>corresponding function for ndarrays</dd>
-<dt><code class="xref py py-func docutils literal notranslate"><span class="pre">numpy.sum()</span></code></dt>
-<dd>equivalent function</dd>
-</dl>
-</div>
-<p class="rubric">Examples</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">],[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">],[</span><span class="mi">7</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">]],</span> <span class="n">mask</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="mi">4</span><span class="p">)</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
-<span class="go">[[1 -- 3]</span>
-<span class="go"> [-- 5 --]</span>
-<span class="go"> [7 -- 9]]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
-<span class="go">25</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
-<span class="go">[4 5 16]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
-<span class="go">[8 5 12]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)[</span><span class="mi">0</span><span class="p">]))</span>
-<span class="go">&lt;type &#39;numpy.int64&#39;&gt;</span>
-</pre></div>
-</div>
+<code class="descclassname">geokit.math.</code><code class="descname">sum</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy function. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
 </dd></dl>
 
 </div>
@@ -366,20 +249,20 @@ If <code class="docutils literal notranslate"><span class="pre">out</span></code
 <dd><dl class="method">
 <dt id="geokit.core.Raster.clip">
 <code class="descname">clip</code><span class="sig-paren">(</span><em>shp_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.clip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.clip" title="Permalink to this definition">¶</a></dt>
-<dd><p>根据给定的shapefile剪切栅格</p>
+<dd><p>Clip raster by specified shapefile.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="geokit.core.Raster.get_point">
-<code class="descname">get_point</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.get_point"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.get_point" title="Permalink to this definition">¶</a></dt>
-<dd><p>获取距离给定(x, y)坐标最近的点值</p>
+<dt id="geokit.core.Raster.get_point_value">
+<code class="descname">get_point_value</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.get_point_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.get_point_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get point value by coordinate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>x</strong> (<em>int</em>) – The vertical axis</li>
-<li><strong>y</strong> (<em>int</em>) – The horizontal axis</li>
+<li><strong>x</strong> (<em>int</em>) – The X coordinate of the point.</li>
+<li><strong>y</strong> (<em>int</em>) – The Y coordinate of the point.</li>
 </ul>
 </td>
 </tr>
@@ -390,16 +273,17 @@ If <code class="docutils literal notranslate"><span class="pre">out</span></code
 <dl class="method">
 <dt id="geokit.core.Raster.plot">
 <code class="descname">plot</code><span class="sig-paren">(</span><em>ax=None</em>, <em>cmap_name='seismic'</em>, <em>if_show=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.plot" title="Permalink to this definition">¶</a></dt>
-<dd><p>使用matplotlib绘制预览图</p>
+<dd><p>Use <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> to plot preview picture</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>ax</strong> – 给定绘图的目标Axes，若为None则在当前默认Axes上进行绘制</li>
-<li><strong>cmap_name</strong> (<em>str</em>) – 图像所使用的color map名，可参考:
+<li><strong>ax</strong> – The <code class="docutils literal notranslate"><span class="pre">Axes</span></code> instance. If it’s <code class="docutils literal notranslate"><span class="pre">None</span></code>, use the current
+<code class="docutils literal notranslate"><span class="pre">Axes</span></code> instance.</li>
+<li><strong>cmap_name</strong> (<em>str</em>) – color map name, reference:
 <a class="reference external" href="https://matplotlib.org/examples/color/colormaps_reference.html">https://matplotlib.org/examples/color/colormaps_reference.html</a></li>
-<li><strong>if_show</strong> (<em>bool</em>) – 绘制后是否调用plt.show()进行显示，默认为False,绘制后不进行任何动作</li>
+<li><strong>if_show</strong> (<em>bool</em>) – If call <code class="xref py py-meth docutils literal notranslate"><span class="pre">plt.show()</span></code> after ploting.</li>
 </ul>
 </td>
 </tr>
@@ -410,30 +294,30 @@ If <code class="docutils literal notranslate"><span class="pre">out</span></code
 <dl class="method">
 <dt id="geokit.core.Raster.reproject">
 <code class="descname">reproject</code><span class="sig-paren">(</span><em>x_count</em>, <em>y_count</em>, <em>transform=None</em>, <em>projection=None</em>, <em>method=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.reproject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.reproject" title="Permalink to this definition">¶</a></dt>
-<dd><p>重投影/重采样</p>
+<dd><p>Reproject/Resample</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>x_count</strong> (<em>int</em>) – RasterXSize 目标数据一行的像素点数</li>
-<li><strong>y_count</strong> (<em>int</em>) – RasterYSize 目标数据一列的像素点数</li>
-<li><strong>transform</strong> (<em>list</em>) – 默认使用原栅格数据的transform</li>
-<li><strong>projection</strong> – 默认使用原栅格数据的projection</li>
+<li><strong>x_count</strong> (<em>int</em>) – Row count. (<code class="docutils literal notranslate"><span class="pre">RasterXSize</span></code>)</li>
+<li><strong>y_count</strong> (<em>int</em>) – Column count. (<code class="docutils literal notranslate"><span class="pre">RasterYSize</span></code>)</li>
+<li><strong>transform</strong> (<em>list</em>) – Use current transform in default.</li>
+<li><strong>projection</strong> – Use current projection in default.</li>
 <li><strong>method</strong> (<em>int</em>) – <div class="line-block">
-<div class="line">重投影/采样时所使用的算法</div>
-<div class="line">gdal.GRA_Bilinear (default)</div>
-<div class="line">gdal.GRA_Average</div>
-<div class="line">gdal.GRA_Cubic</div>
-<div class="line">gdal.GRA_CubicSpline</div>
-<div class="line">gdal.GRA_Lanczos</div>
-<div class="line">gdal.GRA_NearestNeighbour</div>
+<div class="line">Could be following options:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gdal.GRA_Bilinear</span></code> (default)</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gdal.GRA_Average</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gdal.GRA_Cubic</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gdal.GRA_CubicSpline</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gdal.GRA_Lanczos</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">gdal.GRA_NearestNeighbour</span></code></div>
 </div>
 </li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Raster</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#geokit.core.Raster" title="geokit.core.Raster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code></a></p>
 </td>
 </tr>
 </tbody>
@@ -443,29 +327,28 @@ If <code class="docutils literal notranslate"><span class="pre">out</span></code
 <dl class="method">
 <dt id="geokit.core.Raster.save">
 <code class="descname">save</code><span class="sig-paren">(</span><em>out_raster_path=None</em>, <em>dtype=None</em>, <em>compress=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>将Raster对象输出存储为GeoTIFF文件或gdal.Dataset对象</p>
+<dd><p>save <a class="reference internal" href="#geokit.core.Raster" title="geokit.core.Raster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code></a> to GeoTIFF file or <code class="xref py py-class docutils literal notranslate"><span class="pre">gdal.Dataset</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>out_raster_path</strong> (<em>str</em>) – 输出文件路径，若为None则返回gdal.Dataset对象</li>
-<li><strong>dtype</strong> (<em>dtype</em>) – 输出时所使用的数据类型
-默认为目前所使用的数据类型进行存储，
-通过dtype转换为指定的数据类型进行存储</li>
+<li><strong>out_raster_path</strong> (<em>str</em>) – The output path. If it is <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+return <code class="xref py py-class docutils literal notranslate"><span class="pre">gdal.Dataset</span></code>.</li>
+<li><strong>dtype</strong> (<em>dtype</em>) – Save raster as specified data type.</li>
 <li><strong>compress</strong> (<em>int</em>) – <div class="line-block">
-<div class="line">存储时进行压缩, 有以下几种选项</div>
-<div class="line">compress=True(default) 使用LZW算法进行压缩</div>
-<div class="line">compress=False 不进行压缩</div>
-<div class="line">compress=’DEFAULT’ 使用gdal默认算法进行压缩</div>
-<div class="line">compress=’PACKBITS’ 使用gdal的PACKBITS算法进行压缩</div>
-<div class="line">… 或其他gdal支持的压缩算法</div>
+<div class="line">Could be following options:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">compress=True</span></code> (default) Use LZW to compress</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">compress=False</span></code> Do not compress</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">compress='DEFAULT'</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">compress='PACKBITS'</span></code></div>
+<div class="line">… other algorithms that gdal supported</div>
 </div>
 </li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">None or gdal.Dataset</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><cite>None</cite> or <cite>gdal.Dataset</cite></p>
 </td>
 </tr>
 </tbody>
@@ -474,8 +357,8 @@ If <code class="docutils literal notranslate"><span class="pre">out</span></code
 
 <dl class="method">
 <dt id="geokit.core.Raster.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.show" title="Permalink to this definition">¶</a></dt>
-<dd><p>self.plot方法的快捷方式，直接调用plt.show显示绘制的图像进行简单的预览查看</p>
+<code class="descname">show</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.show" title="Permalink to this definition">¶</a></dt>
+<dd><p>A shortcut of <code class="xref py py-meth docutils literal notranslate"><span class="pre">self.plot()</span></code>. Just set <code class="docutils literal notranslate"><span class="pre">if_show=True</span></code>.</p>
 </dd></dl>
 
 </dd></dl>

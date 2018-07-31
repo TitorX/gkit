@@ -1,5 +1,5 @@
 """Wrapping some math functions from numpy, make it 
-work fine with `Raster`.
+work fine with :class:`Raster`.
 """
 import numpy as np
 
@@ -7,9 +7,12 @@ from .core import Raster
 
 
 def agg_func(f):
-    def func(r, axis=0):
-        return Raster(f(x, axis=axis), x[0].transform, x[0].projection)
-    func.__doc__=f.__doc__
+    def func(r, axis=0, *args, **kwargs):
+        """Wrapped numpy function. Get more information by seeing 
+        the corresponding item in ``numpy.ma``.
+        """
+        array = f(r, axis=axis, *args, **kwargs)
+        return Raster(array, r[0].transform, r[0].projection)
     return func
 
 
