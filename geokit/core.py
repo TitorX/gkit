@@ -4,7 +4,7 @@ from numpy.ma import MaskedArray
 from osgeo import gdal, osr, ogr
 
 
-# numpy数据类型到gdal数据类型的映射关系
+# Data type mapping between numpy and gdal
 TYPE = {
     np.dtype(np.int8): gdal.GDT_Byte,
     np.dtype(np.uint8): gdal.GDT_Byte,
@@ -24,8 +24,7 @@ class Raster(MaskedArray):
     """
     def __new__(cls, array, transform, projection=None, a_srs="EPSG:4326",
                 nodatavalue=None, mask=None):
-        """
-        """
+        """"""
 
         if projection is None:
             name, code = a_srs.split(":")
@@ -87,8 +86,8 @@ class Raster(MaskedArray):
         """获取距离给定(x, y)坐标最近的点值
 
         Args:
-            x (int): 纵轴
-            y (int): 横轴
+            x (int): The vertical axis
+            y (int): The horizontal axis
         """
         origin_x = self._raster_meta['transform'][3]
         origin_y = self._raster_meta['transform'][0]
@@ -228,7 +227,7 @@ class Raster(MaskedArray):
                 |  gdal.GRA_NearestNeighbour
 
         Returns:
-            Raster对象
+            Raster
         """
         mem_raster_driver = gdal.GetDriverByName("MEM")
         tmp_raster = mem_raster_driver.Create(

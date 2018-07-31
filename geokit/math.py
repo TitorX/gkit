@@ -1,24 +1,20 @@
-# coding=utf-8
+"""Wrapping some math functions from numpy, make it 
+work fine with `Raster`.
+"""
 import numpy as np
 
 from .core import Raster
 
 
-"""
-对numpy中的数学函数进行封装，使其可以正确的作用于Raster对象
-"""
+def agg_func(f):
+    def func(r, axis=0):
+        return Raster(f(x, axis=axis), x[0].transform, x[0].projection)
+    func.__doc__=f.__doc__
+    return func
 
-def mean(x, axis=0):
-    return Raster(np.ma.mean(x, axis=axis), x[0].transform, x[0].projection)
 
-def max(x, axis=0):
-    return Raster(np.ma.max(x, axis=axis), x[0].transform, x[0].projection)
-
-def min(x, axis=0):
-    return Raster(np.ma.min(x, axis=axis), x[0].transform, x[0].projection)
-
-def sum(x, axis=0):
-    return Raster(np.ma.sum(x, axis=axis), x[0].transform, x[0].projection)
-
-def std(x, axis=0):
-    return Raster(np.ma.std(x, axis=axis), x[0].transform, x[0].projection)
+mean = agg_func(np.ma.mean)
+max = agg_func(np.ma.max)
+min = agg_func(np.ma.min)
+sum = agg_func(np.ma.sum)
+std = agg_func(np.ma.std)

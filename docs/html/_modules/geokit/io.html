@@ -146,29 +146,22 @@
            <div itemprop="articleBody">
             
   <h1>Source code for geokit.io</h1><div class="highlight"><pre>
-<span></span><span class="c1"># coding=utf-8</span>
+<span></span><span class="sd">&quot;&quot;&quot;Reading and writing functions.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">osgeo</span> <span class="k">import</span> <span class="n">gdal</span>
 <span class="kn">from</span> <span class="nn">.core</span> <span class="k">import</span> <span class="n">Raster</span>
 
 
-<span class="k">def</span> <span class="nf">load</span><span class="p">():</span>
-    <span class="k">pass</span>
-
-
-<div class="viewcode-block" id="read_geotiff"><a class="viewcode-back" href="../../api.html#geokit.io.read_geotiff">[docs]</a><span class="k">def</span> <span class="nf">read_geotiff</span><span class="p">(</span><span class="n">in_raster</span><span class="p">,</span> <span class="n">layer_num</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;载入GeoTIFF文件</span>
+<div class="viewcode-block" id="read_gdal"><a class="viewcode-back" href="../../api.html#geokit.io.read_gdal">[docs]</a><span class="k">def</span> <span class="nf">read_gdal</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">layer_num</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;read raster from gdal.Dataset</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        in_raster: 已经打开的gdal栅格对象或要加载的栅格数据文件路径</span>
-<span class="sd">        band_num: 要加载的波段编号，默认为1，加载第一个波段的数据</span>
+<span class="sd">        raster (gdal.Dataset): returned by gdal.Open</span>
+<span class="sd">        layer_num (int): layer number wanted to loaded</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        Raster对象</span>
+<span class="sd">        Raster</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">in_raster</span> <span class="o">=</span> <span class="n">in_raster</span> <span class="k">if</span> <span class="n">in_raster</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tif&quot;</span><span class="p">)</span> \
-        <span class="k">else</span> <span class="n">in_raster</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span>
-    <span class="n">raster</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">in_raster</span><span class="p">)</span>
-
     <span class="n">band</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">layer_num</span><span class="p">)</span>
     <span class="n">projection</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span>
     <span class="n">transform</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
@@ -181,6 +174,23 @@
 
     <span class="k">del</span> <span class="n">band</span><span class="p">,</span> <span class="n">raster</span>
     <span class="k">return</span> <span class="n">obj</span></div>
+
+
+<div class="viewcode-block" id="read_geotiff"><a class="viewcode-back" href="../../api.html#geokit.io.read_geotiff">[docs]</a><span class="k">def</span> <span class="nf">read_geotiff</span><span class="p">(</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">layer_num</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;read GeoTIFF file</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        raster_path (str): 已经打开的gdal栅格对象或要加载的栅格数据文件路径</span>
+<span class="sd">        layer_num (int): layer number wanted to loaded</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Raster</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">raster_path</span> <span class="o">=</span> <span class="n">raster_path</span> <span class="k">if</span> <span class="n">raster_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tif&quot;</span><span class="p">)</span> \
+        <span class="k">else</span> <span class="n">raster_path</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span>
+    <span class="n">raster</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">read_gdal</span><span class="p">(</span><span class="n">raster</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

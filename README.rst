@@ -5,7 +5,7 @@ Geokit
     :alt: GitHub license
     :target: https://github.com/TitorX/geokit/blob/master/LICENSE
 
-.. image:: https://img.shields.io/badge/python-2&3-brightgreen.svg
+.. image:: https://img.shields.io/badge/python-3-brightgreen.svg
     :target: https://www.python.org
 
 

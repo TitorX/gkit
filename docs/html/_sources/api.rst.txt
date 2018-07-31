@@ -10,7 +10,6 @@ math
 ----------
 .. automodule:: geokit.math
     :members:
-    :undoc-members:
 
 core
 ----------
