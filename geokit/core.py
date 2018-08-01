@@ -74,6 +74,15 @@ class Raster(MaskedArray):
     def transform(self, value):
         self._raster_meta['transform'] = value
 
+    @property
+    def extent(self):
+        """The extent of raster in current coordinates."""
+        left = self.transform[0]
+        right = left + self.transform[1] * self.shape[1]
+        top = self.transform[3]
+        bottom = top + self.transform[5] * self.shape[0]
+        return [left, right, top, bottom]
+
     def _gdal_dtype(self):
         if self.dtype in TYPE:
             dtype = TYPE[self.dtype]
@@ -129,6 +138,8 @@ class Raster(MaskedArray):
         dtype = self._gdal_dtype()
 
         options = {}
+        # Ignore compress option, if ``MEM`` driver are used.
+        compress = compress if out_raster_path else False
         if compress is True:
             options['COMPRESS'] = 'LZW'
         elif compress is not False:
@@ -274,27 +285,12 @@ class Raster(MaskedArray):
             ax = plt.gca()
         plt.sca(ax)
 
-        plt.imshow(self, cmap=plt.get_cmap(cmap_name))
+        plt.imshow(
+            self, cmap=plt.get_cmap(cmap_name),
+            extent=self.extent
+        )
 
-        def ticker(origin, pixel_size):
-            def _ticker(t, pos):
-                return round(origin + t * pixel_size, 3)
-            return _ticker
-
-        ax.xaxis.set_major_formatter(FuncFormatter(
-            ticker(
-                self._raster_meta['transform'][0],
-                self._raster_meta['transform'][1]
-            )
-        ))
-        ax.yaxis.set_major_formatter(FuncFormatter(
-            ticker(
-                self._raster_meta['transform'][3],
-                self._raster_meta['transform'][5]
-            )
-        ))
-
-        plt.colorbar()
+        plt.colorbar(orientation='horizontal')
 
         if if_show:
             plt.show()
@@ -302,4 +298,5 @@ class Raster(MaskedArray):
     def show(self, *args, **kwargs):
         """A shortcut of :meth:`self.plot`. Just set ``if_show=True``.
         """
-        self.plot(*args, **kwargs, if_show=True)
+        kwargs['if_show'] = True
+        self.plot(*args, **kwargs)
