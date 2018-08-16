@@ -252,7 +252,7 @@ class Raster(MaskedArray):
         tmp_raster.SetGeoTransform(transform)
         tmp_band = tmp_raster.GetRasterBand(1)
         tmp_band.SetNoDataValue(np.float64(self.fill_value))
-        tmp_band.Fill(self.fill_value)
+        tmp_band.Fill(np.float64(self.fill_value))
 
         gdal.ReprojectImage(
             self.save(), tmp_raster,
