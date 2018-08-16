@@ -217,7 +217,7 @@ class Raster(MaskedArray):
 
         return np.ma.masked_array(self, mask)
 
-    def reproject(self, x_count, y_count,
+    def reproject(self, x_count=None, y_count=None,
                   transform=None, projection=None, method=gdal.GRA_Bilinear):
         """Reproject/Resample
 
@@ -243,11 +243,10 @@ class Raster(MaskedArray):
             "", x_count, y_count, 1, self._gdal_dtype()
         )
 
-        if transform is None:
-            transform = self.transform
-
-        if projection is None:
-            projection = self.projection
+        x_count = x_count or self.shape[1]
+        y_count = y_count or self.shape[0]
+        transform = transform or self.transform
+        projection = projection or self.projection
 
         tmp_raster.SetProjection(projection)
         tmp_raster.SetGeoTransform(transform)
@@ -266,6 +265,11 @@ class Raster(MaskedArray):
             array, transform,
             projection, nodatavalue=self.fill_value)
 
+    def resample(self, *args, **kwargs):
+        """Alias of :meth:`self.reproject`
+        """
+        return self.reproject(*args, **kwargs)
+
     def plot(self, ax=None, cmap_name='seismic', if_show=False):
         """Use ``matplotlib`` to plot preview picture
 
@@ -279,7 +283,6 @@ class Raster(MaskedArray):
             if_show (bool): If call :meth:`plt.show` after ploting.
         """
         import matplotlib.pylab as plt
-        from matplotlib.ticker import FuncFormatter
 
         if ax is None:
             ax = plt.gca()

@@ -4,7 +4,7 @@ from osgeo import gdal
 from .core import Raster
 
 
-def read_gdal(raster, layer_num=1):
+def read_gdal(raster, layer_num=1, transform=None, projection=None):
     """Read raster from :class:`gdal.Dataset`.
 
     Args:
@@ -15,8 +15,8 @@ def read_gdal(raster, layer_num=1):
         :class:`Raster`
     """
     band = raster.GetRasterBand(layer_num)
-    projection = raster.GetProjection()
-    transform = raster.GetGeoTransform()
+    projection = projection or raster.GetProjection()
+    transform = transform or raster.GetGeoTransform()
     array = band.ReadAsArray()
 
     obj = Raster(
@@ -28,7 +28,7 @@ def read_gdal(raster, layer_num=1):
     return obj
 
 
-def read_geotiff(raster_path, layer_num=1):
+def read_geotiff(raster_path, layer_num=1, transform=None, projection=None):
     """Read GeoTIFF file.
 
     Args:
@@ -42,4 +42,4 @@ def read_geotiff(raster_path, layer_num=1):
         else raster_path + ".tif"
     raster = gdal.Open(raster_path)
 
-    return read_gdal(raster)
+    return read_gdal(raster, layer_num, transform, projection)
