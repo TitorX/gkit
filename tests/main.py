@@ -1,6 +1,6 @@
-import geokit as geo
+import gkit as gk
 
 
-r = geo.read_geotiff("lst.tif")
+r = gk.read_geotiff("lst.tif")
 
 r.show()

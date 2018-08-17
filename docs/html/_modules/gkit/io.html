@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>geokit.io &mdash; Gkit 0.1.1 documentation</title>
+  <title>gkit.io &mdash; Gkit 0.1.1 documentation</title>
   
 
   
@@ -130,7 +130,7 @@
         
           <li><a href="../index.html">Module code</a> &raquo;</li>
         
-      <li>geokit.io</li>
+      <li>gkit.io</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -145,14 +145,14 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <h1>Source code for geokit.io</h1><div class="highlight"><pre>
+  <h1>Source code for gkit.io</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Reading and writing functions.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">from</span> <span class="nn">osgeo</span> <span class="k">import</span> <span class="n">gdal</span>
 <span class="kn">from</span> <span class="nn">.core</span> <span class="k">import</span> <span class="n">Raster</span>
 
 
-<div class="viewcode-block" id="read_gdal"><a class="viewcode-back" href="../../api.html#geokit.io.read_gdal">[docs]</a><span class="k">def</span> <span class="nf">read_gdal</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">layer_num</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="read_gdal"><a class="viewcode-back" href="../../api.html#gkit.io.read_gdal">[docs]</a><span class="k">def</span> <span class="nf">read_gdal</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">layer_num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Read raster from :class:`gdal.Dataset`.</span>
 
 <span class="sd">    Args:</span>
@@ -163,20 +163,21 @@
 <span class="sd">        :class:`Raster`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">band</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">layer_num</span><span class="p">)</span>
-    <span class="n">projection</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span>
-    <span class="n">transform</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
+    <span class="n">projection</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;projection&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span>
+    <span class="n">transform</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transform&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
     <span class="n">array</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
 
     <span class="n">obj</span> <span class="o">=</span> <span class="n">Raster</span><span class="p">(</span>
         <span class="n">array</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">projection</span><span class="p">,</span>
-        <span class="n">nodatavalue</span><span class="o">=</span><span class="n">band</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">()</span>
+        <span class="n">nodatavalue</span><span class="o">=</span><span class="n">band</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">(),</span>
+        <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">)</span>
 
     <span class="k">del</span> <span class="n">band</span><span class="p">,</span> <span class="n">raster</span>
     <span class="k">return</span> <span class="n">obj</span></div>
 
 
-<div class="viewcode-block" id="read_geotiff"><a class="viewcode-back" href="../../api.html#geokit.io.read_geotiff">[docs]</a><span class="k">def</span> <span class="nf">read_geotiff</span><span class="p">(</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">layer_num</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="read_geotiff"><a class="viewcode-back" href="../../api.html#gkit.io.read_geotiff">[docs]</a><span class="k">def</span> <span class="nf">read_geotiff</span><span class="p">(</span><span class="n">raster_path</span><span class="p">,</span> <span class="n">layer_num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Read GeoTIFF file.</span>
 
 <span class="sd">    Args:</span>
@@ -190,7 +191,7 @@
         <span class="k">else</span> <span class="n">raster_path</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span>
     <span class="n">raster</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">raster_path</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">read_gdal</span><span class="p">(</span><span class="n">raster</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">read_gdal</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">layer_num</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 </pre></div>
 
            </div>

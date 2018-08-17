@@ -1,47 +1,47 @@
-Geokit
+Gkit
 --------
 
-.. image:: https://img.shields.io/github/license/TitorX/geokit.svg
+.. image:: https://img.shields.io/github/license/TitorX/gkit.svg
     :alt: GitHub license
-    :target: https://github.com/TitorX/geokit/blob/master/LICENSE
+    :target: https://github.com/TitorX/gkit/blob/master/LICENSE
 
 .. image:: https://img.shields.io/badge/python-3-brightgreen.svg
     :target: https://www.python.org
 
 
-Geokit is a suit of utilites for processing geo-dataset.
+Gkit is a suit of utilites for processing geo-dataset.
 
 Until now, it's only support to manipulate GeoTIFF dataset and a part of 
 interaction between raster and vector dataset.
 
-Geokit supports Python3 and all OS which could install numpy, matplotlib, 
+Gkit supports Python3 and all OS which could install numpy, matplotlib, 
 gdal.
 
 In Python2, may have unpredictable bugs.
 
-Documents: https://titorx.github.io/geokit/html/
+Documents: https://titorx.github.io/gkit/html/
 
 
 Simple Example
 ---------------
 
-Here is examples of some basic features that Geokit provides.
+Here is examples of some basic features that Gkit provides.
 
 .. code-block:: python
 
     import numpy as np
-    import geokit as geo
+    import gkit as gk
 
     # Read the first layer(band) from .tif.
-    r = geo.read_geotiff("lst.tif")
+    r = gk.read_geotiff("lst.tif")
 
     # You could also specific point out which layer(band) you want to load.
-    r = geo.read_geotiff("lst.tif", 2)
+    r = gk.read_geotiff("lst.tif", 2)
 
-    # geo.read_geotiff return a Raster class
+    # gk.read_geotiff return a Raster class
     type(r)
     # Output:
-    # geokit.core.Raster
+    # gkit.core.Raster
 
     # Open an interactive window display raster using matplotlib(call plt.show).
     r.show()
@@ -114,7 +114,7 @@ The picture:
 
     transform = [-100, 0.1, 0, 0, 0, -0.1]
 
-    raster = geo.Raster(array, transform)
+    raster = gk.Raster(array, transform)
     raster.show()
 
 The output picture:

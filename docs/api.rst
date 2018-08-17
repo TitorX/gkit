@@ -3,15 +3,15 @@ API Reference
 
 io
 ----------
-.. automodule:: geokit.io
+.. automodule:: gkit.io
     :members:
 
 math
 ----------
-.. automodule:: geokit.math
+.. automodule:: gkit.math
     :members:
 
 core
 ----------
-.. automodule:: geokit.core
+.. automodule:: gkit.core
     :members:

@@ -15,19 +15,19 @@
 import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
-import geokit
+import gkit as gk
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'Geokit'
+project = 'Gkit'
 copyright = '2018, Titor'
 author = 'Titor'
 
 # The short X.Y version
-version = geokit.__version__
+version = gk.__version__
 # The full version, including alpha/beta/rc tags
-release = geokit.__version__
+release = gk.__version__
 
 
 # -- General configuration ---------------------------------------------------
@@ -110,7 +110,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ---------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'Geokitdoc'
+htmlhelp_basename = 'Gkitdoc'
 
 
 # -- Options for LaTeX output ------------------------------------------------
@@ -137,7 +137,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'Geokit.tex', 'Geokit Documentation',
+    (master_doc, 'Gkit.tex', 'Gkit Documentation',
      'Titor', 'manual'),
 ]
 
@@ -147,7 +147,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'geokit', 'Geokit Documentation',
+    (master_doc, 'gkit', 'Gkit Documentation',
      [author], 1)
 ]
 
@@ -158,8 +158,8 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'Geokit', 'Geokit Documentation',
-     author, 'Geokit', 'One line description of project.',
+    (master_doc, 'Gkit', 'Gkit Documentation',
+     author, 'Gkit', 'One line description of project.',
      'Miscellaneous'),
 ]
 

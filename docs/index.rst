@@ -12,7 +12,7 @@ Welcome to Geokit's documentation!
 
    api
 
-.. automodule:: geokit
+.. automodule:: gkit
 
 Indices and tables
 ==================

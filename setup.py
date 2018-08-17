@@ -3,16 +3,16 @@ from geokit import __version__, __author__, __email__
 
 
 setup(
-    name='geokit',
+    name='gkit',
     version=__version__,
     author=__author__,
     author_email=__email__,
-    packages=['geokit'],
+    packages=['gkit'],
     package_data={
-        'geokit': ['README.rst', 'LICENSE']
+        'gkit': ['README.rst', 'LICENSE']
     },
-    entry_points={'console_scripts': ['geokit = geokit.script:execute']},
-    url='https://github.com/TitorX/geokit',
+    entry_points={'console_scripts': ['gkit = gkit.script:execute']},
+    url='https://github.com/TitorX/gkit',
     description='Geokit is a suit of utilites for processing geo-dataset.',
     long_description=open('README.rst').read(),
 )

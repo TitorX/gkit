@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; Geokit 0.1.1 documentation</title>
+  <title>API Reference &mdash; Gkit 0.1.1 documentation</title>
   
 
   
@@ -47,7 +47,7 @@
           
 
           
-            <a href="index.html" class="icon icon-home"> Geokit
+            <a href="index.html" class="icon icon-home"> Gkit
           
 
           
@@ -84,9 +84,9 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">API Reference</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#module-geokit.io">io</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-geokit.math">math</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#module-geokit.core">core</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gkit.io">io</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gkit.math">math</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#module-gkit.core">core</a></li>
 </ul>
 </li>
 </ul>
@@ -103,7 +103,7 @@
       <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">Geokit</a>
+          <a href="index.html">Gkit</a>
         
       </nav>
 
@@ -155,12 +155,12 @@
             
   <div class="section" id="api-reference">
 <h1>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="module-geokit.io">
-<span id="io"></span><h2>io<a class="headerlink" href="#module-geokit.io" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-gkit.io">
+<span id="io"></span><h2>io<a class="headerlink" href="#module-gkit.io" title="Permalink to this headline">¶</a></h2>
 <p>Reading and writing functions.</p>
 <dl class="function">
-<dt id="geokit.io.read_gdal">
-<code class="descclassname">geokit.io.</code><code class="descname">read_gdal</code><span class="sig-paren">(</span><em>raster</em>, <em>layer_num=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/io.html#read_gdal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.io.read_gdal" title="Permalink to this definition">¶</a></dt>
+<dt id="gkit.io.read_gdal">
+<code class="descclassname">gkit.io.</code><code class="descname">read_gdal</code><span class="sig-paren">(</span><em>raster</em>, <em>layer_num=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/io.html#read_gdal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.io.read_gdal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read raster from <code class="xref py py-class docutils literal notranslate"><span class="pre">gdal.Dataset</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -180,8 +180,8 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="geokit.io.read_geotiff">
-<code class="descclassname">geokit.io.</code><code class="descname">read_geotiff</code><span class="sig-paren">(</span><em>raster_path</em>, <em>layer_num=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/io.html#read_geotiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.io.read_geotiff" title="Permalink to this definition">¶</a></dt>
+<dt id="gkit.io.read_geotiff">
+<code class="descclassname">gkit.io.</code><code class="descname">read_geotiff</code><span class="sig-paren">(</span><em>raster_path</em>, <em>layer_num=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/io.html#read_geotiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.io.read_geotiff" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read GeoTIFF file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -201,66 +201,169 @@
 </dd></dl>
 
 </div>
-<div class="section" id="module-geokit.math">
-<span id="math"></span><h2>math<a class="headerlink" href="#module-geokit.math" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-gkit.math">
+<span id="math"></span><h2>math<a class="headerlink" href="#module-gkit.math" title="Permalink to this headline">¶</a></h2>
 <p>Wrapping some math functions from numpy, make it
 work fine with <code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code>.</p>
 <dl class="function">
-<dt id="geokit.math.max">
-<code class="descclassname">geokit.math.</code><code class="descname">max</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.max" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapped numpy function. Get more information by seeing
+<dt id="gkit.math.abs">
+<code class="descclassname">gkit.math.</code><code class="descname">abs</code><span class="sig-paren">(</span><em>rasters</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.abs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
 the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="geokit.math.mean">
-<code class="descclassname">geokit.math.</code><code class="descname">mean</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.mean" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapped numpy function. Get more information by seeing
+<dt id="gkit.math.agg_func">
+<code class="descclassname">gkit.math.</code><code class="descname">agg_func</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/math.html#agg_func"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.math.agg_func" title="Permalink to this definition">¶</a></dt>
+<dd><p>Aggregation functions wrapper.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.cos">
+<code class="descclassname">gkit.math.</code><code class="descname">cos</code><span class="sig-paren">(</span><em>rasters</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.cos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
 the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="geokit.math.min">
-<code class="descclassname">geokit.math.</code><code class="descname">min</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.min" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapped numpy function. Get more information by seeing
+<dt id="gkit.math.cosh">
+<code class="descclassname">gkit.math.</code><code class="descname">cosh</code><span class="sig-paren">(</span><em>rasters</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.cosh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
 the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="geokit.math.std">
-<code class="descclassname">geokit.math.</code><code class="descname">std</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.std" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapped numpy function. Get more information by seeing
+<dt id="gkit.math.count">
+<code class="descclassname">gkit.math.</code><code class="descname">count</code><span class="sig-paren">(</span><em>rasters</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.count" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
 the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
 </dd></dl>
 
 <dl class="function">
-<dt id="geokit.math.sum">
-<code class="descclassname">geokit.math.</code><code class="descname">sum</code><span class="sig-paren">(</span><em>r</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#geokit.math.sum" title="Permalink to this definition">¶</a></dt>
-<dd><p>Wrapped numpy function. Get more information by seeing
+<dt id="gkit.math.exp">
+<code class="descclassname">gkit.math.</code><code class="descname">exp</code><span class="sig-paren">(</span><em>rasters</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.exp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
 the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.log">
+<code class="descclassname">gkit.math.</code><code class="descname">log</code><span class="sig-paren">(</span><em>rasters</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.log" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.log10">
+<code class="descclassname">gkit.math.</code><code class="descname">log10</code><span class="sig-paren">(</span><em>rasters</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.log10" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.log2">
+<code class="descclassname">gkit.math.</code><code class="descname">log2</code><span class="sig-paren">(</span><em>rasters</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.log2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.max">
+<code class="descclassname">gkit.math.</code><code class="descname">max</code><span class="sig-paren">(</span><em>rasters</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.max" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.mean">
+<code class="descclassname">gkit.math.</code><code class="descname">mean</code><span class="sig-paren">(</span><em>rasters</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.mean" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.median">
+<code class="descclassname">gkit.math.</code><code class="descname">median</code><span class="sig-paren">(</span><em>rasters</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.median" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.min">
+<code class="descclassname">gkit.math.</code><code class="descname">min</code><span class="sig-paren">(</span><em>rasters</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.min" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.sin">
+<code class="descclassname">gkit.math.</code><code class="descname">sin</code><span class="sig-paren">(</span><em>rasters</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.sin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.sinh">
+<code class="descclassname">gkit.math.</code><code class="descname">sinh</code><span class="sig-paren">(</span><em>rasters</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.sinh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.std">
+<code class="descclassname">gkit.math.</code><code class="descname">std</code><span class="sig-paren">(</span><em>rasters</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.std" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.sum">
+<code class="descclassname">gkit.math.</code><code class="descname">sum</code><span class="sig-paren">(</span><em>rasters</em>, <em>axis=0</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.sum" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.tan">
+<code class="descclassname">gkit.math.</code><code class="descname">tan</code><span class="sig-paren">(</span><em>rasters</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.tan" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.tanh">
+<code class="descclassname">gkit.math.</code><code class="descname">tanh</code><span class="sig-paren">(</span><em>rasters</em>, <em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#gkit.math.tanh" title="Permalink to this definition">¶</a></dt>
+<dd><p>Wrapped numpy functions. Get more information by seeing
+the corresponding item in <code class="docutils literal notranslate"><span class="pre">numpy.ma</span></code>.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="gkit.math.ufunc">
+<code class="descclassname">gkit.math.</code><code class="descname">ufunc</code><span class="sig-paren">(</span><em>f</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/math.html#ufunc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.math.ufunc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Universal functions wrapper.</p>
 </dd></dl>
 
 </div>
-<div class="section" id="module-geokit.core">
-<span id="core"></span><h2>core<a class="headerlink" href="#module-geokit.core" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="module-gkit.core">
+<span id="core"></span><h2>core<a class="headerlink" href="#module-gkit.core" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="geokit.core.Raster">
-<em class="property">class </em><code class="descclassname">geokit.core.</code><code class="descname">Raster</code><a class="reference internal" href="_modules/geokit/core.html#Raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster" title="Permalink to this definition">¶</a></dt>
+<dt id="gkit.core.Raster">
+<em class="property">class </em><code class="descclassname">gkit.core.</code><code class="descname">Raster</code><a class="reference internal" href="_modules/gkit/core.html#Raster"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.Raster" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
-<dt id="geokit.core.Raster.clip">
-<code class="descname">clip</code><span class="sig-paren">(</span><em>shp_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.clip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.clip" title="Permalink to this definition">¶</a></dt>
+<dt id="gkit.core.Raster.clip">
+<code class="descname">clip</code><span class="sig-paren">(</span><em>shp_path</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core.html#Raster.clip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.Raster.clip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Clip raster by specified shapefile.</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="geokit.core.Raster.extent">
-<code class="descname">extent</code><a class="headerlink" href="#geokit.core.Raster.extent" title="Permalink to this definition">¶</a></dt>
+<dt id="gkit.core.Raster.extent">
+<code class="descname">extent</code><a class="headerlink" href="#gkit.core.Raster.extent" title="Permalink to this definition">¶</a></dt>
 <dd><p>The extent of raster in current coordinates.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="geokit.core.Raster.get_point_value">
-<code class="descname">get_point_value</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.get_point_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.get_point_value" title="Permalink to this definition">¶</a></dt>
+<dt id="gkit.core.Raster.get_point_value">
+<code class="descname">get_point_value</code><span class="sig-paren">(</span><em>x</em>, <em>y</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core.html#Raster.get_point_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.Raster.get_point_value" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get point value by coordinate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -277,8 +380,8 @@ the corresponding item in <code class="docutils literal notranslate"><span class
 </dd></dl>
 
 <dl class="method">
-<dt id="geokit.core.Raster.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>ax=None</em>, <em>cmap_name='seismic'</em>, <em>if_show=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.plot" title="Permalink to this definition">¶</a></dt>
+<dt id="gkit.core.Raster.plot">
+<code class="descname">plot</code><span class="sig-paren">(</span><em>ax=None</em>, <em>cmap_name='seismic'</em>, <em>if_show=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core.html#Raster.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.Raster.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> to plot preview picture</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -298,8 +401,8 @@ the corresponding item in <code class="docutils literal notranslate"><span class
 </dd></dl>
 
 <dl class="method">
-<dt id="geokit.core.Raster.reproject">
-<code class="descname">reproject</code><span class="sig-paren">(</span><em>x_count</em>, <em>y_count</em>, <em>transform=None</em>, <em>projection=None</em>, <em>method=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.reproject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.reproject" title="Permalink to this definition">¶</a></dt>
+<dt id="gkit.core.Raster.reproject">
+<code class="descname">reproject</code><span class="sig-paren">(</span><em>x_count=None</em>, <em>y_count=None</em>, <em>transform=None</em>, <em>projection=None</em>, <em>method=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core.html#Raster.reproject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.Raster.reproject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reproject/Resample</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -323,7 +426,7 @@ the corresponding item in <code class="docutils literal notranslate"><span class
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#geokit.core.Raster" title="geokit.core.Raster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code></a></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#gkit.core.Raster" title="gkit.core.Raster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code></a></p>
 </td>
 </tr>
 </tbody>
@@ -331,9 +434,15 @@ the corresponding item in <code class="docutils literal notranslate"><span class
 </dd></dl>
 
 <dl class="method">
-<dt id="geokit.core.Raster.save">
-<code class="descname">save</code><span class="sig-paren">(</span><em>out_raster_path=None</em>, <em>dtype=None</em>, <em>compress=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.save" title="Permalink to this definition">¶</a></dt>
-<dd><p>save <a class="reference internal" href="#geokit.core.Raster" title="geokit.core.Raster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code></a> to GeoTIFF file or <code class="xref py py-class docutils literal notranslate"><span class="pre">gdal.Dataset</span></code>.</p>
+<dt id="gkit.core.Raster.resample">
+<code class="descname">resample</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core.html#Raster.resample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.Raster.resample" title="Permalink to this definition">¶</a></dt>
+<dd><p>Alias of <code class="xref py py-meth docutils literal notranslate"><span class="pre">self.reproject()</span></code></p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gkit.core.Raster.save">
+<code class="descname">save</code><span class="sig-paren">(</span><em>out_raster_path=None</em>, <em>dtype=None</em>, <em>compress=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core.html#Raster.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.Raster.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>save <a class="reference internal" href="#gkit.core.Raster" title="gkit.core.Raster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code></a> to GeoTIFF file or <code class="xref py py-class docutils literal notranslate"><span class="pre">gdal.Dataset</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -362,8 +471,8 @@ return <code class="xref py py-class docutils literal notranslate"><span class="
 </dd></dl>
 
 <dl class="method">
-<dt id="geokit.core.Raster.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/geokit/core.html#Raster.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#geokit.core.Raster.show" title="Permalink to this definition">¶</a></dt>
+<dt id="gkit.core.Raster.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core.html#Raster.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.Raster.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>A shortcut of <code class="xref py py-meth docutils literal notranslate"><span class="pre">self.plot()</span></code>. Just set <code class="docutils literal notranslate"><span class="pre">if_show=True</span></code>.</p>
 </dd></dl>
 
