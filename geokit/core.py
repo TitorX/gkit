@@ -24,7 +24,6 @@ class Raster(MaskedArray):
     def __new__(cls, array, transform, projection=None, a_srs="EPSG:4326",
                 nodatavalue=None, mask=None, filepath=None):
         """"""
-        self.filepath = filepath
 
         if projection is None:
             name, code = a_srs.split(":")
@@ -56,6 +55,7 @@ class Raster(MaskedArray):
             cls, array, fill_value=nodatavalue
         )
 
+        setattr(obj, 'filepath', filepath)
         setattr(obj, '_raster_meta', _raster_meta)
         return obj
 

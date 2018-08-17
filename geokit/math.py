@@ -9,8 +9,9 @@ from .core import Raster
 
 
 def agg_func(f):
+    """Aggregation functions wrapper."""
     def func(rasters, axis=0, *args, **kwargs):
-        """Wrapped numpy function. Get more information by seeing 
+        """Wrapped numpy functions. Get more information by seeing 
         the corresponding item in ``numpy.ma``.
         """
         projections = set(map(lambda r: r.projection, rasters))
@@ -25,9 +26,39 @@ def agg_func(f):
     return func
 
 
-mean = agg_func(np.ma.mean)
 max = agg_func(np.ma.max)
 min = agg_func(np.ma.min)
+median = agg_func(np.ma.median)
+count = agg_func(np.ma.count)
+mean = agg_func(np.ma.mean)
 sum = agg_func(np.ma.sum)
 std = agg_func(np.ma.std)
-abs = agg_func(np.ma.abs)
+
+
+def ufunc(f):
+    """Universal functions wrapper."""
+    def func(rasters, *args, **kwargs):
+        """Wrapped numpy functions. Get more information by seeing 
+        the corresponding item in ``numpy.ma``.
+        """
+        if isinstance(rasters, (list, tuple)):
+            return list(map(lambda r: f(r, *args, **kwargs), rasters))
+        else:
+            return f(rasters, *args, **kwargs)
+    return func
+
+
+sin = ufunc(np.ma.sin)
+sinh = ufunc(np.ma.sinh)
+cos = ufunc(np.ma.cos)
+cosh = ufunc(np.ma.cosh)
+tan = ufunc(np.ma.tan)
+tanh = ufunc(np.ma.tanh)
+
+log = ufunc(np.ma.log)
+log2 = ufunc(np.ma.log2)
+log10 = ufunc(np.ma.log10)
+
+exp = ufunc(np.ma.exp)
+
+abs = ufunc(np.ma.abs)
