@@ -1,5 +1,5 @@
 from setuptools import setup
-from geokit import __version__, __author__, __email__
+from gkit import __version__, __author__, __email__
 
 
 setup(
@@ -13,6 +13,6 @@ setup(
     },
     entry_points={'console_scripts': ['gkit = gkit.script:execute']},
     url='https://github.com/TitorX/gkit',
-    description='Geokit is a suit of utilites for processing geo-dataset.',
+    description='Gkit is a suit of utilites for processing geo-dataset.',
     long_description=open('README.rst').read(),
 )
