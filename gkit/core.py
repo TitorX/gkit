@@ -42,7 +42,7 @@ class Raster(MaskedArray):
 
         _raster_meta = {
             'projection': projection,
-            'transform': transform,
+            'transform': tuple(transform),
         }
 
         if mask is not None:
@@ -73,7 +73,7 @@ class Raster(MaskedArray):
 
     @transform.setter
     def transform(self, value):
-        self._raster_meta['transform'] = value
+        self._raster_meta['transform'] = tuple(value)
 
     @property
     def extent(self):
