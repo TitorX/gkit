@@ -1,5 +1,6 @@
 """Reading and writing functions.
 """
+import os
 from osgeo import gdal
 from .core import Raster
 
@@ -29,18 +30,19 @@ def read_gdal(raster, layer_num=1, **kwargs):
     return obj
 
 
-def read_geotiff(raster_path, layer_num=1, **kwargs):
+def read_geotiff(filepath, layer_num=1, **kwargs):
     """Read GeoTIFF file.
 
     Args:
-        raster_path (str): GeoTIFF file path.
+        filepath (str): GeoTIFF file path.
         layer_num (int): Layer number wanted to loaded.
 
     Returns:
         :class:`Raster`
     """
-    raster_path = raster_path if raster_path.endswith(".tif") \
-        else raster_path + ".tif"
-    raster = gdal.Open(raster_path)
+    filepath = filepath if filepath.endswith(".tif") \
+        else filepath + ".tif"
+    filepath = os.path.abspath(filepath)
+    raster = gdal.Open(filepath)
 
-    return read_gdal(raster, layer_num, **kwargs)
+    return read_gdal(raster, layer_num, filepath=filepath, **kwargs)
