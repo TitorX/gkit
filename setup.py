@@ -11,7 +11,9 @@ setup(
     package_data={
         'gkit': ['README.rst', 'LICENSE']
     },
-    entry_points={'console_scripts': ['gkit = gkit.script:execute']},
+    entry_points={'console_scripts': [
+        'gk = gkit.cli:main'
+    ]},
     url='https://github.com/TitorX/gkit',
     description='Gkit is a suit of utilites for processing geo-dataset.',
     long_description=open('README.rst').read(),

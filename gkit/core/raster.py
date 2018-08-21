@@ -109,8 +109,10 @@ class Raster(MaskedArray):
         ]
 
     def _update_from(self, obj):
-        self.__dict__.update(
-            {"_raster_meta": getattr(obj, '_raster_meta', None)})
+        self.__dict__.update({
+            "_raster_meta": getattr(obj, '_raster_meta', None),
+            "filepath": getattr(obj, 'filepath', None)
+        })
         super(Raster, self)._update_from(obj)
         return
 

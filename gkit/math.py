@@ -17,7 +17,7 @@ def agg_func(f):
         projections = set(map(lambda r: r.projection, rasters))
         if len(projections) != 1:
             warnings.warn("Rasters has different projections.")
-        transforms = set(map(lambda r: tuple(r.transform), rasters))
+        transforms = set(map(lambda r: r.transform, rasters))
         if len(transforms) != 1:
             warnings.warn("Rasters has different transforms.")
 
