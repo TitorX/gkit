@@ -55,6 +55,8 @@ cosh = ufunc(np.ma.cosh)
 tan = ufunc(np.ma.tan)
 tanh = ufunc(np.ma.tanh)
 
+radians = ufunc(np.radians)
+
 log = ufunc(np.ma.log)
 log2 = ufunc(np.ma.log2)
 log10 = ufunc(np.ma.log10)
