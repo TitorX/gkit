@@ -7,12 +7,12 @@ setup(
     version=__version__,
     author=__author__,
     author_email=__email__,
-    packages=['gkit'],
+    packages=['gkit', 'gkit.core'],
     package_data={
         'gkit': ['README.rst', 'LICENSE']
     },
     entry_points={'console_scripts': [
-        'gk = gkit.cli:main'
+        'gkit = gkit.cli:main'
     ]},
     url='https://github.com/TitorX/gkit',
     description='Gkit is a suit of utilites for processing geo-dataset.',
