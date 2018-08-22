@@ -9,18 +9,6 @@ from gkit.math import *
 
 class CLI(object):
 
-    def exec(self, formula, out=None, *args, **kwargs):
-        pass
-
-    def reproject(self, formula, out=None, *args, **kwargs):
-        pass
-
-    def resample(self, formula, out=None, *args, **kwargs):
-        pass
-
-    def clipbyshp(self, formula, out=None, *args, **kwargs):
-        pass
-
     @staticmethod
     def map(formula, out="./", *args, **kwargs):
         for r in map(gk.read_geotiff, args):
