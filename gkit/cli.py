@@ -1,10 +1,30 @@
 #!/Users/titor/.pyenv/shims/python
 import os
+import re
+from pathlib import Path
+from urllib.parse import urlparse
 
 import fire
 
 import gkit as gk
 from gkit.math import *
+
+
+def loader(*args):
+    rs = []
+    for fn in args:
+        if "re://" in fn:
+            fn = re.compile(fn[5:])
+            files = filter(
+                lambda f: re.search(fn, str(f)) is not None,
+                Path(".").rglob("*")
+            )
+            for fn in list(files):
+                rs.append(gk.read_geotiff(str(fn)))
+        else:
+            rs.append(gk.read_geotiff(fn))
+
+    return rs[0] if len(rs) == 1 else rs
 
 
 class CLI(object):
@@ -20,9 +40,7 @@ class CLI(object):
         if not args:
             return
 
-        r = list(map(gk.read_geotiff, args))
-        r = r[0] if len(r) == 1 else r
-
+        r = loader(*args)
         res = eval(formula)
         res.save(out)
 
