@@ -173,34 +173,8 @@ class Raster(MaskedArray):
         else:
             del out_band, out_raster
 
-    def zonal_apply(self, func, shp_path):
-        """"""
-        mem_shp_driver = ogr.GetDriverByName("Memory")
-
-        shp = ogr.Open(shp_path)
-
-        fid = []
-        result = []
-        for feature in shp.GetLayer():
-            tmp_shp = mem_shp_driver.CreateDataSource("")
-            srs = osr.SpatialReference()
-            srs.ImportFromWkt(self._raster_meta['projection'])
-            tmp_layer = tmp_shp.CreateLayer("tmp", srs)
-            tmp_layer.CreateFeature(feature.Clone())
-
-            tmp_raster = self._clip(tmp_layer)
-            fid.append(feature.GetFID())
-            result.append(func(tmp_raster))
-
-        return fid, result
-
-    def clip(self, shp_path):
-        """Clip raster by specified shapefile."""
-        shp = ogr.Open(shp_path)
-        return self._clip(shp.GetLayer())
-
-    def _clip(self, layer):
-        """Clip raster by specified layer."""
+    def clip(self, layer):
+        """Clip raster by layer."""
 
         # TODO Convert layer's projection into raster's projection when
         # they have different projection.
@@ -218,7 +192,37 @@ class Raster(MaskedArray):
         mask = np.ma.masked_equal(
             tmp_raster.ReadAsArray(), 0).mask
 
-        return np.ma.masked_array(self, mask)
+        array = np.ma.masked_array(self, mask)
+        return Raster(array, self.transform, self.projection)
+
+    def clip_by_shp(self, shp_path):
+        """Clip raster by shapefile."""
+        shp = ogr.Open(shp_path)
+        return self.clip(shp.GetLayer())
+
+    def clip_by_feature(self, feature):
+        """Clip raster by a feature."""
+        tmp_shp = mem_shp_driver.CreateDataSource("")
+        srs = osr.SpatialReference()
+        srs.ImportFromWkt(self.projection)
+        tmp_layer = tmp_shp.CreateLayer("tmp", srs)
+        tmp_layer.CreateFeature(feature.Clone())
+
+        return self.clip(tmp_layer)
+
+    def zonal_apply(self, shp_path, func, by=None):
+        """"""
+        mem_shp_driver = ogr.GetDriverByName("Memory")
+        shp = ogr.Open(shp_path)
+
+        index = []
+        result = []
+        for feature in shp.GetLayer():
+            tmp_raster = self.clip_by_feature(feature)
+            index.append(feature[by] if by is not None else feature.GetFID())
+            result.append(func(tmp_raster))
+
+        return list(zip(index, result))
 
     def reproject(self, x_count=None, y_count=None,
                   transform=None, projection=None, method=gdal.GRA_Bilinear):
@@ -229,7 +233,7 @@ class Raster(MaskedArray):
             y_count (int): Column count. (``RasterYSize``)
             transform (list): Use current transform in default.
             projection: Use current projection in default.
-            method (int): 
+            method (int):
                 |  Could be following options:
                 |  ``gdal.GRA_Bilinear`` (default)
                 |  ``gdal.GRA_Average``

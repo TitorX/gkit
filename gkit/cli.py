@@ -32,6 +32,8 @@ class CLI(object):
     @staticmethod
     def map(formula, out="./", *args, **kwargs):
         for r in map(gk.read_geotiff, args):
+            if kwargs.get('print'):
+                print(r.filepath)
             res = eval(formula)
             res.save(os.path.join(out, os.path.basename(res.filepath)))
 
@@ -41,6 +43,13 @@ class CLI(object):
             return
 
         r = loader(*args)
+        if kwargs.get('print'):
+            if isinstance(r, list):
+                for i in r:
+                    print(i.filepath)
+            else:
+                print(r.filepath)
+
         res = eval(formula)
         res.save(out)
 
