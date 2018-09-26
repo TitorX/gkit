@@ -202,6 +202,7 @@ class Raster(MaskedArray):
 
     def clip_by_feature(self, feature):
         """Clip raster by a feature."""
+        mem_shp_driver = ogr.GetDriverByName("Memory")
         tmp_shp = mem_shp_driver.CreateDataSource("")
         srs = osr.SpatialReference()
         srs.ImportFromWkt(self.projection)
@@ -212,7 +213,6 @@ class Raster(MaskedArray):
 
     def zonal_apply(self, shp_path, func, by=None):
         """"""
-        mem_shp_driver = ogr.GetDriverByName("Memory")
         shp = ogr.Open(shp_path)
 
         index = []
