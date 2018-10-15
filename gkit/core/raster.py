@@ -82,7 +82,7 @@ class Raster(MaskedArray):
         right = left + self.transform[1] * self.shape[1]
         top = self.transform[3]
         bottom = top + self.transform[5] * self.shape[0]
-        return [left, right, top, bottom]
+        return [left, right, , bottom, top]
 
     def _gdal_dtype(self):
         if self.dtype in TYPE:

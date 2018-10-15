@@ -35,7 +35,7 @@ class CLI(object):
             if kwargs.get('print'):
                 print(r.filepath)
             res = eval(formula)
-            res.save(os.path.join(out, os.path.basename(r.filepath)))
+            res.save(os.path.join(out, os.path.basename(res.filepath)))
 
     @staticmethod
     def calc(formula, out='out', *args, **kwargs):
