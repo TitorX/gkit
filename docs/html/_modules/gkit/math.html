@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gkit.math &mdash; Gkit 0.1.2 documentation</title>
+  <title>gkit.math &mdash; Gkit 0.2.15 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.1.2
+                0.2.15
               </div>
             
           
@@ -146,7 +146,7 @@
            <div itemprop="articleBody">
             
   <h1>Source code for gkit.math</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Wrapping some math functions from numpy, make it </span>
+<span></span><span class="sd">&quot;&quot;&quot;Wrapping some math functions from numpy, make it</span>
 <span class="sd">work fine with :class:`Raster`.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
@@ -159,7 +159,7 @@
 <div class="viewcode-block" id="agg_func"><a class="viewcode-back" href="../../api.html#gkit.math.agg_func">[docs]</a><span class="k">def</span> <span class="nf">agg_func</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Aggregation functions wrapper.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">rasters</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Wrapped numpy functions. Get more information by seeing </span>
+        <span class="sd">&quot;&quot;&quot;Wrapped numpy functions. Get more information by seeing</span>
 <span class="sd">        the corresponding item in ``numpy.ma``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">projections</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="n">r</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span> <span class="n">rasters</span><span class="p">))</span>
@@ -186,7 +186,7 @@
 <div class="viewcode-block" id="ufunc"><a class="viewcode-back" href="../../api.html#gkit.math.ufunc">[docs]</a><span class="k">def</span> <span class="nf">ufunc</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Universal functions wrapper.&quot;&quot;&quot;</span>
     <span class="k">def</span> <span class="nf">func</span><span class="p">(</span><span class="n">rasters</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Wrapped numpy functions. Get more information by seeing </span>
+        <span class="sd">&quot;&quot;&quot;Wrapped numpy functions. Get more information by seeing</span>
 <span class="sd">        the corresponding item in ``numpy.ma``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rasters</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
@@ -202,6 +202,8 @@
 <span class="n">cosh</span> <span class="o">=</span> <span class="n">ufunc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">cosh</span><span class="p">)</span>
 <span class="n">tan</span> <span class="o">=</span> <span class="n">ufunc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">tan</span><span class="p">)</span>
 <span class="n">tanh</span> <span class="o">=</span> <span class="n">ufunc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">tanh</span><span class="p">)</span>
+
+<span class="n">radians</span> <span class="o">=</span> <span class="n">ufunc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">)</span>
 
 <span class="n">log</span> <span class="o">=</span> <span class="n">ufunc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log</span><span class="p">)</span>
 <span class="n">log2</span> <span class="o">=</span> <span class="n">ufunc</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log2</span><span class="p">)</span>
@@ -222,7 +224,7 @@
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2018, Titor.
+        &copy; Copyright 2018, Titor
 
     </p>
   </div>
@@ -241,21 +243,24 @@
 
   
 
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.1.2',
-            LANGUAGE:'None',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    
+      <script type="text/javascript">
+          var DOCUMENTATION_OPTIONS = {
+              URL_ROOT:'../../',
+              VERSION:'0.2.15',
+              LANGUAGE:'None',
+              COLLAPSE_INDEX:false,
+              FILE_SUFFIX:'.html',
+              HAS_SOURCE:  true,
+              SOURCELINK_SUFFIX: '.txt'
+          };
+      </script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
 
   
 

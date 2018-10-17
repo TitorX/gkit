@@ -1,4 +1,4 @@
-"""Wrapping some math functions from numpy, make it 
+"""Wrapping some math functions from numpy, make it
 work fine with :class:`Raster`.
 """
 import warnings
@@ -11,7 +11,7 @@ from .core import Raster
 def agg_func(f):
     """Aggregation functions wrapper."""
     def func(rasters, axis=0, *args, **kwargs):
-        """Wrapped numpy functions. Get more information by seeing 
+        """Wrapped numpy functions. Get more information by seeing
         the corresponding item in ``numpy.ma``.
         """
         projections = set(map(lambda r: r.projection, rasters))
@@ -38,7 +38,7 @@ std = agg_func(np.ma.std)
 def ufunc(f):
     """Universal functions wrapper."""
     def func(rasters, *args, **kwargs):
-        """Wrapped numpy functions. Get more information by seeing 
+        """Wrapped numpy functions. Get more information by seeing
         the corresponding item in ``numpy.ma``.
         """
         if isinstance(rasters, (list, tuple)):

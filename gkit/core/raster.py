@@ -174,7 +174,7 @@ class Raster(MaskedArray):
         else:
             del out_band, out_raster
 
-    def clip(self, layer):
+    def clip_by_layer(self, layer):
         """Clip raster by layer."""
 
         # TODO Convert layer's projection into raster's projection when
@@ -199,7 +199,7 @@ class Raster(MaskedArray):
     def clip_by_shp(self, shp_path):
         """Clip raster by shapefile."""
         shp = ogr.Open(shp_path)
-        return self.clip(shp.GetLayer())
+        return self.clip_by_layer(shp.GetLayer())
 
     def clip_by_feature(self, feature):
         """Clip raster by a feature."""
@@ -210,7 +210,7 @@ class Raster(MaskedArray):
         tmp_layer = tmp_shp.CreateLayer("tmp", srs)
         tmp_layer.CreateFeature(feature.Clone())
 
-        return self.clip(tmp_layer)
+        return self.clip_by_layer(tmp_layer)
 
     def zonal_apply(self, shp_path, func, by=None):
         """"""
@@ -273,8 +273,9 @@ class Raster(MaskedArray):
             array, transform,
             projection, nodatavalue=self.fill_value)
 
-    def resample(self, *args, **kwargs):
-        """Alias of :meth:`self.reproject`
+    def resample(self, x_count=None, y_count=None, transform=None):
+        """Alias of :meth:`self.reproject`. The only difference is that
+        :meth:`resample` cannot change the projection of raster.
         """
         return self.reproject(*args, **kwargs)
 
