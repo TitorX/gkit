@@ -11,7 +11,6 @@ from gkit.math import *
 
 
 def loader(*args):
-    rs = []
     for fn in args:
         if "re://" in fn:
             fn = re.compile(fn[5:])
@@ -20,35 +19,36 @@ def loader(*args):
                 Path(".").rglob("*")
             )
             for fn in list(files):
-                rs.append(gk.read_geotiff(str(fn)))
+                yield gk.read_geotiff(str(fn))
         else:
-            rs.append(gk.read_geotiff(fn))
-
-    return rs[0] if len(rs) == 1 else rs
+            yield gk.read_geotiff(fn)
 
 
 class CLI(object):
 
     @staticmethod
     def map(formula, out="./", *args, **kwargs):
-        for r in map(gk.read_geotiff, args):
+        if not os.path.exists(out):
+            os.makedirs(out)
+
+        for r in loader(*args):
             if kwargs.get('print'):
                 print(r.filepath)
             res = eval(formula)
-            res.save(os.path.join(out, os.path.basename(res.filepath)))
+            res.save(os.path.join(out, os.path.basename(r.filepath)))
 
     @staticmethod
     def calc(formula, out='out', *args, **kwargs):
         if not args:
             return
 
-        r = loader(*args)
+        r = list(loader(*args))
+
         if kwargs.get('print'):
-            if isinstance(r, list):
-                for i in r:
-                    print(i.filepath)
-            else:
-                print(r.filepath)
+            for i in r:
+                print(i.filepath)
+
+        if len(r) == 1: r = r[0]
 
         res = eval(formula)
         res.save(out)

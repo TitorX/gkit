@@ -55,6 +55,7 @@ class Raster(MaskedArray):
             cls, array, fill_value=nodatavalue
         )
 
+        if filepath is not None: filepath = str(filepath)
         setattr(obj, 'filepath', filepath)
         setattr(obj, '_raster_meta', _raster_meta)
         return obj
