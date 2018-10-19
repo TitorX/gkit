@@ -117,6 +117,16 @@ class Raster(MaskedArray):
         super(Raster, self)._update_from(obj)
         return
 
+    def set_fill_value(self, value=None):
+        info = np.iinfo if self.dtype.kind == "i" else np.finfo
+        max_value = info(self.dtype).max
+        min_value = info(self.dtype).min
+        if value is None:
+            super(Raster, self).set_fill_value(max_value)
+        else:
+            value = min(max_value, max(min_value, value))
+            super(Raster, self).set_fill_value(value)
+
     def save(self, out_raster_path=None, dtype=None, compress=True):
         """save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.
 
@@ -166,6 +176,7 @@ class Raster(MaskedArray):
         out_raster.SetProjection(raster.projection)
         out_raster.SetGeoTransform(raster.transform)
         out_band = out_raster.GetRasterBand(1)
+        raster.set_fill_value(raster.fill_value)
         out_band.SetNoDataValue(np.float64(raster.fill_value))
         out_band.WriteArray(raster.filled())
 
@@ -273,11 +284,11 @@ class Raster(MaskedArray):
             array, transform,
             projection, nodatavalue=self.fill_value)
 
-    def resample(self, x_count=None, y_count=None, transform=None):
+    def resample(self, x_count=None, y_count=None, transform=None, method=None):
         """Alias of :meth:`self.reproject`. The only difference is that
         :meth:`resample` cannot change the projection of raster.
         """
-        return self.reproject(*args, **kwargs)
+        return self.reproject(x_count, y_count, transform, method=method)
 
     def plot(self, ax=None, cmap_name='seismic', if_show=False):
         """Use ``matplotlib`` to plot preview picture
