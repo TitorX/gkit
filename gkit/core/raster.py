@@ -46,6 +46,8 @@ class Raster(MaskedArray):
             'transform': tuple(transform),
         }
 
+        array = np.ma.masked_invalid(array)
+
         if mask is not None:
             array = MaskedArray(array, mask=mask)
 

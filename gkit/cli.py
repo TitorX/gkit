@@ -1,8 +1,6 @@
-#!/Users/titor/.pyenv/shims/python
 import os
 import re
 from pathlib import Path
-from urllib.parse import urlparse
 
 import fire
 
@@ -25,6 +23,16 @@ def loader(*args):
 
 
 class CLI(object):
+    @staticmethod
+    def clip_by_shp(shp_path, out="./", *args, **kwargs):
+        if not os.path.exists(out):
+            os.makedirs(out)
+
+        for r in loader(*args):
+            if kwargs.get('print'):
+                print(r.filepath)
+            res = r.clip_by_shp(shp_path)
+            res.save(os.path.join(out, os.path.basename(r.filepath)))
 
     @staticmethod
     def map(formula, out="./", *args, **kwargs):
@@ -48,14 +56,15 @@ class CLI(object):
             for i in r:
                 print(i.filepath)
 
-        if len(r) == 1: r = r[0]
+        if len(r) == 1:
+            r = r[0]
 
         res = eval(formula)
         res.save(out)
 
     @staticmethod
     def show(raster):
-        """Display raster file."""
+        """Display a raster file."""
         gk.read_geotiff(raster).show()
 
 
