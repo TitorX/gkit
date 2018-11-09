@@ -347,31 +347,32 @@ class Raster(MaskedArray):
                 Ignored if footprint is given.
             footprint (array, str):
                 |  Either `size` or `footprint` must be defined. `size` gives
-                the shape that is taken from the input array, at every element
-                position, to define the input to the filter function.
+                    the shape that is taken from the input array, at every
+                    element position, to define the input to the filter
+                    function.
                 |  `footprint` is a boolean array that specifies (implicitly) a
-                shape, but also which of the elements within this shape will
-                get passed to the filter function.
+                    shape, but also which of the elements within this shape
+                    will get passed to the filter function.
                 |  When `footprint` is given, `size` is ignored.
             mode (str):
                 |  The `mode` parameter determines how the input array is
-                extended when the filter overlaps a border. By passing a
-                sequence of modes with length equal to the number of dimensions
-                of the input array, different modes can be specified along each
-                axis. Default value is 'reflect'. The valid values and their
-                behavior is as follows:
+                    extended when the filter overlaps a border. By passing a
+                    sequence of modes with length equal to the number of
+                    dimensions of the input array, different modes can be
+                    specified along each axis. Default value is 'reflect'.
+                    The valid values and their behavior is as follows:
 
                 |  'reflect' (`d c b a | a b c d | d c b a`) The input is
-                extended by reflecting about the edge of the last pixel.
+                    extended by reflecting about the edge of the last pixel.
                 |  'constant' (`k k k k | a b c d | k k k k`) The input is
-                extended by filling all values beyond the edge with the same
-                constant value, defined by the `cval` parameter.
+                    extended by filling all values beyond the edge with the
+                    same constant value, defined by the `cval` parameter.
                 |  'nearest' (`a a a a | a b c d | d d d d`) The input is
-                extended by replicating the last pixel.
+                    extended by replicating the last pixel.
                 |  'mirror' (`d c b | a b c d | c b a`) The input is extended
-                by reflecting about the center of the last pixel.
+                    by reflecting about the center of the last pixel.
                 |  'wrap' (`a b c d | a b c d | a b c d`) The input is extended
-                by wrapping around to the opposite edge.
+                    by wrapping around to the opposite edge.
             cval (scalar): Value to fill past edges of input if `mode` is
                 'constant'. Default is 0.0.
 
