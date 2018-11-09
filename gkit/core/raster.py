@@ -1,6 +1,7 @@
 import numpy as np
 from numpy.ma import MaskedArray
 from osgeo import gdal, osr, ogr
+from scipy.ndimage.filters import generic_filter as gf
 
 
 # Data type mapping between numpy and gdal.
@@ -55,7 +56,8 @@ class Raster(MaskedArray):
             cls, array, fill_value=nodatavalue
         )
 
-        if filepath is not None: filepath = str(filepath)
+        if filepath is not None:
+            filepath = str(filepath)
         setattr(obj, 'filepath', filepath)
         setattr(obj, '_raster_meta', _raster_meta)
         return obj
@@ -104,10 +106,15 @@ class Raster(MaskedArray):
         pixel_x = self._raster_meta['transform'][5]
         pixel_y = self._raster_meta['transform'][1]
 
-        return self[
+        res = self[
             int((x - origin_x) / pixel_x),
             int((y - origin_y) / pixel_y)
         ]
+
+        if np.ma.is_masked(res):
+            return np.nan
+        else:
+            return res
 
     def _update_from(self, obj):
         self.__dict__.update({
@@ -118,6 +125,7 @@ class Raster(MaskedArray):
         return
 
     def set_fill_value(self, value=None):
+        """"""
         info = np.iinfo if self.dtype.kind == "i" else np.finfo
         max_value = info(self.dtype).max
         min_value = info(self.dtype).min
@@ -284,7 +292,8 @@ class Raster(MaskedArray):
             array, transform,
             projection, nodatavalue=self.fill_value)
 
-    def resample(self, x_count=None, y_count=None, transform=None, method=None):
+    def resample(self, x_count=None, y_count=None,
+                 transform=None, method=None):
         """Alias of :meth:`self.reproject`. The only difference is that
         :meth:`resample` cannot change the projection of raster.
         """
@@ -323,3 +332,53 @@ class Raster(MaskedArray):
         """
         kwargs['if_show'] = True
         self.plot(*args, **kwargs)
+
+    def rolling(self, function, size=None, footprint=None, mode='reflect',
+                cval=0.0):
+        """Calculate a 2D filter using the given function.
+
+        At each element the provided function is called. The input values
+        within the filter footprint at that element are passed to the function
+        as a 1D array of double values.
+
+        Args:
+            function (callable, str): Function to apply at each element.
+            size (scalar, tuple): See foorprint, below.
+                Ignored if footprint is given.
+            footprint (array, str):
+                |  Either `size` or `footprint` must be defined. `size` gives
+                the shape that is taken from the input array, at every element
+                position, to define the input to the filter function.
+                |  `footprint` is a boolean array that specifies (implicitly) a
+                shape, but also which of the elements within this shape will
+                get passed to the filter function.
+                |  When `footprint` is given, `size` is ignored.
+            mode (str):
+                |  The `mode` parameter determines how the input array is
+                extended when the filter overlaps a border. By passing a
+                sequence of modes with length equal to the number of dimensions
+                of the input array, different modes can be specified along each
+                axis. Default value is 'reflect'. The valid values and their
+                behavior is as follows:
+
+                |  'reflect' (`d c b a | a b c d | d c b a`) The input is
+                extended by reflecting about the edge of the last pixel.
+                |  'constant' (`k k k k | a b c d | k k k k`) The input is
+                extended by filling all values beyond the edge with the same
+                constant value, defined by the `cval` parameter.
+                |  'nearest' (`a a a a | a b c d | d d d d`) The input is
+                extended by replicating the last pixel.
+                |  'mirror' (`d c b | a b c d | c b a`) The input is extended
+                by reflecting about the center of the last pixel.
+                |  'wrap' (`a b c d | a b c d | a b c d`) The input is extended
+                by wrapping around to the opposite edge.
+            cval (scalar): Value to fill past edges of input if `mode` is
+                'constant'. Default is 0.0.
+
+        Returns:
+            :class:`Raster`
+        """
+        res = gf(
+            self.filled(np.nan), function, size, footprint,
+            mode=mode, cval=cval)
+        return Raster(res, self.transform, self.projection, mask=self.mask)
