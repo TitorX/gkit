@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; Gkit 0.2.15 documentation</title>
+  <title>API Reference &mdash; Gkit 0.3.2 documentation</title>
   
 
   
@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                0.2.15
+                0.3.2
               </div>
             
           
@@ -304,9 +304,69 @@
 
 <dl class="method">
 <dt id="gkit.core.raster.Raster.resample">
-<code class="descname">resample</code><span class="sig-paren">(</span><em>x_count=None</em>, <em>y_count=None</em>, <em>transform=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core/raster.html#Raster.resample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.raster.Raster.resample" title="Permalink to this definition">¶</a></dt>
+<code class="descname">resample</code><span class="sig-paren">(</span><em>x_count=None</em>, <em>y_count=None</em>, <em>transform=None</em>, <em>method=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core/raster.html#Raster.resample"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.raster.Raster.resample" title="Permalink to this definition">¶</a></dt>
 <dd><p>Alias of <code class="xref py py-meth docutils literal notranslate"><span class="pre">self.reproject()</span></code>. The only difference is that
 <a class="reference internal" href="#gkit.core.raster.Raster.resample" title="gkit.core.raster.Raster.resample"><code class="xref py py-meth docutils literal notranslate"><span class="pre">resample()</span></code></a> cannot change the projection of raster.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="gkit.core.raster.Raster.rolling">
+<code class="descname">rolling</code><span class="sig-paren">(</span><em>function</em>, <em>size=None</em>, <em>footprint=None</em>, <em>mode='reflect'</em>, <em>cval=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core/raster.html#Raster.rolling"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.raster.Raster.rolling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate a 2D filter using the given function.</p>
+<p>At each element the provided function is called. The input values
+within the filter footprint at that element are passed to the function
+as a 1D array of double values.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>function</strong> (<em>callable</em><em>, </em><em>str</em>) – Function to apply at each element.</li>
+<li><strong>size</strong> (<em>scalar</em><em>, </em><em>tuple</em>) – See foorprint, below.
+Ignored if footprint is given.</li>
+<li><strong>footprint</strong> (<em>array</em><em>, </em><em>str</em>) – <div class="line-block">
+<div class="line">Either <cite>size</cite> or <cite>footprint</cite> must be defined. <cite>size</cite> gives
+the shape that is taken from the input array, at every
+element position, to define the input to the filter
+function.</div>
+<div class="line"><cite>footprint</cite> is a boolean array that specifies (implicitly) a
+shape, but also which of the elements within this shape
+will get passed to the filter function.</div>
+<div class="line">When <cite>footprint</cite> is given, <cite>size</cite> is ignored.</div>
+</div>
+</li>
+<li><strong>mode</strong> (<em>str</em>) – <div class="line-block">
+<div class="line">The <cite>mode</cite> parameter determines how the input array is
+extended when the filter overlaps a border. By passing a
+sequence of modes with length equal to the number of
+dimensions of the input array, different modes can be
+specified along each axis. Default value is ‘reflect’.
+The valid values and their behavior is as follows:</div>
+</div>
+<div class="line-block">
+<div class="line">’reflect’ (<cite>d c b a | a b c d | d c b a</cite>) The input is
+extended by reflecting about the edge of the last pixel.</div>
+<div class="line">’constant’ (<cite>k k k k | a b c d | k k k k</cite>) The input is
+extended by filling all values beyond the edge with the
+same constant value, defined by the <cite>cval</cite> parameter.</div>
+<div class="line">’nearest’ (<cite>a a a a | a b c d | d d d d</cite>) The input is
+extended by replicating the last pixel.</div>
+<div class="line">’mirror’ (<cite>d c b | a b c d | c b a</cite>) The input is extended
+by reflecting about the center of the last pixel.</div>
+<div class="line">’wrap’ (<cite>a b c d | a b c d | a b c d</cite>) The input is extended
+by wrapping around to the opposite edge.</div>
+</div>
+</li>
+<li><strong>cval</strong> (<em>scalar</em>) – Value to fill past edges of input if <cite>mode</cite> is
+‘constant’. Default is 0.0.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><a class="reference internal" href="#gkit.core.raster.Raster" title="gkit.core.raster.Raster"><code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code></a></p>
+</td>
+</tr>
+</tbody>
+</table>
 </dd></dl>
 
 <dl class="method">
@@ -540,21 +600,11 @@ the corresponding item in <code class="docutils literal notranslate"><span class
 
     
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'./',
-              VERSION:'0.2.15',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
         <script type="text/javascript" src="_static/jquery.js"></script>
         <script type="text/javascript" src="_static/underscore.js"></script>
         <script type="text/javascript" src="_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
   

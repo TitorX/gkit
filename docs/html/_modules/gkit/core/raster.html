@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gkit.core.raster &mdash; Gkit 0.2.15 documentation</title>
+  <title>gkit.core.raster &mdash; Gkit 0.3.2 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.2.15
+                0.3.2
               </div>
             
           
@@ -149,6 +149,7 @@
 <span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">numpy.ma</span> <span class="k">import</span> <span class="n">MaskedArray</span>
 <span class="kn">from</span> <span class="nn">osgeo</span> <span class="k">import</span> <span class="n">gdal</span><span class="p">,</span> <span class="n">osr</span><span class="p">,</span> <span class="n">ogr</span>
+<span class="kn">from</span> <span class="nn">scipy.ndimage.filters</span> <span class="k">import</span> <span class="n">generic_filter</span> <span class="k">as</span> <span class="n">gf</span>
 
 
 <span class="c1"># Data type mapping between numpy and gdal.</span>
@@ -203,7 +204,8 @@
             <span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">nodatavalue</span>
         <span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span> <span class="n">filepath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">filepath</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">filepath</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;filepath&#39;</span><span class="p">,</span> <span class="n">filepath</span><span class="p">)</span>
         <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_raster_meta&#39;</span><span class="p">,</span> <span class="n">_raster_meta</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span>
@@ -252,10 +254,15 @@
         <span class="n">pixel_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span>
         <span class="n">pixel_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span>
             <span class="nb">int</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">origin_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">pixel_x</span><span class="p">),</span>
             <span class="nb">int</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">origin_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">pixel_y</span><span class="p">)</span>
-        <span class="p">]</span></div>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">is_masked</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">res</span></div>
 
     <span class="k">def</span> <span class="nf">_update_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
@@ -264,6 +271,17 @@
         <span class="p">})</span>
         <span class="nb">super</span><span class="p">(</span><span class="n">Raster</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_update_from</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
         <span class="k">return</span>
+
+    <span class="k">def</span> <span class="nf">set_fill_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;i&quot;</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span>
+        <span class="n">max_value</span> <span class="o">=</span> <span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
+        <span class="n">min_value</span> <span class="o">=</span> <span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">min</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">Raster</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">max_value</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_value</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">min_value</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
+            <span class="nb">super</span><span class="p">(</span><span class="n">Raster</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Raster.save"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_raster_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.</span>
@@ -314,6 +332,7 @@
         <span class="n">out_raster</span><span class="o">.</span><span class="n">SetProjection</span><span class="p">(</span><span class="n">raster</span><span class="o">.</span><span class="n">projection</span><span class="p">)</span>
         <span class="n">out_raster</span><span class="o">.</span><span class="n">SetGeoTransform</span><span class="p">(</span><span class="n">raster</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span>
         <span class="n">out_band</span> <span class="o">=</span> <span class="n">out_raster</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">raster</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">raster</span><span class="o">.</span><span class="n">fill_value</span><span class="p">)</span>
         <span class="n">out_band</span><span class="o">.</span><span class="n">SetNoDataValue</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">raster</span><span class="o">.</span><span class="n">fill_value</span><span class="p">))</span>
         <span class="n">out_band</span><span class="o">.</span><span class="n">WriteArray</span><span class="p">(</span><span class="n">raster</span><span class="o">.</span><span class="n">filled</span><span class="p">())</span>
 
@@ -421,11 +440,12 @@
             <span class="n">array</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span>
             <span class="n">projection</span><span class="p">,</span> <span class="n">nodatavalue</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Raster.resample"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Raster.resample"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.resample">[docs]</a>    <span class="k">def</span> <span class="nf">resample</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Alias of :meth:`self.reproject`. The only difference is that</span>
 <span class="sd">        :meth:`resample` cannot change the projection of raster.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reproject</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">reproject</span><span class="p">(</span><span class="n">x_count</span><span class="p">,</span> <span class="n">y_count</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">method</span><span class="o">=</span><span class="n">method</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Raster.plot"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap_name</span><span class="o">=</span><span class="s1">&#39;seismic&#39;</span><span class="p">,</span> <span class="n">if_show</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Use ``matplotlib`` to plot preview picture</span>
@@ -459,7 +479,58 @@
         <span class="sd">&quot;&quot;&quot;A shortcut of :meth:`self.plot`. Just set ``if_show=True``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;if_show&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Raster.rolling"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.rolling">[docs]</a>    <span class="k">def</span> <span class="nf">rolling</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">function</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">footprint</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;reflect&#39;</span><span class="p">,</span>
+                <span class="n">cval</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Calculate a 2D filter using the given function.</span>
+
+<span class="sd">        At each element the provided function is called. The input values</span>
+<span class="sd">        within the filter footprint at that element are passed to the function</span>
+<span class="sd">        as a 1D array of double values.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            function (callable, str): Function to apply at each element.</span>
+<span class="sd">            size (scalar, tuple): See foorprint, below.</span>
+<span class="sd">                Ignored if footprint is given.</span>
+<span class="sd">            footprint (array, str):</span>
+<span class="sd">                |  Either `size` or `footprint` must be defined. `size` gives</span>
+<span class="sd">                    the shape that is taken from the input array, at every</span>
+<span class="sd">                    element position, to define the input to the filter</span>
+<span class="sd">                    function.</span>
+<span class="sd">                |  `footprint` is a boolean array that specifies (implicitly) a</span>
+<span class="sd">                    shape, but also which of the elements within this shape</span>
+<span class="sd">                    will get passed to the filter function.</span>
+<span class="sd">                |  When `footprint` is given, `size` is ignored.</span>
+<span class="sd">            mode (str):</span>
+<span class="sd">                |  The `mode` parameter determines how the input array is</span>
+<span class="sd">                    extended when the filter overlaps a border. By passing a</span>
+<span class="sd">                    sequence of modes with length equal to the number of</span>
+<span class="sd">                    dimensions of the input array, different modes can be</span>
+<span class="sd">                    specified along each axis. Default value is &#39;reflect&#39;.</span>
+<span class="sd">                    The valid values and their behavior is as follows:</span>
+
+<span class="sd">                |  &#39;reflect&#39; (`d c b a | a b c d | d c b a`) The input is</span>
+<span class="sd">                    extended by reflecting about the edge of the last pixel.</span>
+<span class="sd">                |  &#39;constant&#39; (`k k k k | a b c d | k k k k`) The input is</span>
+<span class="sd">                    extended by filling all values beyond the edge with the</span>
+<span class="sd">                    same constant value, defined by the `cval` parameter.</span>
+<span class="sd">                |  &#39;nearest&#39; (`a a a a | a b c d | d d d d`) The input is</span>
+<span class="sd">                    extended by replicating the last pixel.</span>
+<span class="sd">                |  &#39;mirror&#39; (`d c b | a b c d | c b a`) The input is extended</span>
+<span class="sd">                    by reflecting about the center of the last pixel.</span>
+<span class="sd">                |  &#39;wrap&#39; (`a b c d | a b c d | a b c d`) The input is extended</span>
+<span class="sd">                    by wrapping around to the opposite edge.</span>
+<span class="sd">            cval (scalar): Value to fill past edges of input if `mode` is</span>
+<span class="sd">                &#39;constant&#39;. Default is 0.0.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            :class:`Raster`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">gf</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">),</span> <span class="n">function</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">footprint</span><span class="p">,</span>
+            <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="n">cval</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">Raster</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span></div></div>
 </pre></div>
 
            </div>
@@ -493,21 +564,11 @@
 
     
     
-      <script type="text/javascript">
-          var DOCUMENTATION_OPTIONS = {
-              URL_ROOT:'../../../',
-              VERSION:'0.2.15',
-              LANGUAGE:'None',
-              COLLAPSE_INDEX:false,
-              FILE_SUFFIX:'.html',
-              HAS_SOURCE:  true,
-              SOURCELINK_SUFFIX: '.txt'
-          };
-      </script>
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
         <script type="text/javascript" src="../../../_static/jquery.js"></script>
         <script type="text/javascript" src="../../../_static/underscore.js"></script>
         <script type="text/javascript" src="../../../_static/doctools.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+        <script async="async" type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
     
 
   
