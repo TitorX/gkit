@@ -385,3 +385,9 @@ class Raster(MaskedArray):
             self.filled(np.nan), function, size, footprint,
             mode=mode, cval=cval)
         return Raster(res, self.transform, self.projection, mask=self.mask)
+
+    def __str__(self):
+        projection_name = osr.SpatialReference(
+            wkt=self.projection).GetAttrValue('geogcs')
+        return "Raster Shape: {}*{}, Transform: {}, Projection: {}".format(
+            *self.shape, self.transform, projection_name)
