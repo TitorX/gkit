@@ -14,6 +14,7 @@ def agg_func(f):
         """Wrapped numpy functions. Get more information by seeing
         the corresponding item in ``numpy.ma``.
         """
+        rasters = list(rasters)
         projections = set(map(lambda r: r.projection, rasters))
         if len(projections) != 1:
             warnings.warn("Rasters has different projections.")
@@ -41,6 +42,7 @@ def ufunc(f):
         """Wrapped numpy functions. Get more information by seeing
         the corresponding item in ``numpy.ma``.
         """
+        rasters = list(rasters)
         if isinstance(rasters, (list, tuple)):
             return list(map(lambda r: f(r, *args, **kwargs), rasters))
         else:

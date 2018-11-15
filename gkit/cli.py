@@ -50,6 +50,10 @@ class CLI(object):
         if not args:
             return
 
+        out = Path(out).absolute()
+        if not out.parent.exists():
+            os.makedirs(str(out.parent))
+
         r = list(loader(*args))
 
         if kwargs.get('print'):
@@ -60,7 +64,7 @@ class CLI(object):
             r = r[0]
 
         res = eval(formula)
-        res.save(out)
+        res.save(str(out))
 
     @staticmethod
     def show(raster):
