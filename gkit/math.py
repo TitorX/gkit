@@ -42,8 +42,9 @@ def ufunc(f):
         """Wrapped numpy functions. Get more information by seeing
         the corresponding item in ``numpy.ma``.
         """
-        rasters = list(rasters)
-        if isinstance(rasters, (list, tuple)):
+
+        if not isinstance(rasters, Raster):
+            rasters = list(rasters)
             return list(map(lambda r: f(r, *args, **kwargs), rasters))
         else:
             return f(rasters, *args, **kwargs)
