@@ -233,18 +233,22 @@ class Raster(MaskedArray):
 
         return self.clip_by_layer(tmp_layer)
 
-    def zonal_apply(self, shp_path, func, by=None):
+    def zonal_apply(self, shp_path, func, by=None, overall=False,
+                    args=(), kwargs={}):
         """"""
         shp = ogr.Open(shp_path)
 
-        index = []
-        result = []
+        result = {}
+        if overall:
+            tmp_raster = self.clip_by_layer(shp.GetLayer())
+            result["overall"] = func(tmp_raster, *args, **kwargs)
+
         for feature in shp.GetLayer():
             tmp_raster = self.clip_by_feature(feature)
-            index.append(feature[by] if by is not None else feature.GetFID())
-            result.append(func(tmp_raster))
+            result[feature[by] if by is not None else feature.GetFID()] = \
+                func(tmp_raster, *args, **kwargs)
 
-        return list(zip(index, result))
+        return result
 
     def reproject(self, x_count=None, y_count=None,
                   transform=None, projection=None, method=gdal.GRA_Bilinear):
