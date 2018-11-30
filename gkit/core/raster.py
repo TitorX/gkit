@@ -19,6 +19,34 @@ TYPE = {
 }
 
 
+def split_by_shp(rasters, shp, by=None, overall=False):
+    rasters = list(rasters)
+    shp = ogr.Open(shp)
+    result = []
+    if overall:
+        result.append(['overall', *[r.copy() for r in rasters]])
+
+    for feature in shp.GetLayer():
+        result.append([
+            feature[by] if by else feature.GetFID(),
+            *[r.clip_by_feature(feature) for r in rasters]
+        ])
+    return np.array(result, dtype=object)
+
+
+def zonal_apply(rasters, shp, func, by=None, overall=False,
+                args=(), kwargs={}):
+
+    splited = split_by_shp(rasters, shp, by, overall)
+
+    result = []
+    for i, *r in splited:
+        result.append([
+            i, func(*r, *args, **kwargs)
+        ])
+    return np.array(result)
+
+
 class Raster(MaskedArray):
     """
     """
@@ -233,22 +261,13 @@ class Raster(MaskedArray):
 
         return self.clip_by_layer(tmp_layer)
 
+    def split_by_shp(self, shp, by=None, overall=False):
+        return split_by_shp([self], shp, by, overall)
+
     def zonal_apply(self, shp_path, func, by=None, overall=False,
                     args=(), kwargs={}):
         """"""
-        shp = ogr.Open(shp_path)
-
-        result = {}
-        if overall:
-            tmp_raster = self.clip_by_layer(shp.GetLayer())
-            result["overall"] = func(tmp_raster, *args, **kwargs)
-
-        for feature in shp.GetLayer():
-            tmp_raster = self.clip_by_feature(feature)
-            result[feature[by] if by is not None else feature.GetFID()] = \
-                func(tmp_raster, *args, **kwargs)
-
-        return result
+        return zonal_apply([self], shp_path, func, by, overall, args, kwargs)
 
     def reproject(self, x_count=None, y_count=None,
                   transform=None, projection=None, method=gdal.GRA_Bilinear):
@@ -390,8 +409,10 @@ class Raster(MaskedArray):
             mode=mode, cval=cval)
         return Raster(res, self.transform, self.projection, mask=self.mask)
 
-    def __str__(self):
-        projection_name = osr.SpatialReference(
-            wkt=self.projection).GetAttrValue('geogcs')
-        return "Raster Shape: {}*{}, Transform: {}, Projection: {}".format(
-            *self.shape, self.transform, projection_name)
+    # def __str__(self):
+    #     return self.__repr__()
+    #
+    # def __repr__(self):
+    #     # projection_name = osr.SpatialReference(
+    #     #     wkt=self.projection).GetAttrValue('geogcs')
+    #     return "{}*{}".format(*self.shape)
