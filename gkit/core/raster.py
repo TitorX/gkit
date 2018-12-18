@@ -22,11 +22,12 @@ TYPE = {
 def split_by_shp(rasters, shp, by=None, overall=False):
     rasters = list(rasters)
     shp = ogr.Open(shp)
+    layer = shp.GetLayer()
     result = []
     if overall:
-        result.append(['overall', *[r.copy() for r in rasters]])
+        result.append(['overall', *[r.clip_by_layer(layer) for r in rasters]])
 
-    for feature in shp.GetLayer():
+    for feature in layer:
         result.append([
             feature[by] if by else feature.GetFID(),
             *[r.clip_by_feature(feature) for r in rasters]
@@ -269,8 +270,11 @@ class Raster(MaskedArray):
         """"""
         return zonal_apply([self], shp_path, func, by, overall, args, kwargs)
 
-    def reproject(self, x_count=None, y_count=None,
-                  transform=None, projection=None, method=gdal.GRA_Bilinear):
+    def reproject(self,
+                  x_count=None, y_count=None,
+                  x_size=None, y_size=None,
+                  transform=None, projection=None,
+                  method=gdal.GRA_Bilinear):
         """Reproject/Resample
 
         Args:
