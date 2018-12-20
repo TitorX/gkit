@@ -8,13 +8,16 @@ Gkit
 .. image:: https://img.shields.io/badge/python-3-brightgreen.svg
     :target: https://www.python.org
 
+.. image:: https://img.shields.io/pypi/v/gkit.svg
+    :target: https://pypi.org/project/gkit/
+
 
 Gkit is a suit of utilites for processing geo-dataset.
 
-Until now, it's only support to manipulate GeoTIFF dataset and a part of 
+Until now, it's only support to manipulate GeoTIFF dataset and a part of
 interaction between raster and vector dataset.
 
-Gkit supports Python3 and all OS which could install numpy, matplotlib, 
+Gkit supports Python3 and all OS which could install numpy, matplotlib,
 gdal.
 
 In Python2, may have unpredictable bugs.
@@ -48,7 +51,7 @@ Here is examples of some basic features that Gkit provides.
 
 The picture:
 
-.. image:: docs/imgs/lst_plot.png
+.. image:: https://raw.githubusercontent.com/TitorX/gkit/master/docs/imgs/lst_plot.png
     :align: center
 
 .. code-block:: python
@@ -119,4 +122,4 @@ The picture:
 
 The output picture:
 
-.. image:: docs/imgs/array_plot.png
+.. image:: https://raw.githubusercontent.com/TitorX/gkit/master/docs/imgs/array_plot.png
