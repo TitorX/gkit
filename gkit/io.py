@@ -1,6 +1,7 @@
 """Reading and writing functions.
 """
 import os
+import numpy as np
 from osgeo import gdal
 from .core import Raster
 
@@ -27,12 +28,8 @@ def read_gdal(ds, band=None, **kwargs):
     for b in band:
         b = ds.GetRasterBand(b)
         array = b.ReadAsArray()
-
-        r = Raster(
-            array, transform, projection,
-            nodatavalue=b.GetNoDataValue(),
-            **kwargs
-        )
+        kwargs.setdefault("nodatavalue", b.GetNoDataValue())
+        r = Raster(array, transform, projection, **kwargs)
         del b, ds
         rs.append(r)
     if len(rs) == 1:
@@ -72,19 +69,66 @@ def read(filepath, band=None, **kwargs):
         return read_gdal(dataset, band, filepath=filepath, **kwargs)
 
 
-def read_geotiff(filepath, band=None, **kwargs):
-    """Read GeoTIFF file.
+def save(raster, out_raster_path=None, dtype=None, compress=True):
+    """save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.
 
     Args:
-        filepath (str): GeoTIFF file path.
-        band (int): Band number.
+        out_raster_path (str): The output path. If it is ``None``,
+            return :class:`gdal.Dataset`.
+
+        dtype (dtype): Save raster as specified data type.
+
+        compress (int):
+            |  Could be following options:
+            |  ``compress=True`` (default) Use LZW to compress
+            |  ``compress=False`` Do not compress
+            |  ``compress='DEFAULT'``
+            |  ``compress='PACKBITS'``
+            |  ... other algorithms gdal supported
 
     Returns:
-        :class:`Raster`
+        `None` or `gdal.Dataset`
     """
-    filepath = filepath if filepath.endswith(".tif") \
-        else filepath + ".tif"
-    filepath = os.path.abspath(filepath)
-    raster = gdal.Open(filepath)
+    if isinstance(raster, Raster):
+        raster = [raster]
 
-    return read_gdal(raster, band, filepath=filepath, **kwargs)
+    dtype = raster[0]._gdal_dtype()
+    xsize = raster[0].shape[1]
+    ysize = raster[0].shape[0]
+    bands = len(raster)
+
+    options = {}
+    # Ignore compress option, if use ``MEM`` driver.
+    compress = compress if out_raster_path else False
+    if compress is True:
+        options['COMPRESS'] = 'LZW'
+    elif compress is not False:
+        options['COMPRESS'] = compress
+
+    options = ["{0}={1}".format(k, v) for k, v in options.items()]
+
+    if out_raster_path:
+        driver = gdal.GetDriverByName('GTiff')
+        if not out_raster_path.endswith('.tif'):
+            out_raster_path += '.tif'
+    else:
+        driver = gdal.GetDriverByName('MEM')
+        out_raster_path = ''
+
+    out_raster = driver.Create(
+        out_raster_path, xsize, ysize, bands, dtype, options=options)
+
+    out_raster.SetProjection(raster[0].projection)
+    out_raster.SetGeoTransform(raster[0].transform)
+
+    for i, r in enumerate(raster):
+        out_band = out_raster.GetRasterBand(i+1)
+        r.set_fill_value(r.fill_value)
+        out_band.SetNoDataValue(np.float64(r.fill_value))
+        out_band.WriteArray(r.filled())
+        del out_band
+
+    if driver.ShortName == "MEM":
+        return out_raster
+    else:
+        del out_raster
