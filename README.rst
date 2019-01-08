@@ -13,7 +13,7 @@ Gkit
 
 
 Gkit is a suite of utilities for processing geo-dataset allowing you to
- manipulate raster datasets like `np.MaskedArray`.
+manipulate raster datasets like `np.MaskedArray`.
 
 Gkit supports Python3 and all OS which could install numpy, matplotlib,
 gdal.
@@ -33,21 +33,21 @@ Here is examples of some basic features that Gkit provides.
     import numpy as np
     import gkit as gk
 
-    # Read the first band from .tif.
+    # Read the first band from .tif
     r = gk.read("lst.tif")
 
-    # You could also specific point out which band you want to load.
+    # You could also specific point out which band you want to load
     r = gk.read("lst.tif", 2)
 
-    # gk.read returns a Raster class.
+    # gk.read returns a Raster class
     type(r)
     # Output:
     # gkit.core.Raster
 
-    # Open an interactive window display raster using matplotlib(call plt.show).
+    # Open an interactive window display raster using matplotlib(call plt.show)
     r.show()
 
-The picture:
+The screenshot:
 
 .. image:: https://raw.githubusercontent.com/TitorX/gkit/master/docs/imgs/lst_plot.png
     :align: center
@@ -59,8 +59,16 @@ The picture:
     r.plot()
     plt.xlabel("Lon")
     plt.ylabel("Lat")
-    plt.title("LST(C)")
-    plt.savefig("lst_plot.png")
+    plt.title("LST(C$^\circ$)")
+    plt.colorbar()
+    plt.savefig("raster_plot.png")
+
+The screenshot:
+
+.. image:: https://raw.githubusercontent.com/TitorX/gkit/master/docs/imgs/raster_plot.png
+    :align: center
+
+.. code-block:: python
 
     # Raster class inherits from np.ma.MaskedArray.
     # It has all features which MaskedArray has.
