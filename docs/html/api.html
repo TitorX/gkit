@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>API Reference &mdash; Gkit 0.3.2 documentation</title>
+  <title>API Reference &mdash; Gkit 0.4.2 documentation</title>
   
 
   
@@ -57,7 +57,7 @@
             
             
               <div class="version">
-                0.3.2
+                0.4.2
               </div>
             
           
@@ -159,16 +159,37 @@
 <span id="io"></span><h2>io<a class="headerlink" href="#module-gkit.io" title="Permalink to this headline">¶</a></h2>
 <p>Reading and writing functions.</p>
 <dl class="function">
+<dt id="gkit.io.read">
+<code class="descclassname">gkit.io.</code><code class="descname">read</code><span class="sig-paren">(</span><em>filepath</em>, <em>band=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/io.html#read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.io.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read rasters from files.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>filepath</strong> (<em>str</em>) – Raster files path.</li>
+<li><strong>band</strong> (<em>int</em><em> or </em><em>list</em>) – Band number.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code> or a list of <code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
 <dt id="gkit.io.read_gdal">
-<code class="descclassname">gkit.io.</code><code class="descname">read_gdal</code><span class="sig-paren">(</span><em>raster</em>, <em>layer_num=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/io.html#read_gdal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.io.read_gdal" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">gkit.io.</code><code class="descname">read_gdal</code><span class="sig-paren">(</span><em>ds</em>, <em>band=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/io.html#read_gdal"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.io.read_gdal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read raster from <code class="xref py py-class docutils literal notranslate"><span class="pre">gdal.Dataset</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>raster</strong> (<em>gdal.Dataset</em>) – Returned by <code class="xref py py-meth docutils literal notranslate"><span class="pre">gdal.Open()</span></code>.</li>
-<li><strong>layer_num</strong> (<em>int</em>) – Layer number wanted to loaded.</li>
+<li><strong>ds</strong> (<em>gdal.Dataset</em>) – Dataset returned by <code class="xref py py-meth docutils literal notranslate"><span class="pre">gdal.Open()</span></code>.</li>
+<li><strong>band</strong> (<em>int</em><em> or </em><em>list</em>) – Band number</li>
 </ul>
 </td>
 </tr>
@@ -180,20 +201,33 @@
 </dd></dl>
 
 <dl class="function">
-<dt id="gkit.io.read_geotiff">
-<code class="descclassname">gkit.io.</code><code class="descname">read_geotiff</code><span class="sig-paren">(</span><em>filepath</em>, <em>layer_num=1</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/io.html#read_geotiff"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.io.read_geotiff" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read GeoTIFF file.</p>
+<dt id="gkit.io.save">
+<code class="descclassname">gkit.io.</code><code class="descname">save</code><span class="sig-paren">(</span><em>raster</em>, <em>out_raster_path=None</em>, <em>dtype=None</em>, <em>compress=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/io.html#save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.io.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>save <code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code> to GeoTIFF file or <code class="xref py py-class docutils literal notranslate"><span class="pre">gdal.Dataset</span></code>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>filepath</strong> (<em>str</em>) – GeoTIFF file path.</li>
-<li><strong>layer_num</strong> (<em>int</em>) – Layer number wanted to loaded.</li>
+<li><strong>raster</strong> (<a class="reference internal" href="#gkit.core.raster.Raster" title="gkit.core.raster.Raster"><em>Raster</em></a><em> or </em><em>a list of Rasters</em>) – Save rasters to file. When it’s a
+list or tuple of <code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code>, save them all as multi bands
+in one file.</li>
+<li><strong>out_raster_path</strong> (<em>str</em>) – The output path. If it is <code class="docutils literal notranslate"><span class="pre">None</span></code>,
+return a <code class="xref py py-class docutils literal notranslate"><span class="pre">gdal.Dataset</span></code>.</li>
+<li><strong>dtype</strong> (<em>dtype</em>) – Save raster with specified data type.</li>
+<li><strong>compress</strong> (<em>int</em>) – <div class="line-block">
+<div class="line">Could be following options:</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">compress=True</span></code> (default) Use LZW to compress</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">compress=False</span></code> Do not compress</div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">compress='DEFAULT'</span></code></div>
+<div class="line"><code class="docutils literal notranslate"><span class="pre">compress='PACKBITS'</span></code></div>
+<div class="line">… other algorithms gdal supported</div>
+</div>
+</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal notranslate"><span class="pre">Raster</span></code></p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><cite>None</cite> or <cite>gdal.Dataset</cite></p>
 </td>
 </tr>
 </tbody>
@@ -250,7 +284,7 @@
 
 <dl class="method">
 <dt id="gkit.core.raster.Raster.plot">
-<code class="descname">plot</code><span class="sig-paren">(</span><em>ax=None</em>, <em>cmap_name='seismic'</em>, <em>if_show=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core/raster.html#Raster.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.raster.Raster.plot" title="Permalink to this definition">¶</a></dt>
+<code class="descname">plot</code><span class="sig-paren">(</span><em>*args</em>, <em>ax=None</em>, <em>cmap_name='seismic'</em>, <em>if_show=False</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core/raster.html#Raster.plot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.raster.Raster.plot" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> to plot preview picture</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -271,7 +305,7 @@
 
 <dl class="method">
 <dt id="gkit.core.raster.Raster.reproject">
-<code class="descname">reproject</code><span class="sig-paren">(</span><em>x_count=None</em>, <em>y_count=None</em>, <em>transform=None</em>, <em>projection=None</em>, <em>method=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core/raster.html#Raster.reproject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.raster.Raster.reproject" title="Permalink to this definition">¶</a></dt>
+<code class="descname">reproject</code><span class="sig-paren">(</span><em>x_count=None</em>, <em>y_count=None</em>, <em>x_size=None</em>, <em>y_size=None</em>, <em>transform=None</em>, <em>projection=None</em>, <em>method=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/gkit/core/raster.html#Raster.reproject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#gkit.core.raster.Raster.reproject" title="Permalink to this definition">¶</a></dt>
 <dd><p>Reproject/Resample</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -379,7 +413,7 @@ by wrapping around to the opposite edge.</div>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>out_raster_path</strong> (<em>str</em>) – The output path. If it is <code class="docutils literal notranslate"><span class="pre">None</span></code>,
-return <code class="xref py py-class docutils literal notranslate"><span class="pre">gdal.Dataset</span></code>.</li>
+return a <code class="xref py py-class docutils literal notranslate"><span class="pre">gdal.Dataset</span></code>.</li>
 <li><strong>dtype</strong> (<em>dtype</em>) – Save raster as specified data type.</li>
 <li><strong>compress</strong> (<em>int</em>) – <div class="line-block">
 <div class="line">Could be following options:</div>

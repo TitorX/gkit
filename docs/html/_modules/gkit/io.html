@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gkit.io &mdash; Gkit 0.3.2 documentation</title>
+  <title>gkit.io &mdash; Gkit 0.4.2 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.3.2
+                0.4.2
               </div>
             
           
@@ -149,51 +149,140 @@
 <span></span><span class="sd">&quot;&quot;&quot;Reading and writing functions.</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">osgeo</span> <span class="k">import</span> <span class="n">gdal</span>
 <span class="kn">from</span> <span class="nn">.core</span> <span class="k">import</span> <span class="n">Raster</span>
 
 
-<div class="viewcode-block" id="read_gdal"><a class="viewcode-back" href="../../api.html#gkit.io.read_gdal">[docs]</a><span class="k">def</span> <span class="nf">read_gdal</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">layer_num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="read_gdal"><a class="viewcode-back" href="../../api.html#gkit.io.read_gdal">[docs]</a><span class="k">def</span> <span class="nf">read_gdal</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Read raster from :class:`gdal.Dataset`.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        raster (gdal.Dataset): Returned by :meth:`gdal.Open`.</span>
-<span class="sd">        layer_num (int): Layer number wanted to loaded.</span>
+<span class="sd">        ds (gdal.Dataset): Dataset returned by :meth:`gdal.Open`.</span>
+<span class="sd">        band (int or list): Band number</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        :class:`Raster`</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">band</span> <span class="o">=</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">layer_num</span><span class="p">)</span>
-    <span class="n">projection</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;projection&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span>
-    <span class="n">transform</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transform&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">raster</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
-    <span class="n">array</span> <span class="o">=</span> <span class="n">band</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+    <span class="n">projection</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;projection&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetProjection</span><span class="p">()</span>
+    <span class="n">transform</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;transform&#39;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetGeoTransform</span><span class="p">()</span>
 
-    <span class="n">obj</span> <span class="o">=</span> <span class="n">Raster</span><span class="p">(</span>
-        <span class="n">array</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">projection</span><span class="p">,</span>
-        <span class="n">nodatavalue</span><span class="o">=</span><span class="n">band</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">(),</span>
-        <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">band</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">band</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">RasterCount</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">band</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">band</span> <span class="o">=</span> <span class="p">[</span><span class="n">band</span><span class="p">]</span>
 
-    <span class="k">del</span> <span class="n">band</span><span class="p">,</span> <span class="n">raster</span>
-    <span class="k">return</span> <span class="n">obj</span></div>
+    <span class="n">rs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">band</span><span class="p">:</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">array</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">ReadAsArray</span><span class="p">()</span>
+        <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;nodatavalue&quot;</span><span class="p">,</span> <span class="n">b</span><span class="o">.</span><span class="n">GetNoDataValue</span><span class="p">())</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">Raster</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">projection</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">b</span><span class="p">,</span> <span class="n">ds</span>
+        <span class="n">rs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">rs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">rs</span></div>
 
 
-<div class="viewcode-block" id="read_geotiff"><a class="viewcode-back" href="../../api.html#gkit.io.read_geotiff">[docs]</a><span class="k">def</span> <span class="nf">read_geotiff</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">layer_num</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Read GeoTIFF file.</span>
+<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../api.html#gkit.io.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">filepath</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read rasters from files.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        filepath (str): GeoTIFF file path.</span>
-<span class="sd">        layer_num (int): Layer number wanted to loaded.</span>
+<span class="sd">        filepath (str): Raster files path.</span>
+<span class="sd">        band (int or list): Band number.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        :class:`Raster`</span>
+<span class="sd">        :class:`Raster` or a list of :class:`Raster`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">filepath</span> <span class="o">=</span> <span class="n">filepath</span> <span class="k">if</span> <span class="n">filepath</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.tif&quot;</span><span class="p">)</span> \
-        <span class="k">else</span> <span class="n">filepath</span> <span class="o">+</span> <span class="s2">&quot;.tif&quot;</span>
-    <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
-    <span class="n">raster</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">read_gdal</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">layer_num</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+    <span class="n">filepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="n">dataset</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">filepath</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">GetDriver</span><span class="p">()</span><span class="o">.</span><span class="n">ShortName</span>
+
+    <span class="k">if</span> <span class="s1">&#39;HDF&#39;</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+        <span class="n">subset</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">GetSubDatasets</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">band</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">band</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">subset</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">band</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">band</span> <span class="o">=</span> <span class="p">[</span><span class="n">band</span><span class="p">]</span>
+
+        <span class="n">rs</span> <span class="o">=</span> <span class="p">[</span><span class="n">read_gdal</span><span class="p">(</span><span class="n">gdal</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">subset</span><span class="p">[</span><span class="n">b</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">band</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">rs</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">read_gdal</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="save"><a class="viewcode-back" href="../../api.html#gkit.io.save">[docs]</a><span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">out_raster_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        raster (Raster or a list of Rasters): Save rasters to file. When it&#39;s a</span>
+<span class="sd">            list or tuple of :class:`Raster`, save them all as multi bands</span>
+<span class="sd">            in one file.</span>
+<span class="sd">        out_raster_path (str): The output path. If it is ``None``,</span>
+<span class="sd">            return a :class:`gdal.Dataset`.</span>
+
+<span class="sd">        dtype (dtype): Save raster with specified data type.</span>
+
+<span class="sd">        compress (int):</span>
+<span class="sd">            |  Could be following options:</span>
+<span class="sd">            |  ``compress=True`` (default) Use LZW to compress</span>
+<span class="sd">            |  ``compress=False`` Do not compress</span>
+<span class="sd">            |  ``compress=&#39;DEFAULT&#39;``</span>
+<span class="sd">            |  ``compress=&#39;PACKBITS&#39;``</span>
+<span class="sd">            |  ... other algorithms gdal supported</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        `None` or `gdal.Dataset`</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">Raster</span><span class="p">):</span>
+        <span class="n">raster</span> <span class="o">=</span> <span class="p">[</span><span class="n">raster</span><span class="p">]</span>
+
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">raster</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">_gdal_dtype</span><span class="p">()</span>
+    <span class="n">xsize</span> <span class="o">=</span> <span class="n">raster</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">ysize</span> <span class="o">=</span> <span class="n">raster</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">bands</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">raster</span><span class="p">)</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="c1"># Ignore compress option, if use ``MEM`` driver.</span>
+    <span class="n">compress</span> <span class="o">=</span> <span class="n">compress</span> <span class="k">if</span> <span class="n">out_raster_path</span> <span class="k">else</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">compress</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">options</span><span class="p">[</span><span class="s1">&#39;COMPRESS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;LZW&#39;</span>
+    <span class="k">elif</span> <span class="n">compress</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="n">options</span><span class="p">[</span><span class="s1">&#39;COMPRESS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">compress</span>
+
+    <span class="n">options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">=</span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
+
+    <span class="k">if</span> <span class="n">out_raster_path</span><span class="p">:</span>
+        <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s1">&#39;GTiff&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">out_raster_path</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.tif&#39;</span><span class="p">):</span>
+            <span class="n">out_raster_path</span> <span class="o">+=</span> <span class="s1">&#39;.tif&#39;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s1">&#39;MEM&#39;</span><span class="p">)</span>
+        <span class="n">out_raster_path</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+    <span class="n">out_raster</span> <span class="o">=</span> <span class="n">driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span>
+        <span class="n">out_raster_path</span><span class="p">,</span> <span class="n">xsize</span><span class="p">,</span> <span class="n">ysize</span><span class="p">,</span> <span class="n">bands</span><span class="p">,</span> <span class="n">dtype</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+    <span class="n">out_raster</span><span class="o">.</span><span class="n">SetProjection</span><span class="p">(</span><span class="n">raster</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">projection</span><span class="p">)</span>
+    <span class="n">out_raster</span><span class="o">.</span><span class="n">SetGeoTransform</span><span class="p">(</span><span class="n">raster</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">raster</span><span class="p">):</span>
+        <span class="n">out_band</span> <span class="o">=</span> <span class="n">out_raster</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">fill_value</span><span class="p">)</span>
+        <span class="n">out_band</span><span class="o">.</span><span class="n">SetNoDataValue</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">fill_value</span><span class="p">))</span>
+        <span class="n">out_band</span><span class="o">.</span><span class="n">WriteArray</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">filled</span><span class="p">())</span>
+        <span class="k">del</span> <span class="n">out_band</span>
+
+    <span class="k">if</span> <span class="n">driver</span><span class="o">.</span><span class="n">ShortName</span> <span class="o">==</span> <span class="s2">&quot;MEM&quot;</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">out_raster</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">del</span> <span class="n">out_raster</span></div>
 </pre></div>
 
            </div>
