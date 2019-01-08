@@ -12,10 +12,8 @@ Gkit
     :target: https://pypi.org/project/gkit/
 
 
-Gkit is a suit of utilites for processing geo-dataset.
-
-Until now, it's only support to manipulate GeoTIFF dataset and a part of
-interaction between raster and vector dataset.
+Gkit is a suite of utilities for processing geo-dataset allowing you to
+ manipulate raster datasets like `np.MaskedArray`.
 
 Gkit supports Python3 and all OS which could install numpy, matplotlib,
 gdal.
@@ -35,13 +33,13 @@ Here is examples of some basic features that Gkit provides.
     import numpy as np
     import gkit as gk
 
-    # Read the first layer(band) from .tif.
-    r = gk.read_geotiff("lst.tif")
+    # Read the first band from .tif.
+    r = gk.read("lst.tif")
 
-    # You could also specific point out which layer(band) you want to load.
-    r = gk.read_geotiff("lst.tif", 2)
+    # You could also specific point out which band you want to load.
+    r = gk.read("lst.tif", 2)
 
-    # gk.read_geotiff return a Raster class
+    # gk.read returns a Raster class.
     type(r)
     # Output:
     # gkit.core.Raster
@@ -56,8 +54,7 @@ The picture:
 
 .. code-block:: python
 
-    # Only draw raster without calling plt.show to continue
-    # modify figure.
+    # Only draw raster without calling plt.show.
     import matplotlib.pylab as plt
     r.plot()
     plt.xlabel("Lon")
@@ -101,6 +98,7 @@ The picture:
     print(r.max())
     print(r.min())
 
+    # convert data type
     tmp = r.astype(np.float64)
 
     # Save to file
