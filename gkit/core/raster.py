@@ -173,7 +173,7 @@ class Raster(MaskedArray):
 
         Args:
             out_raster_path (str): The output path. If it is ``None``,
-                return :class:`gdal.Dataset`.
+                return a :class:`gdal.Dataset`.
 
             dtype (dtype): Save raster as specified data type.
 
@@ -192,44 +192,6 @@ class Raster(MaskedArray):
             self, out_raster_path=out_raster_path,
             dtype=dtype, compress=compress
         )
-
-        # raster = self
-        #
-        # dtype = self._gdal_dtype()
-        #
-        # options = {}
-        # # Ignore compress option, if ``MEM`` driver are used.
-        # compress = compress if out_raster_path else False
-        # if compress is True:
-        #     options['COMPRESS'] = 'LZW'
-        # elif compress is not False:
-        #     options['COMPRESS'] = compress
-        #
-        # options = ["{0}={1}".format(k, v) for k, v in options.items()]
-        #
-        # if out_raster_path:
-        #     driver = gdal.GetDriverByName('GTiff')
-        #     if not out_raster_path.endswith('.tif'):
-        #         out_raster_path += '.tif'
-        # else:
-        #     driver = gdal.GetDriverByName('MEM')
-        #     out_raster_path = ''
-        #
-        # out_raster = driver.Create(
-        #     out_raster_path,
-        #     raster.shape[1], raster.shape[0], 1, dtype, options=options)
-        #
-        # out_raster.SetProjection(raster.projection)
-        # out_raster.SetGeoTransform(raster.transform)
-        # out_band = out_raster.GetRasterBand(1)
-        # raster.set_fill_value(raster.fill_value)
-        # out_band.SetNoDataValue(np.float64(raster.fill_value))
-        # out_band.WriteArray(raster.filled())
-        #
-        # if driver.ShortName == "MEM":
-        #     return out_raster
-        # else:
-        #     del out_band, out_raster
 
     def clip_by_layer(self, layer):
         """Clip raster by layer."""

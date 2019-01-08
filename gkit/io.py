@@ -73,10 +73,13 @@ def save(raster, out_raster_path=None, dtype=None, compress=True):
     """save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.
 
     Args:
+        raster (Raster or a list of Rasters): Save rasters to file. When it's a
+            list or tuple of :class:`Raster`, save them all as multi bands
+            in one file.
         out_raster_path (str): The output path. If it is ``None``,
-            return :class:`gdal.Dataset`.
+            return a :class:`gdal.Dataset`.
 
-        dtype (dtype): Save raster as specified data type.
+        dtype (dtype): Save raster with specified data type.
 
         compress (int):
             |  Could be following options:
