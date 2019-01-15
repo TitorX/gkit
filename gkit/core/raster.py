@@ -139,15 +139,10 @@ class Raster(MaskedArray):
         pixel_x = self._raster_meta['transform'][5]
         pixel_y = self._raster_meta['transform'][1]
 
-        res = self[
+        return self[
             int((x - origin_x) / pixel_x),
             int((y - origin_y) / pixel_y)
         ]
-
-        if np.ma.is_masked(res):
-            return np.nan
-        else:
-            return res
 
     def _update_from(self, obj):
         self.__dict__.update({

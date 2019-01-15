@@ -59,7 +59,7 @@ The screenshot:
     r.plot()
     plt.xlabel("Lon")
     plt.ylabel("Lat")
-    plt.title("LST(C$^\circ$)")
+    plt.title("LST(K)")
     plt.colorbar()
     plt.savefig("raster_plot.png")
 
@@ -126,6 +126,6 @@ The screenshot:
     raster = gk.Raster(array, transform)
     raster.show()
 
-The output picture:
+The screenshot:
 
 .. image:: https://raw.githubusercontent.com/TitorX/gkit/master/docs/imgs/array_plot.png
