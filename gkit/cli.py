@@ -17,9 +17,9 @@ def loader(*args):
                 Path(".").rglob("*")
             )
             for fn in list(files):
-                yield gk.read_geotiff(str(fn))
+                yield gk.read(str(fn))
         else:
-            yield gk.read_geotiff(fn)
+            yield gk.read(fn)
 
 
 class CLI(object):
@@ -69,7 +69,7 @@ class CLI(object):
     @staticmethod
     def show(raster):
         """Display a raster file."""
-        gk.read_geotiff(raster).show()
+        gk.read(raster).show()
 
 
 def main():

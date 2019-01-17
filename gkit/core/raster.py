@@ -183,7 +183,7 @@ class Raster(MaskedArray):
         Returns:
             `None` or `gdal.Dataset`
         """
-        gk.save(
+        return gk.save(
             self, out_raster_path=out_raster_path,
             dtype=dtype, compress=compress
         )
