@@ -48,12 +48,10 @@ def read(filepath, band=None, **kwargs):
     Returns:
         :class:`Raster` or a list of :class:`Raster`.
     """
-
-    filepath = os.path.abspath(filepath)
     dataset = gdal.Open(filepath)
     name = dataset.GetDriver().ShortName
 
-    if ('HDF' in name) or ("netCDF" == name):
+    if not dataset.RasterCount and (('HDF' in name) or ("netCDF" == name)):
         subset = dataset.GetSubDatasets()
         if band is None:
             band = list(range(1, len(subset)+1))

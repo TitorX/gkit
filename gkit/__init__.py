@@ -4,6 +4,6 @@ from .functions import *
 from .io import read, save
 
 
-__version__ = "0.4.8"
+__version__ = "0.4.9"
 __author__ = "titor"
 __email__ = "titor.sun@gmail.com"
