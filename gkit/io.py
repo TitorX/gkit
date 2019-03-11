@@ -11,7 +11,7 @@ def read_gdal(ds, band=None, **kwargs):
 
     Args:
         ds (gdal.Dataset): Dataset returned by :meth:`gdal.Open`.
-        band (int or list): Band number
+        band (int or list): Band number (default=1)
 
     Returns:
         :class:`Raster`
@@ -43,7 +43,7 @@ def read(filepath, band=None, **kwargs):
 
     Args:
         filepath (str): Raster files path.
-        band (int or list): Band number.
+        band (int or list): Band number. (default=1)
 
     Returns:
         :class:`Raster` or a list of :class:`Raster`.
@@ -53,13 +53,14 @@ def read(filepath, band=None, **kwargs):
     dataset = gdal.Open(filepath)
     name = dataset.GetDriver().ShortName
 
-    if 'HDF' in name:
+    if ('HDF' in name) or ("netCDF" == name):
         subset = dataset.GetSubDatasets()
         if band is None:
             band = list(range(1, len(subset)+1))
-        if isinstance(band, int):
+        elif isinstance(band, int):
             band = [band]
 
+        assert (np.array(band) >= 1).all(), "Band number start with 1. It must be greater than 0."
         rs = [read_gdal(gdal.Open(subset[b-1][0])) for b in band]
         if len(rs) == 1:
             return rs[0]
@@ -69,7 +70,7 @@ def read(filepath, band=None, **kwargs):
         return read_gdal(dataset, band, filepath=filepath, **kwargs)
 
 
-def save(raster, out_raster_path=None, dtype=None, compress=True):
+def save(raster, out_raster_path=None, dtype=None, compress=False):
     """save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.
 
     Args:
@@ -83,8 +84,8 @@ def save(raster, out_raster_path=None, dtype=None, compress=True):
 
         compress (int):
             |  Could be following options:
-            |  ``compress=True`` (default) Use LZW to compress
-            |  ``compress=False`` Do not compress
+            |  ``compress=True``  Use LZW to compress
+            |  ``compress=False`` (default) Do not compress
             |  ``compress='DEFAULT'``
             |  ``compress='PACKBITS'``
             |  ... other algorithms gdal supported
@@ -111,9 +112,12 @@ def save(raster, out_raster_path=None, dtype=None, compress=True):
     options = ["{0}={1}".format(k, v) for k, v in options.items()]
 
     if out_raster_path:
-        driver = gdal.GetDriverByName('GTiff')
-        if not out_raster_path.endswith('.tif'):
-            out_raster_path += '.tif'
+        if out_raster_path.endswith(".nc"):
+            driver = gdal.GetDriverByName("netCDF")
+        else:
+            driver = gdal.GetDriverByName('GTiff')
+            if not out_raster_path.endswith('.tif'):
+                out_raster_path += '.tif'
     else:
         driver = gdal.GetDriverByName('MEM')
         out_raster_path = ''

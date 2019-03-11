@@ -95,6 +95,14 @@ class Raster(MaskedArray):
         setattr(obj, '_raster_meta', _raster_meta)
         return obj
 
+    def _update_from(self, obj):
+        self.__dict__.update({
+            "_raster_meta": getattr(obj, '_raster_meta', None),
+            "filepath": getattr(obj, 'filepath', None)
+        })
+        super(Raster, self)._update_from(obj)
+        return
+
     @property
     def projection(self):
         return self._raster_meta['projection']
@@ -113,7 +121,9 @@ class Raster(MaskedArray):
 
     @property
     def extent(self):
-        """The extent of raster in current coordinates."""
+        """The extent of raster in current coordinates.
+        [left, right, bottom, top]
+        """
         left = self.transform[0]
         right = left + self.transform[1] * self.shape[1]
         top = self.transform[3]
@@ -143,14 +153,6 @@ class Raster(MaskedArray):
             int((x - origin_x) / pixel_x),
             int((y - origin_y) / pixel_y)
         ]
-
-    def _update_from(self, obj):
-        self.__dict__.update({
-            "_raster_meta": getattr(obj, '_raster_meta', None),
-            "filepath": getattr(obj, 'filepath', None)
-        })
-        super(Raster, self)._update_from(obj)
-        return
 
     def set_fill_value(self, value=None):
         """"""
@@ -225,6 +227,10 @@ class Raster(MaskedArray):
         tmp_layer.CreateFeature(feature.Clone())
 
         return self.clip_by_layer(tmp_layer)
+
+    def clip_by_extent(self, extent):
+        """Clip raster by extent. [left, right, bottom, top]"""
+        return 
 
     def split_by_shp(self, shp, by=None, overall=False):
         return split_by_shp([self], shp, by, overall)
