@@ -16,8 +16,8 @@ def read_gdal(ds, band=None, **kwargs):
     Returns:
         :class:`Raster`
     """
-    projection = kwargs.get('projection') or ds.GetProjection()
-    transform = kwargs.get('transform') or ds.GetGeoTransform()
+    kwargs.setdefault("projection", ds.GetProjection())
+    kwargs.setdefault("transform", ds.GetGeoTransform())
 
     if band is None:
         band = list(range(1, ds.RasterCount + 1))
@@ -29,7 +29,7 @@ def read_gdal(ds, band=None, **kwargs):
         b = ds.GetRasterBand(b)
         array = b.ReadAsArray()
         kwargs.setdefault("nodatavalue", b.GetNoDataValue())
-        r = Raster(array, transform, projection, **kwargs)
+        r = Raster(array, **kwargs)
         del b, ds
         rs.append(r)
     if len(rs) == 1:
@@ -49,6 +49,13 @@ def read(filepath, band=None, **kwargs):
         :class:`Raster` or a list of :class:`Raster`.
     """
     dataset = gdal.Open(filepath)
+    if len(filepath.split(":")) == 3:
+        filepath = filepath.split(":")[1].replace('"', "")
+        tmp = gdal.Open(filepath)
+        tmp = gdal.Open(tmp.GetSubDatasets()[0][0])
+        kwargs.setdefault("projection", tmp.GetProjection())
+        kwargs.setdefault("transform", tmp.GetGeoTransform())
+
     name = dataset.GetDriver().ShortName
 
     if not dataset.RasterCount and (('HDF' in name) or ("netCDF" == name)):
@@ -59,7 +66,7 @@ def read(filepath, band=None, **kwargs):
             band = [band]
 
         assert (np.array(band) >= 1).all(), "Band number start with 1. It must be greater than 0."
-        rs = [read_gdal(gdal.Open(subset[b-1][0])) for b in band]
+        rs = [read_gdal(gdal.Open(subset[b-1][0]), **kwargs) for b in band]
         if len(rs) == 1:
             return rs[0]
         else:
