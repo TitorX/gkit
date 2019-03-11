@@ -17,4 +17,9 @@ setup(
     url='https://github.com/TitorX/gkit',
     description='Gkit is a suit of utilites for processing geo-dataset.',
     long_description=open('README.rst').read(),
+    install_requires=[
+        "numpy",
+        "fire",
+        "matplotlib",
+    ],
 )
