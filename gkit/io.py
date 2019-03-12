@@ -75,7 +75,8 @@ def read(filepath, band=None, **kwargs):
         return read_gdal(dataset, band, filepath=filepath, **kwargs)
 
 
-def save(raster, out_raster_path=None, dtype=None, compress=False):
+def save(raster, out_raster_path=None, dtype=None, compress=False,
+         options=None):
     """save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.
 
     Args:
@@ -106,7 +107,7 @@ def save(raster, out_raster_path=None, dtype=None, compress=False):
     ysize = raster[0].shape[0]
     bands = len(raster)
 
-    options = {}
+    options = options or {}
     # Ignore compress option, if use ``MEM`` driver.
     compress = compress if out_raster_path else False
     if compress is True:
@@ -114,11 +115,10 @@ def save(raster, out_raster_path=None, dtype=None, compress=False):
     elif compress is not False:
         options['COMPRESS'] = compress
 
-    options = ["{0}={1}".format(k, v) for k, v in options.items()]
-
     if out_raster_path:
         if out_raster_path.endswith(".nc"):
             driver = gdal.GetDriverByName("netCDF")
+            options["WRITE_BOTTOMUP"] = "NO"
         else:
             driver = gdal.GetDriverByName('GTiff')
             if not out_raster_path.endswith('.tif'):
@@ -127,6 +127,7 @@ def save(raster, out_raster_path=None, dtype=None, compress=False):
         driver = gdal.GetDriverByName('MEM')
         out_raster_path = ''
 
+    options = ["{0}={1}".format(k, v) for k, v in options.items()]
     out_raster = driver.Create(
         out_raster_path, xsize, ysize, bands, dtype, options=options)
 
