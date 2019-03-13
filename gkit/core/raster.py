@@ -21,6 +21,23 @@ TYPE = {
 }
 
 
+def _srs_to_wkt(a_srs):
+    name, code = a_srs.split(":")
+    name = name.upper()
+    code = int(code)
+
+    srs = osr.SpatialReference()
+    if name.startswith("EPSG"):
+        srs.ImportFromEPSG(code)
+    elif name.startswith("ESRI"):
+        srs.ImportFromESRI(code)
+
+    projection = srs.ExportToWkt()
+
+    del srs
+    return projection
+
+
 def split_by_shp(rasters, shp, by=None, overall=False):
     rasters = list(rasters)
     shp = ogr.Open(shp)
@@ -56,21 +73,7 @@ class Raster(MaskedArray):
     def __new__(cls, array, transform, projection=None, a_srs="EPSG:4326",
                 nodatavalue=None, mask=None, filepath=None):
         """"""
-
-        if projection is None:
-            name, code = a_srs.split(":")
-            name = name.upper()
-            code = int(code)
-
-            srs = osr.SpatialReference()
-            if name.startswith("EPSG"):
-                srs.ImportFromEPSG(code)
-            elif name.startswith("ESRI"):
-                srs.ImportFromESRI(code)
-
-            projection = srs.ExportToWkt()
-
-            del srs
+        projection = projection or _srs_to_wkt(a_srs)
 
         _raster_meta = {
             'projection': projection,
@@ -240,10 +243,8 @@ class Raster(MaskedArray):
         """"""
         return zonal_apply([self], shp_path, func, by, overall, args, kwargs)
 
-    def reproject(self,
-                  x_count=None, y_count=None,
-                  x_size=None, y_size=None,
-                  transform=None, projection=None,
+    def reproject(self, x_count=None, y_count=None,
+                  transform=None, projection=None, a_srs=None,
                   method=gdal.GRA_Bilinear):
         """Reproject/Resample
 
@@ -264,15 +265,18 @@ class Raster(MaskedArray):
         Returns:
             :class:`Raster`
         """
+        x_count = x_count or self.shape[1]
+        y_count = y_count or self.shape[0]
+        transform = transform or self.transform
+        if projection or a_srs:
+            projection = projection or _srs_to_wkt(a_srs)
+        else:
+            projection = self.projection
+
         mem_raster_driver = gdal.GetDriverByName("MEM")
         tmp_raster = mem_raster_driver.Create(
             "", x_count, y_count, 1, self._gdal_dtype()
         )
-
-        x_count = x_count or self.shape[1]
-        y_count = y_count or self.shape[0]
-        transform = transform or self.transform
-        projection = projection or self.projection
 
         tmp_raster.SetProjection(projection)
         tmp_raster.SetGeoTransform(transform)
