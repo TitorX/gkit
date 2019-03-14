@@ -235,8 +235,32 @@ class Raster(MaskedArray):
         return self.clip_by_layer(tmp_layer)
 
     def clip_by_extent(self, extent):
-        """Clip raster by extent. [left, right, bottom, top]"""
-        return 
+        """Clip raster by extent.
+
+        Args:
+            extent (tuple or list): [left, right, bottom, top]
+
+        Returns:
+            `None` or `gdal.Dataset`
+        """
+        extent = list(extent)
+        if self.transform[1] < 0:
+            extent[0], extent[1] = extent[1], extent[0]
+        if self.transform[5] > 0:
+            extent[2], extent[3] = extent[3], extent[2]
+
+        index = np.round([
+            (extent[0] - self.transform[0]) / self.transform[1],
+            (extent[1] - self.transform[0]) / self.transform[1],
+            (extent[2] - self.transform[3]) / self.transform[5],
+            (extent[3] - self.transform[3]) / self.transform[5],
+        ]).astype(int)
+        raster = self[index[3]:index[2], index[0]:index[1]]
+        transform = list(self.transform)
+        transform[0] = index[0] * self.transform[1] + self.transform[0]
+        transform[3] = index[3] * self.transform[5] + self.transform[3]
+        raster.transform = transform
+        return raster
 
     def split_by_shp(self, shp, by=None, overall=False):
         return split_by_shp([self], shp, by, overall)
