@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gkit.core.raster &mdash; Gkit 0.4.2 documentation</title>
+  <title>gkit.core.raster &mdash; Gkit 0.6.0 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.4.2
+                0.6.0
               </div>
             
           
@@ -169,6 +169,23 @@
 <span class="p">}</span>
 
 
+<span class="k">def</span> <span class="nf">_srs_to_wkt</span><span class="p">(</span><span class="n">a_srs</span><span class="p">):</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">code</span> <span class="o">=</span> <span class="n">a_srs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+    <span class="n">code</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+
+    <span class="n">srs</span> <span class="o">=</span> <span class="n">osr</span><span class="o">.</span><span class="n">SpatialReference</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;EPSG&quot;</span><span class="p">):</span>
+        <span class="n">srs</span><span class="o">.</span><span class="n">ImportFromEPSG</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ESRI&quot;</span><span class="p">):</span>
+        <span class="n">srs</span><span class="o">.</span><span class="n">ImportFromESRI</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
+
+    <span class="n">projection</span> <span class="o">=</span> <span class="n">srs</span><span class="o">.</span><span class="n">ExportToWkt</span><span class="p">()</span>
+
+    <span class="k">del</span> <span class="n">srs</span>
+    <span class="k">return</span> <span class="n">projection</span>
+
+
 <span class="k">def</span> <span class="nf">split_by_shp</span><span class="p">(</span><span class="n">rasters</span><span class="p">,</span> <span class="n">shp</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overall</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">rasters</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">rasters</span><span class="p">)</span>
     <span class="n">shp</span> <span class="o">=</span> <span class="n">ogr</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">shp</span><span class="p">)</span>
@@ -204,21 +221,7 @@
     <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">transform</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a_srs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">,</span>
                 <span class="n">nodatavalue</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
-
-        <span class="k">if</span> <span class="n">projection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">name</span><span class="p">,</span> <span class="n">code</span> <span class="o">=</span> <span class="n">a_srs</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
-            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
-            <span class="n">code</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
-
-            <span class="n">srs</span> <span class="o">=</span> <span class="n">osr</span><span class="o">.</span><span class="n">SpatialReference</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;EPSG&quot;</span><span class="p">):</span>
-                <span class="n">srs</span><span class="o">.</span><span class="n">ImportFromEPSG</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
-            <span class="k">elif</span> <span class="n">name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;ESRI&quot;</span><span class="p">):</span>
-                <span class="n">srs</span><span class="o">.</span><span class="n">ImportFromESRI</span><span class="p">(</span><span class="n">code</span><span class="p">)</span>
-
-            <span class="n">projection</span> <span class="o">=</span> <span class="n">srs</span><span class="o">.</span><span class="n">ExportToWkt</span><span class="p">()</span>
-
-            <span class="k">del</span> <span class="n">srs</span>
+        <span class="n">projection</span> <span class="o">=</span> <span class="n">projection</span> <span class="ow">or</span> <span class="n">_srs_to_wkt</span><span class="p">(</span><span class="n">a_srs</span><span class="p">)</span>
 
         <span class="n">_raster_meta</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s1">&#39;projection&#39;</span><span class="p">:</span> <span class="n">projection</span><span class="p">,</span>
@@ -243,6 +246,14 @@
         <span class="nb">setattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_raster_meta&#39;</span><span class="p">,</span> <span class="n">_raster_meta</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span>
 
+    <span class="k">def</span> <span class="nf">_update_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+            <span class="s2">&quot;_raster_meta&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_raster_meta&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="s2">&quot;filepath&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;filepath&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="p">})</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Raster</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_update_from</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">return</span>
+
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">projection</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;projection&#39;</span><span class="p">]</span>
@@ -261,7 +272,9 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">extent</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;The extent of raster in current coordinates.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;The extent of raster in current coordinates.</span>
+<span class="sd">        [left, right, bottom, top]</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">left</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">right</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
@@ -287,23 +300,10 @@
         <span class="n">pixel_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span>
         <span class="n">pixel_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span>
             <span class="nb">int</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">origin_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">pixel_x</span><span class="p">),</span>
             <span class="nb">int</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">origin_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">pixel_y</span><span class="p">)</span>
-        <span class="p">]</span>
-
-        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">is_masked</span><span class="p">(</span><span class="n">res</span><span class="p">):</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">res</span></div>
-
-    <span class="k">def</span> <span class="nf">_update_from</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
-            <span class="s2">&quot;_raster_meta&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;_raster_meta&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-            <span class="s2">&quot;filepath&quot;</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="s1">&#39;filepath&#39;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="p">})</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">Raster</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">_update_from</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
-        <span class="k">return</span>
+        <span class="p">]</span></div>
 
     <span class="k">def</span> <span class="nf">set_fill_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
@@ -336,7 +336,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            `None` or `gdal.Dataset`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">gk</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+        <span class="k">return</span> <span class="n">gk</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
             <span class="bp">self</span><span class="p">,</span> <span class="n">out_raster_path</span><span class="o">=</span><span class="n">out_raster_path</span><span class="p">,</span>
             <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="n">compress</span>
         <span class="p">)</span></div>
@@ -379,6 +379,10 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_by_layer</span><span class="p">(</span><span class="n">tmp_layer</span><span class="p">)</span></div>
 
+<div class="viewcode-block" id="Raster.clip_by_extent"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.clip_by_extent">[docs]</a>    <span class="k">def</span> <span class="nf">clip_by_extent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extent</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Clip raster by extent. [left, right, bottom, top]&quot;&quot;&quot;</span>
+        <span class="k">return</span> </div>
+
     <span class="k">def</span> <span class="nf">split_by_shp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shp</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overall</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">split_by_shp</span><span class="p">([</span><span class="bp">self</span><span class="p">],</span> <span class="n">shp</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">overall</span><span class="p">)</span>
 
@@ -387,10 +391,8 @@
         <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">zonal_apply</span><span class="p">([</span><span class="bp">self</span><span class="p">],</span> <span class="n">shp_path</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">overall</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Raster.reproject"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.reproject">[docs]</a>    <span class="k">def</span> <span class="nf">reproject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
-                  <span class="n">x_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                  <span class="n">x_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                  <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<div class="viewcode-block" id="Raster.reproject"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.reproject">[docs]</a>    <span class="k">def</span> <span class="nf">reproject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                  <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a_srs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">method</span><span class="o">=</span><span class="n">gdal</span><span class="o">.</span><span class="n">GRA_Bilinear</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Reproject/Resample</span>
 
@@ -411,15 +413,18 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            :class:`Raster`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x_count</span> <span class="o">=</span> <span class="n">x_count</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">y_count</span> <span class="o">=</span> <span class="n">y_count</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span>
+        <span class="k">if</span> <span class="n">projection</span> <span class="ow">or</span> <span class="n">a_srs</span><span class="p">:</span>
+            <span class="n">projection</span> <span class="o">=</span> <span class="n">projection</span> <span class="ow">or</span> <span class="n">_srs_to_wkt</span><span class="p">(</span><span class="n">a_srs</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">projection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span>
+
         <span class="n">mem_raster_driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;MEM&quot;</span><span class="p">)</span>
         <span class="n">tmp_raster</span> <span class="o">=</span> <span class="n">mem_raster_driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span>
             <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">x_count</span><span class="p">,</span> <span class="n">y_count</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gdal_dtype</span><span class="p">()</span>
         <span class="p">)</span>
-
-        <span class="n">x_count</span> <span class="o">=</span> <span class="n">x_count</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">y_count</span> <span class="o">=</span> <span class="n">y_count</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span>
-        <span class="n">projection</span> <span class="o">=</span> <span class="n">projection</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span>
 
         <span class="n">tmp_raster</span><span class="o">.</span><span class="n">SetProjection</span><span class="p">(</span><span class="n">projection</span><span class="p">)</span>
         <span class="n">tmp_raster</span><span class="o">.</span><span class="n">SetGeoTransform</span><span class="p">(</span><span class="n">transform</span><span class="p">)</span>

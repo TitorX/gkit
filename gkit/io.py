@@ -10,7 +10,7 @@ def read_gdal(ds, band=None, **kwargs):
     """Read raster from :class:`gdal.Dataset`.
 
     Args:
-        ds (gdal.Dataset): :meth:`gdal.Dataset`.
+        ds (gdal.Dataset): :class:`gdal.Dataset`.
         band (int or list):
             |  Band number (read all bands by default)
             |  Should be a int or list to read one or more bands.
