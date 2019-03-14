@@ -2,7 +2,6 @@
 work fine with :class:`Raster`.
 """
 import warnings
-
 import numpy as np
 
 from .core import Raster

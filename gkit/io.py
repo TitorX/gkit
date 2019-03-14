@@ -74,7 +74,7 @@ def read(filepath, band=None, **kwargs):
     return read_gdal(ds, band, filepath=filepath, **kwargs)
 
 
-def save(raster, out_path=None, dtype=None, driver_name="GTiff",
+def save(raster, out_path=None, driver_name="GTiff",
          compress=False, options=None):
     """save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.
 
@@ -84,9 +84,7 @@ def save(raster, out_path=None, dtype=None, driver_name="GTiff",
             in one file.
         out_path (str): The output path. If it is ``None``,
             return a :class:`gdal.Dataset`.(use MEM driver)
-        dtype (dtype): Save raster with specified data type.
         driver_name (str): Use which driver to save.(default="GTiff")
-
         compress (int):
             |  Could be following options:
             |  ``compress=True``  Use LZW to compress
@@ -130,7 +128,8 @@ def save(raster, out_path=None, dtype=None, driver_name="GTiff",
 
     for i, r in enumerate(raster):
         out_band = out_raster.GetRasterBand(i+1)
-        r.set_fill_value(r.fill_value)
+        r.set_fill_value()  # Make sure fill value is correct.
+        # Nodata value must be float type.
         out_band.SetNoDataValue(np.float64(r.fill_value))
         out_band.WriteArray(r.filled())
         del out_band

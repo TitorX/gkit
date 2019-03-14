@@ -2,7 +2,7 @@ from functools import reduce
 import numpy as np
 
 
-def uniform_mask(*args, ignore_invalid=False,
+def uniform_mask(*args, ignore_invalid=True,
                  return_mask=False, inplace=False):
     if ignore_invalid:
         masks = [x.mask for x in args]
@@ -15,8 +15,6 @@ def uniform_mask(*args, ignore_invalid=False,
 
     if not inplace:
         args = [i.copy() for i in args]
-
     for x in args:
         x.mask = mask
-
     return args

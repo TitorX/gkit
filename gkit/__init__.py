@@ -1,6 +1,5 @@
-from .core import Raster, zonal_apply, split_by_shp
+from .core import Raster, zonal_apply, split_by_shp, uniform_mask
 from .math import *
-from .functions import *
 from .io import read, read_gdal, save
 
 

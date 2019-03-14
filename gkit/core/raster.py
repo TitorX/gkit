@@ -158,40 +158,43 @@ class Raster(MaskedArray):
         ]
 
     def set_fill_value(self, value=None):
-        """"""
+        """Set fill value.
+
+        Args:
+            value (int or float): Fill value. The max or min value 
+                of current dtype will be used when this argument is greater
+                or lower than current dtype's range.
+        """
         info = np.iinfo if self.dtype.kind == "i" else np.finfo
         max_value = info(self.dtype).max
         min_value = info(self.dtype).min
-        if value is None:
-            super(Raster, self).set_fill_value(max_value)
-        else:
-            value = min(max_value, max(min_value, value))
-            super(Raster, self).set_fill_value(value)
+        value = self.fill_value if value is None else value
+        value = np.median([max_value, min_value, value])
+        super(Raster, self).set_fill_value(value)
 
-    def save(self, out_raster_path=None, dtype=None, compress=True):
+    def save(self, out_path=None, driver_name="GTiff",
+             compress=True, options=None):
         """save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.
 
         Args:
-            out_raster_path (str): The output path. If it is ``None``,
-                return a :class:`gdal.Dataset`.
-
-            dtype (dtype): Save raster as specified data type.
-
+            raster (Raster or a list of Rasters): Save rasters to file. When it's a
+                list or tuple of :class:`Raster`, save them all as multi bands
+                in one file.
+            out_path (str): The output path. If it is ``None``,
+                return a :class:`gdal.Dataset`.(use MEM driver)
+            driver_name (str): Use which driver to save.(default="GTiff")
             compress (int):
                 |  Could be following options:
-                |  ``compress=True`` (default) Use LZW to compress
-                |  ``compress=False`` Do not compress
+                |  ``compress=True``  Use LZW to compress
+                |  ``compress=False`` (default) Do not compress
                 |  ``compress='DEFAULT'``
                 |  ``compress='PACKBITS'``
-                |  ... other algorithms that gdal supported
+                |  ... other algorithms gdal supported
 
         Returns:
             `None` or `gdal.Dataset`
         """
-        return gk.save(
-            self, out_raster_path=out_raster_path,
-            dtype=dtype, compress=compress
-        )
+        return gk.save(self, out_path, driver_name, compress, options)
 
     def clip_by_layer(self, layer):
         """Clip raster by layer."""
