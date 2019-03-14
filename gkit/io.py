@@ -10,69 +10,68 @@ def read_gdal(ds, band=None, **kwargs):
     """Read raster from :class:`gdal.Dataset`.
 
     Args:
-        ds (gdal.Dataset): Dataset returned by :meth:`gdal.Open`.
-        band (int or list): Band number (default=1)
+        ds (gdal.Dataset): :meth:`gdal.Dataset`.
+        band (int or list):
+            |  Band number (read all bands by default)
+            |  Should be a int or list to read one or more bands.
+            |  Bands are numbered starting from 1.
 
     Returns:
-        :class:`Raster`
+        :class:`Raster` or a list of :class:`Raster`.
     """
     kwargs.setdefault("projection", ds.GetProjection())
     kwargs.setdefault("transform", ds.GetGeoTransform())
 
     if band is None:
-        band = list(range(1, ds.RasterCount + 1))
-    if isinstance(band, int):
-        band = [band]
-
-    rs = []
-    for b in band:
-        b = ds.GetRasterBand(b)
-        array = b.ReadAsArray()
-        kwargs.setdefault("nodatavalue", b.GetNoDataValue())
-        r = Raster(array, **kwargs)
-        del b, ds
-        rs.append(r)
-    if len(rs) == 1:
-        return rs[0]
+        band = np.arange(1, ds.RasterCount + 1) or \
+            np.arange(1, len(ds.GetSubDatasets()) + 1)
+    elif isinstance(band, int):
+        band = np.array([band])
     else:
-        return rs
+        band = np.array(band)
+
+    assert (band >= 1).all(), "Bands number are starting from 1." \
+        "{} contains invalid bands number.".format(band)
+
+    if ds.RasterCount:
+        data = []
+        for b in band:
+            b = ds.GetRasterBand(int(b))
+            array = b.ReadAsArray()
+            kwargs.setdefault("nodatavalue", b.GetNoDataValue())
+            r = Raster(array, **kwargs)
+            data.append(r)
+    else:
+        subset = ds.GetSubDatasets()
+        if not len(band):
+            band = np.arange(1, len(subset) + 1)
+        data = [
+            read_gdal(gdal.Open(subset[b-1][0]), 1, **kwargs)
+            for b in band
+        ]
+
+    if len(data) == 1:
+        return data[0]
+    else:
+        return data
 
 
 def read(filepath, band=None, **kwargs):
-    """Read rasters from files.
+    """Read rasters from file.
 
     Args:
-        filepath (str): Raster files path.
-        band (int or list): Band number. (default=1)
+        filepath (str): Raster file path.
+        band (int or list):
+            |  Band number (read all bands by default)
+            |  Should be a int or list to read one or more bands.
+            |  Bands are numbered starting from 1.
 
     Returns:
         :class:`Raster` or a list of :class:`Raster`.
     """
-    dataset = gdal.Open(filepath)
-    if len(filepath.split(":")) == 3:
-        filepath = filepath.split(":")[1].replace('"', "")
-        tmp = gdal.Open(filepath)
-        tmp = gdal.Open(tmp.GetSubDatasets()[0][0])
-        kwargs.setdefault("projection", tmp.GetProjection())
-        kwargs.setdefault("transform", tmp.GetGeoTransform())
-
-    name = dataset.GetDriver().ShortName
-
-    if not dataset.RasterCount and (('HDF' in name) or ("netCDF" == name)):
-        subset = dataset.GetSubDatasets()
-        if band is None:
-            band = list(range(1, len(subset)+1))
-        elif isinstance(band, int):
-            band = [band]
-
-        assert (np.array(band) >= 1).all(), "Band number start with 1. It must be greater than 0."
-        rs = [read_gdal(gdal.Open(subset[b-1][0]), **kwargs) for b in band]
-        if len(rs) == 1:
-            return rs[0]
-        else:
-            return rs
-    else:
-        return read_gdal(dataset, band, filepath=filepath, **kwargs)
+    ds = gdal.Open(filepath)
+    filepath = os.path.abspath(ds.GetFileList()[0])
+    return read_gdal(ds, band, filepath=filepath, **kwargs)
 
 
 def save(raster, out_raster_path=None, dtype=None, compress=False,
