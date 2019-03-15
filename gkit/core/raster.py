@@ -38,35 +38,6 @@ def _srs_to_wkt(a_srs):
     return projection
 
 
-def split_by_shp(rasters, shp, by=None, overall=False):
-    rasters = list(rasters)
-    shp = ogr.Open(shp)
-    layer = shp.GetLayer()
-    result = []
-    if overall:
-        result.append(['overall', *[r.clip_by_layer(layer) for r in rasters]])
-
-    for feature in layer:
-        result.append([
-            feature[by] if by else feature.GetFID(),
-            *[r.clip_by_feature(feature) for r in rasters]
-        ])
-    return np.array(result, dtype=object)
-
-
-def zonal_apply(rasters, shp, func, by=None, overall=False,
-                args=(), kwargs={}):
-
-    splited = split_by_shp(rasters, shp, by, overall)
-
-    result = []
-    for i, *r in splited:
-        result.append([
-            i, func(*r, *args, **kwargs)
-        ])
-    return np.array(result)
-
-
 class Raster(MaskedArray):
     """
     """
@@ -131,7 +102,7 @@ class Raster(MaskedArray):
         right = left + self.transform[1] * self.shape[1]
         top = self.transform[3]
         bottom = top + self.transform[5] * self.shape[0]
-        return [left, right, bottom, top]
+        return left, right, bottom, top
 
     def _gdal_dtype(self):
         if self.dtype in TYPE:
@@ -140,22 +111,21 @@ class Raster(MaskedArray):
         else:
             raise 'Cannot convert {} into gdal.'.format(self.dtype)
 
-    def get_point_value(self, x, y):
+    def coord(self, x, y):
         """Get point value by coordinate.
 
         Args:
-            x (int): The X coordinate of the point.
-            y (int): The Y coordinate of the point.
+            x (float): The X coordinate of the point.
+            y (float): The Y coordinate of the point.
         """
         origin_x = self._raster_meta['transform'][3]
         origin_y = self._raster_meta['transform'][0]
         pixel_x = self._raster_meta['transform'][5]
         pixel_y = self._raster_meta['transform'][1]
 
-        return self[
-            int((x - origin_x) / pixel_x),
-            int((y - origin_y) / pixel_y)
-        ]
+        x = int((x - origin_x) / pixel_x)
+        y = int((y - origin_y) / pixel_y)
+        return self[x, y]
 
     def set_fill_value(self, value=None):
         """Set fill value.
@@ -224,13 +194,15 @@ class Raster(MaskedArray):
         return self.clip_by_layer(shp.GetLayer())
 
     def clip_by_feature(self, feature):
-        """Clip raster by a feature."""
+        """Clip raster by on or more features."""
+        feature = [feature] if isinstance(feature, ogr.Feature) else feature
         mem_shp_driver = ogr.GetDriverByName("Memory")
         tmp_shp = mem_shp_driver.CreateDataSource("")
         srs = osr.SpatialReference()
         srs.ImportFromWkt(self.projection)
         tmp_layer = tmp_shp.CreateLayer("tmp", srs)
-        tmp_layer.CreateFeature(feature.Clone())
+        for f in feature:
+            tmp_layer.CreateFeature(f.Clone())
 
         return self.clip_by_layer(tmp_layer)
 
@@ -263,12 +235,11 @@ class Raster(MaskedArray):
         return raster
 
     def split_by_shp(self, shp, by=None, overall=False):
-        return split_by_shp([self], shp, by, overall)
+        return gk.split_by_shp(self, shp, by, overall)
 
     def zonal_apply(self, shp_path, func, by=None, overall=False,
                     args=(), kwargs={}):
-        """"""
-        return zonal_apply([self], shp_path, func, by, overall, args, kwargs)
+        return gk.zonal_apply(self, shp_path, func, by, overall, args, kwargs)
 
     def reproject(self, x_count=None, y_count=None,
                   transform=None, projection=None, a_srs=None,
@@ -414,10 +385,11 @@ class Raster(MaskedArray):
             mode=mode, cval=cval)
         return Raster(res, self.transform, self.projection, mask=self.mask)
 
-    # def __str__(self):
-    #     return self.__repr__()
-    #
-    # def __repr__(self):
-    #     # projection_name = osr.SpatialReference(
-    #     #     wkt=self.projection).GetAttrValue('geogcs')
-    #     return "{}*{}".format(*self.shape)
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        projection_name = osr.SpatialReference(
+            wkt=self.projection).GetAttrValue('geogcs')
+        return "Raster<{}, {}, {}>".format(
+            projection_name, self.shape, self.extent)
