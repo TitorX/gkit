@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gkit.io &mdash; Gkit 0.6.0 documentation</title>
+  <title>gkit.io &mdash; Gkit 0.6.2 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.6.0
+                0.6.2
               </div>
             
           
@@ -222,7 +222,7 @@
     <span class="k">return</span> <span class="n">read_gdal</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">band</span><span class="p">,</span> <span class="n">filepath</span><span class="o">=</span><span class="n">filepath</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="save"><a class="viewcode-back" href="../../api.html#gkit.io.save">[docs]</a><span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">out_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">driver_name</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
+<div class="viewcode-block" id="save"><a class="viewcode-back" href="../../api.html#gkit.io.save">[docs]</a><span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="n">raster</span><span class="p">,</span> <span class="n">out_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">driver_name</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
          <span class="n">compress</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.</span>
 
@@ -232,9 +232,7 @@
 <span class="sd">            in one file.</span>
 <span class="sd">        out_path (str): The output path. If it is ``None``,</span>
 <span class="sd">            return a :class:`gdal.Dataset`.(use MEM driver)</span>
-<span class="sd">        dtype (dtype): Save raster with specified data type.</span>
 <span class="sd">        driver_name (str): Use which driver to save.(default=&quot;GTiff&quot;)</span>
-
 <span class="sd">        compress (int):</span>
 <span class="sd">            |  Could be following options:</span>
 <span class="sd">            |  ``compress=True``  Use LZW to compress</span>
@@ -278,7 +276,8 @@
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">raster</span><span class="p">):</span>
         <span class="n">out_band</span> <span class="o">=</span> <span class="n">out_raster</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">r</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">fill_value</span><span class="p">)</span>
+        <span class="n">r</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">()</span>  <span class="c1"># Make sure fill value is correct.</span>
+        <span class="c1"># Nodata value must be float type.</span>
         <span class="n">out_band</span><span class="o">.</span><span class="n">SetNoDataValue</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">fill_value</span><span class="p">))</span>
         <span class="n">out_band</span><span class="o">.</span><span class="n">WriteArray</span><span class="p">(</span><span class="n">r</span><span class="o">.</span><span class="n">filled</span><span class="p">())</span>
         <span class="k">del</span> <span class="n">out_band</span>

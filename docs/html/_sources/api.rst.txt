@@ -11,6 +11,11 @@ core
 .. automodule:: gkit.core.raster
     :members:
 
+functions
+----------
+.. automodule:: gkit.core.functions
+    :members:
+
 math
 ----------
 .. automodule:: gkit.math

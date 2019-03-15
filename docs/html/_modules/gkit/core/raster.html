@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>gkit.core.raster &mdash; Gkit 0.6.0 documentation</title>
+  <title>gkit.core.raster &mdash; Gkit 0.6.2 documentation</title>
   
 
   
@@ -56,7 +56,7 @@
             
             
               <div class="version">
-                0.6.0
+                0.6.2
               </div>
             
           
@@ -186,35 +186,6 @@
     <span class="k">return</span> <span class="n">projection</span>
 
 
-<span class="k">def</span> <span class="nf">split_by_shp</span><span class="p">(</span><span class="n">rasters</span><span class="p">,</span> <span class="n">shp</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overall</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="n">rasters</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">rasters</span><span class="p">)</span>
-    <span class="n">shp</span> <span class="o">=</span> <span class="n">ogr</span><span class="o">.</span><span class="n">Open</span><span class="p">(</span><span class="n">shp</span><span class="p">)</span>
-    <span class="n">layer</span> <span class="o">=</span> <span class="n">shp</span><span class="o">.</span><span class="n">GetLayer</span><span class="p">()</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">if</span> <span class="n">overall</span><span class="p">:</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="s1">&#39;overall&#39;</span><span class="p">,</span> <span class="o">*</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">clip_by_layer</span><span class="p">(</span><span class="n">layer</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rasters</span><span class="p">]])</span>
-
-    <span class="k">for</span> <span class="n">feature</span> <span class="ow">in</span> <span class="n">layer</span><span class="p">:</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
-            <span class="n">feature</span><span class="p">[</span><span class="n">by</span><span class="p">]</span> <span class="k">if</span> <span class="n">by</span> <span class="k">else</span> <span class="n">feature</span><span class="o">.</span><span class="n">GetFID</span><span class="p">(),</span>
-            <span class="o">*</span><span class="p">[</span><span class="n">r</span><span class="o">.</span><span class="n">clip_by_feature</span><span class="p">(</span><span class="n">feature</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rasters</span><span class="p">]</span>
-        <span class="p">])</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">zonal_apply</span><span class="p">(</span><span class="n">rasters</span><span class="p">,</span> <span class="n">shp</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="n">args</span><span class="o">=</span><span class="p">(),</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{}):</span>
-
-    <span class="n">splited</span> <span class="o">=</span> <span class="n">split_by_shp</span><span class="p">(</span><span class="n">rasters</span><span class="p">,</span> <span class="n">shp</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">overall</span><span class="p">)</span>
-
-    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
-    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="o">*</span><span class="n">r</span> <span class="ow">in</span> <span class="n">splited</span><span class="p">:</span>
-        <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
-            <span class="n">i</span><span class="p">,</span> <span class="n">func</span><span class="p">(</span><span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="p">])</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
-
-
 <div class="viewcode-block" id="Raster"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster">[docs]</a><span class="k">class</span> <span class="nc">Raster</span><span class="p">(</span><span class="n">MaskedArray</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -279,7 +250,7 @@
         <span class="n">right</span> <span class="o">=</span> <span class="n">left</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">top</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
         <span class="n">bottom</span> <span class="o">=</span> <span class="n">top</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">return</span> <span class="p">[</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">top</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">top</span>
 
     <span class="k">def</span> <span class="nf">_gdal_dtype</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span> <span class="ow">in</span> <span class="n">TYPE</span><span class="p">:</span>
@@ -288,58 +259,60 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="s1">&#39;Cannot convert </span><span class="si">{}</span><span class="s1"> into gdal.&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Raster.get_point_value"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.get_point_value">[docs]</a>    <span class="k">def</span> <span class="nf">get_point_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
+<div class="viewcode-block" id="Raster.coord"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.coord">[docs]</a>    <span class="k">def</span> <span class="nf">coord</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Get point value by coordinate.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            x (int): The X coordinate of the point.</span>
-<span class="sd">            y (int): The Y coordinate of the point.</span>
+<span class="sd">            x (float): The X coordinate of the point.</span>
+<span class="sd">            y (float): The Y coordinate of the point.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">origin_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="mi">3</span><span class="p">]</span>
         <span class="n">origin_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">pixel_x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="mi">5</span><span class="p">]</span>
         <span class="n">pixel_y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_raster_meta</span><span class="p">[</span><span class="s1">&#39;transform&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
 
-        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span>
-            <span class="nb">int</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">origin_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">pixel_x</span><span class="p">),</span>
-            <span class="nb">int</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">origin_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">pixel_y</span><span class="p">)</span>
-        <span class="p">]</span></div>
+        <span class="n">x</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">x</span> <span class="o">-</span> <span class="n">origin_x</span><span class="p">)</span> <span class="o">/</span> <span class="n">pixel_x</span><span class="p">)</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">y</span> <span class="o">-</span> <span class="n">origin_y</span><span class="p">)</span> <span class="o">/</span> <span class="n">pixel_y</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]</span></div>
 
-    <span class="k">def</span> <span class="nf">set_fill_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Raster.set_fill_value"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.set_fill_value">[docs]</a>    <span class="k">def</span> <span class="nf">set_fill_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set fill value.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            value (int or float): Fill value. The max or min value </span>
+<span class="sd">                of current dtype will be used when this argument is greater</span>
+<span class="sd">                or lower than current dtype&#39;s range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">info</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">iinfo</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;i&quot;</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span>
         <span class="n">max_value</span> <span class="o">=</span> <span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">max</span>
         <span class="n">min_value</span> <span class="o">=</span> <span class="n">info</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span><span class="o">.</span><span class="n">min</span>
-        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">super</span><span class="p">(</span><span class="n">Raster</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">max_value</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">value</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">max_value</span><span class="p">,</span> <span class="nb">max</span><span class="p">(</span><span class="n">min_value</span><span class="p">,</span> <span class="n">value</span><span class="p">))</span>
-            <span class="nb">super</span><span class="p">(</span><span class="n">Raster</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">value</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">([</span><span class="n">max_value</span><span class="p">,</span> <span class="n">min_value</span><span class="p">,</span> <span class="n">value</span><span class="p">])</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">Raster</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Raster.save"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_raster_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="Raster.save"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.save">[docs]</a>    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">driver_name</span><span class="o">=</span><span class="s2">&quot;GTiff&quot;</span><span class="p">,</span>
+             <span class="n">compress</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;save :class:`Raster` to GeoTIFF file or :class:`gdal.Dataset`.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            out_raster_path (str): The output path. If it is ``None``,</span>
-<span class="sd">                return a :class:`gdal.Dataset`.</span>
-
-<span class="sd">            dtype (dtype): Save raster as specified data type.</span>
-
+<span class="sd">            raster (Raster or a list of Rasters): Save rasters to file. When it&#39;s a</span>
+<span class="sd">                list or tuple of :class:`Raster`, save them all as multi bands</span>
+<span class="sd">                in one file.</span>
+<span class="sd">            out_path (str): The output path. If it is ``None``,</span>
+<span class="sd">                return a :class:`gdal.Dataset`.(use MEM driver)</span>
+<span class="sd">            driver_name (str): Use which driver to save.(default=&quot;GTiff&quot;)</span>
 <span class="sd">            compress (int):</span>
 <span class="sd">                |  Could be following options:</span>
-<span class="sd">                |  ``compress=True`` (default) Use LZW to compress</span>
-<span class="sd">                |  ``compress=False`` Do not compress</span>
+<span class="sd">                |  ``compress=True``  Use LZW to compress</span>
+<span class="sd">                |  ``compress=False`` (default) Do not compress</span>
 <span class="sd">                |  ``compress=&#39;DEFAULT&#39;``</span>
 <span class="sd">                |  ``compress=&#39;PACKBITS&#39;``</span>
-<span class="sd">                |  ... other algorithms that gdal supported</span>
+<span class="sd">                |  ... other algorithms gdal supported</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            `None` or `gdal.Dataset`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">gk</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">out_raster_path</span><span class="o">=</span><span class="n">out_raster_path</span><span class="p">,</span>
-            <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">,</span> <span class="n">compress</span><span class="o">=</span><span class="n">compress</span>
-        <span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">gk</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">out_path</span><span class="p">,</span> <span class="n">driver_name</span><span class="p">,</span> <span class="n">compress</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Raster.clip_by_layer"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.clip_by_layer">[docs]</a>    <span class="k">def</span> <span class="nf">clip_by_layer</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">layer</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Clip raster by layer.&quot;&quot;&quot;</span>
@@ -369,27 +342,52 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_by_layer</span><span class="p">(</span><span class="n">shp</span><span class="o">.</span><span class="n">GetLayer</span><span class="p">())</span></div>
 
 <div class="viewcode-block" id="Raster.clip_by_feature"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.clip_by_feature">[docs]</a>    <span class="k">def</span> <span class="nf">clip_by_feature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">feature</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Clip raster by a feature.&quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Clip raster by on or more features.&quot;&quot;&quot;</span>
+        <span class="n">feature</span> <span class="o">=</span> <span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">feature</span><span class="p">,</span> <span class="n">ogr</span><span class="o">.</span><span class="n">Feature</span><span class="p">)</span> <span class="k">else</span> <span class="n">feature</span>
         <span class="n">mem_shp_driver</span> <span class="o">=</span> <span class="n">ogr</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;Memory&quot;</span><span class="p">)</span>
         <span class="n">tmp_shp</span> <span class="o">=</span> <span class="n">mem_shp_driver</span><span class="o">.</span><span class="n">CreateDataSource</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="n">srs</span> <span class="o">=</span> <span class="n">osr</span><span class="o">.</span><span class="n">SpatialReference</span><span class="p">()</span>
         <span class="n">srs</span><span class="o">.</span><span class="n">ImportFromWkt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">)</span>
         <span class="n">tmp_layer</span> <span class="o">=</span> <span class="n">tmp_shp</span><span class="o">.</span><span class="n">CreateLayer</span><span class="p">(</span><span class="s2">&quot;tmp&quot;</span><span class="p">,</span> <span class="n">srs</span><span class="p">)</span>
-        <span class="n">tmp_layer</span><span class="o">.</span><span class="n">CreateFeature</span><span class="p">(</span><span class="n">feature</span><span class="o">.</span><span class="n">Clone</span><span class="p">())</span>
+        <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">feature</span><span class="p">:</span>
+            <span class="n">tmp_layer</span><span class="o">.</span><span class="n">CreateFeature</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">Clone</span><span class="p">())</span>
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">clip_by_layer</span><span class="p">(</span><span class="n">tmp_layer</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Raster.clip_by_extent"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.clip_by_extent">[docs]</a>    <span class="k">def</span> <span class="nf">clip_by_extent</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extent</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Clip raster by extent. [left, right, bottom, top]&quot;&quot;&quot;</span>
-        <span class="k">return</span> </div>
+        <span class="sd">&quot;&quot;&quot;Clip raster by extent.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            extent (tuple or list): [left, right, bottom, top]</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            `None` or `gdal.Dataset`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">extent</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">extent</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="n">index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">([</span>
+            <span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+            <span class="p">(</span><span class="n">extent</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span>
+        <span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">raster</span> <span class="o">=</span> <span class="bp">self</span><span class="p">[</span><span class="n">index</span><span class="p">[</span><span class="mi">3</span><span class="p">]:</span><span class="n">index</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">index</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+        <span class="n">transform</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">)</span>
+        <span class="n">transform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">transform</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">index</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="n">raster</span><span class="o">.</span><span class="n">transform</span> <span class="o">=</span> <span class="n">transform</span>
+        <span class="k">return</span> <span class="n">raster</span></div>
 
     <span class="k">def</span> <span class="nf">split_by_shp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shp</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overall</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">split_by_shp</span><span class="p">([</span><span class="bp">self</span><span class="p">],</span> <span class="n">shp</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">overall</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gk</span><span class="o">.</span><span class="n">split_by_shp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shp</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">overall</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">zonal_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shp_path</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">by</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overall</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
                     <span class="n">args</span><span class="o">=</span><span class="p">(),</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{}):</span>
-        <span class="sd">&quot;&quot;&quot;&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">zonal_apply</span><span class="p">([</span><span class="bp">self</span><span class="p">],</span> <span class="n">shp_path</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">overall</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">gk</span><span class="o">.</span><span class="n">zonal_apply</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shp_path</span><span class="p">,</span> <span class="n">func</span><span class="p">,</span> <span class="n">by</span><span class="p">,</span> <span class="n">overall</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">kwargs</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Raster.reproject"><a class="viewcode-back" href="../../../api.html#gkit.core.raster.Raster.reproject">[docs]</a>    <span class="k">def</span> <span class="nf">reproject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">y_count</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
                   <span class="n">transform</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a_srs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -533,15 +531,16 @@
         <span class="n">res</span> <span class="o">=</span> <span class="n">gf</span><span class="p">(</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">),</span> <span class="n">function</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">footprint</span><span class="p">,</span>
             <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">cval</span><span class="o">=</span><span class="n">cval</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">Raster</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">Raster</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">)</span></div>
 
-    <span class="c1"># def __str__(self):</span>
-    <span class="c1">#     return self.__repr__()</span>
-    <span class="c1">#</span>
-    <span class="c1"># def __repr__(self):</span>
-    <span class="c1">#     # projection_name = osr.SpatialReference(</span>
-    <span class="c1">#     #     wkt=self.projection).GetAttrValue(&#39;geogcs&#39;)</span>
-    <span class="c1">#     return &quot;{}*{}&quot;.format(*self.shape)</span>
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="fm">__repr__</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">projection_name</span> <span class="o">=</span> <span class="n">osr</span><span class="o">.</span><span class="n">SpatialReference</span><span class="p">(</span>
+            <span class="n">wkt</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">)</span><span class="o">.</span><span class="n">GetAttrValue</span><span class="p">(</span><span class="s1">&#39;geogcs&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;Raster&lt;</span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">, </span><span class="si">{}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+            <span class="n">projection_name</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">extent</span><span class="p">)</span></div>
 </pre></div>
 
            </div>
