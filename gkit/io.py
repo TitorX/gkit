@@ -117,11 +117,11 @@ def save(raster, out_path=None, driver_name="GTiff",
         driver = gdal.GetDriverByName(driver_name)
     else:
         driver = gdal.GetDriverByName('MEM')
-        out_raster_path = ''
+        out_path = ''
 
     options = ["{0}={1}".format(k, v) for k, v in options.items()]
     out_raster = driver.Create(
-        out_raster_path, xsize, ysize, bands, dtype, options=options)
+        out_path, xsize, ysize, bands, dtype, options=options)
 
     out_raster.SetProjection(projection)
     out_raster.SetGeoTransform(transform)
