@@ -114,6 +114,9 @@ def save(raster, out_path=None, driver_name="GTiff",
         options['COMPRESS'] = compress
 
     if out_path:
+        if driver_name == "GTiff":
+            if not out_path.lower().endswith(".tif"):
+                out_path += ".tif"
         driver = gdal.GetDriverByName(driver_name)
     else:
         driver = gdal.GetDriverByName('MEM')
