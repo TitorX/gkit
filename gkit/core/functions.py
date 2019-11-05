@@ -29,13 +29,14 @@ def split_by_shp(raster, shp_path, by=None, overall=False):
         result["overall"] = r
 
     # Group features by field values.
-    shp_features = {}
+    grouped_features = {}
     for feature in layer:
-        shp_features.setdefault(feature[by] if by else feature.GetFID(), [])
-        shp_features[feature[by] if by else feature.GetFID()].append(feature)
+        fid = feature[by] if by else feature.GetFID()
+        grouped_features.setdefault(fid, [])
+        grouped_features[fid].append(feature)
 
-    for key, feature in shp_features.items():
-        r = [r.clip_by_feature(feature) for r in raster]
+    for key, features in grouped_features.items():
+        r = [r.clip_by_feature(features) for r in raster]
         if len(r) == 1:
             r = r[0]
         result[key] = r
@@ -61,8 +62,7 @@ def zonal_apply(raster, shp, func, by=None, overall=False,
     splited = split_by_shp(raster, shp, by, overall)
     result = {}
     for i, rs in splited.items():
-        rs = [rs] if isinstance(rs, Raster) else rs
-        result[i] = func(*rs, *args, **kwargs)
+        result[i] = func(rs, *args, **kwargs)
     return result
 
 
