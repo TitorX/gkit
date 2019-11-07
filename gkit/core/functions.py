@@ -23,10 +23,11 @@ def split_by_shp(raster, shp_path, by=None, overall=False):
     layer = shp.GetLayer()
     result = {}
     if overall:
+        overall = 'overall' if overall is True else overall
         r = [r.clip_by_layer(layer) for r in raster]
         if len(r) == 1:
             r = r[0]
-        result["overall"] = r
+        result[overall] = r
 
     # Group features by field values.
     grouped_features = {}
